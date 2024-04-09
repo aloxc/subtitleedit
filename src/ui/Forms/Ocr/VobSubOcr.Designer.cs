@@ -19,14 +19,14 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             this.components = new System.ComponentModel.Container();
             this.contextMenuStripListview = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripSeparatorOcrSelected = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemSaveSubtitleAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorImageCompare = new System.Windows.Forms.ToolStripSeparator();
             this.EditLastAdditionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorOcrSelected = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.labelSubtitleText = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
@@ -45,7 +45,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemImageSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
             this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
@@ -71,7 +70,45 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparatorImageCompare,
             this.EditLastAdditionsToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
-            this.contextMenuStripListview.Size = new System.Drawing.Size(333, 304);
+            this.contextMenuStripListview.Size = new System.Drawing.Size(305, 104);
+            // 
+            // toolStripMenuItemSaveSubtitleAs
+            // 
+            this.toolStripMenuItemSaveSubtitleAs.Name = "toolStripMenuItemSaveSubtitleAs";
+            this.toolStripMenuItemSaveSubtitleAs.Size = new System.Drawing.Size(304, 22);
+            this.toolStripMenuItemSaveSubtitleAs.Text = "Save subtitle as...";
+            this.toolStripMenuItemSaveSubtitleAs.Click += new System.EventHandler(this.toolStripMenuItemSaveSubtitleAs_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(301, 6);
+            // 
+            // saveImageAsToolStripMenuItem
+            // 
+            this.saveImageAsToolStripMenuItem.Name = "saveImageAsToolStripMenuItem";
+            this.saveImageAsToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
+            this.saveImageAsToolStripMenuItem.Text = "Save image as...";
+            this.saveImageAsToolStripMenuItem.Click += new System.EventHandler(this.SaveImageAsToolStripMenuItemClick);
+            // 
+            // saveAllImagesWithHtmlIndexViewToolStripMenuItem
+            // 
+            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Name = "saveAllImagesWithHtmlIndexViewToolStripMenuItem";
+            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
+            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Text = "Save all images with HTML index view...";
+            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Click += new System.EventHandler(this.SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click);
+            // 
+            // toolStripSeparatorImageCompare
+            // 
+            this.toolStripSeparatorImageCompare.Name = "toolStripSeparatorImageCompare";
+            this.toolStripSeparatorImageCompare.Size = new System.Drawing.Size(301, 6);
+            // 
+            // EditLastAdditionsToolStripMenuItem
+            // 
+            this.EditLastAdditionsToolStripMenuItem.Name = "EditLastAdditionsToolStripMenuItem";
+            this.EditLastAdditionsToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
+            this.EditLastAdditionsToolStripMenuItem.Text = "Edit last OCR image additions...";
+            this.EditLastAdditionsToolStripMenuItem.Click += new System.EventHandler(this.inspectLastAdditionsToolStripMenuItem_Click);
             // 
             // toolStripSeparatorOcrSelected
             // 
@@ -82,44 +119,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(329, 6);
-            // 
-            // toolStripMenuItemSaveSubtitleAs
-            // 
-            this.toolStripMenuItemSaveSubtitleAs.Name = "toolStripMenuItemSaveSubtitleAs";
-            this.toolStripMenuItemSaveSubtitleAs.Size = new System.Drawing.Size(332, 22);
-            this.toolStripMenuItemSaveSubtitleAs.Text = "Save subtitle as...";
-            this.toolStripMenuItemSaveSubtitleAs.Click += new System.EventHandler(this.toolStripMenuItemSaveSubtitleAs_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(329, 6);
-            // 
-            // saveImageAsToolStripMenuItem
-            // 
-            this.saveImageAsToolStripMenuItem.Name = "saveImageAsToolStripMenuItem";
-            this.saveImageAsToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.saveImageAsToolStripMenuItem.Text = "Save image as...";
-            this.saveImageAsToolStripMenuItem.Click += new System.EventHandler(this.SaveImageAsToolStripMenuItemClick);
-            // 
-            // saveAllImagesWithHtmlIndexViewToolStripMenuItem
-            // 
-            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Name = "saveAllImagesWithHtmlIndexViewToolStripMenuItem";
-            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Text = "Save all images with HTML index view...";
-            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Click += new System.EventHandler(this.SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click);
-            // 
-            // toolStripSeparatorImageCompare
-            // 
-            this.toolStripSeparatorImageCompare.Name = "toolStripSeparatorImageCompare";
-            this.toolStripSeparatorImageCompare.Size = new System.Drawing.Size(329, 6);
-            // 
-            // EditLastAdditionsToolStripMenuItem
-            // 
-            this.EditLastAdditionsToolStripMenuItem.Name = "EditLastAdditionsToolStripMenuItem";
-            this.EditLastAdditionsToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.EditLastAdditionsToolStripMenuItem.Text = "Edit last OCR image additions...";
-            this.EditLastAdditionsToolStripMenuItem.Click += new System.EventHandler(this.inspectLastAdditionsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -279,20 +278,20 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemImageSaveAs,
             this.previewToolStripMenuItem});
             this.contextMenuStripImage.Name = "contextMenuStripUnknownWords";
-            this.contextMenuStripImage.Size = new System.Drawing.Size(289, 142);
+            this.contextMenuStripImage.Size = new System.Drawing.Size(250, 70);
             this.contextMenuStripImage.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripImage_Opening);
             // 
             // autoTransparentBackgroundToolStripMenuItem
             // 
             this.autoTransparentBackgroundToolStripMenuItem.CheckOnClick = true;
             this.autoTransparentBackgroundToolStripMenuItem.Name = "autoTransparentBackgroundToolStripMenuItem";
-            this.autoTransparentBackgroundToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
+            this.autoTransparentBackgroundToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.autoTransparentBackgroundToolStripMenuItem.Text = "Auto transparent background";
             // 
             // toolStripMenuItemImageSaveAs
             // 
             this.toolStripMenuItemImageSaveAs.Name = "toolStripMenuItemImageSaveAs";
-            this.toolStripMenuItemImageSaveAs.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItemImageSaveAs.Size = new System.Drawing.Size(249, 22);
             this.toolStripMenuItemImageSaveAs.Text = "Save image as...";
             this.toolStripMenuItemImageSaveAs.Click += new System.EventHandler(this.toolStripMenuItemImageSaveAs_Click);
             // 
@@ -300,13 +299,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.previewToolStripMenuItem.Name = "previewToolStripMenuItem";
             this.previewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.previewToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
+            this.previewToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.previewToolStripMenuItem.Text = "Preview...";
             this.previewToolStripMenuItem.Click += new System.EventHandler(this.previewToolStripMenuItem_Click);
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // splitContainerBottom
             // 
@@ -355,8 +350,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.subtitleListView1.UseSyntaxColoring = true;
             this.subtitleListView1.View = System.Windows.Forms.View.Details;
             this.subtitleListView1.SelectedIndexChanged += new System.EventHandler(this.SubtitleListView1SelectedIndexChanged);
-
-           
             // 
             // timerHideStatus
             // 
@@ -413,7 +406,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem saveAllImagesWithHtmlIndexViewToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorImageCompare;
         private System.Windows.Forms.ToolStripMenuItem EditLastAdditionsToolStripMenuItem;
