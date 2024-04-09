@@ -431,9 +431,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             captureTopAlignmentToolStripMenuItem.Text = language.CaptureTopAlign;
 
             groupBoxTransportStream.Text = language.TransportStream;
-            checkBoxTransportStreamGrayscale.Text = language.TransportStreamGrayscale;
-            checkBoxTransportStreamGetColorAndSplit.Text = language.TransportStreamGetColor;
-            checkBoxTransportStreamGetColorAndSplit.Left = checkBoxTransportStreamGrayscale.Left + checkBoxTransportStreamGrayscale.Width + 9;
 
             groupBoxOcrAutoFix.Text = language.OcrAutoCorrectionSpellChecking;
             tabControlLogs.TabPages[0].Text = language.UnknownWords;
@@ -1520,11 +1517,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         nDvbBmp.MakeBackgroundTransparent((int)numericUpDownAutoTransparentAlphaMax.Value);
                     }
 
-                    if (checkBoxTransportStreamGrayscale.Checked)
-                    {
-                        nDvbBmp.GrayScale();
-                    }
-
                     dvbBmp.Dispose();
                     returnBmp = nDvbBmp.GetBitmap();
                 }
@@ -1547,11 +1539,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         nDvbBmp.MakeBackgroundTransparent((int)numericUpDownAutoTransparentAlphaMax.Value);
                     }
 
-                    if (checkBoxTransportStreamGrayscale.Checked)
-                    {
-                        nDvbBmp.GrayScale();
-                    }
-
+     
                     dvbBmp.Dispose();
                     returnBmp = nDvbBmp.GetBitmap();
                 }
@@ -1571,12 +1559,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     nDvbBmp.MakeBackgroundTransparent((int)numericUpDownAutoTransparentAlphaMax.Value);
                 }
-
-                if (checkBoxTransportStreamGrayscale.Checked)
-                {
-                    nDvbBmp.GrayScale();
-                }
-
                 bmp.Dispose();
                 returnBmp = nDvbBmp.GetBitmap();
             }
@@ -4133,8 +4115,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             buttonCancel.Enabled = false;
             buttonStartOcr.Enabled = false;
             buttonPause.Enabled = true;
-            checkBoxTransportStreamGrayscale.Enabled = false;
-            checkBoxTransportStreamGetColorAndSplit.Enabled = false;
             _mainOcrRunning = true;
             progressBar1.Visible = true;
             subtitleListView1.MultiSelect = false;
@@ -4149,8 +4129,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             buttonCancel.Enabled = true;
             buttonStartOcr.Enabled = true;
             buttonPause.Enabled = false;
-            checkBoxTransportStreamGrayscale.Enabled = true;
-            checkBoxTransportStreamGetColorAndSplit.Enabled = true;
             _mainOcrRunning = false;
             labelStatus.Text = string.Empty;
             progressBar1.Visible = false;
@@ -7584,7 +7562,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             groupBoxTransportStream.Left = groupBoxImagePalette.Left;
             groupBoxTransportStream.Top = groupBoxImagePalette.Top;
             groupBoxTransportStream.Visible = true;
-            checkBoxTransportStreamGetColorAndSplit.Visible = subtitles.Count > 0 && subtitles[0].IsDvbSub;
             _fromMenuItem = skipMakeBinary;
         }
 
@@ -7596,35 +7573,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _dvbSubColor.Add(Color.Transparent);
             }
         }
-
-        private void checkBoxTransportStreamGrayscale_CheckedChanged(object sender, EventArgs e)
-        {
-            SubtitleListView1SelectedIndexChanged(null, null);
-        }
-
-        private void checkBoxTransportStreamGetColorAndSplit_CheckedChanged(object sender, EventArgs e)
-        {
-            _transportStreamUseColor = checkBoxTransportStreamGetColorAndSplit.Checked;
-
-            if (_ocrMethodIndex == _ocrMethodTesseract5)
-            {
-                _abort = true;
-                ResetTesseractThread();
-            }
-
-            if (checkBoxTransportStreamGetColorAndSplit.Checked)
-            {
-                SplitDvbForEachSubImage();
-            }
-            else
-            {
-                MergeDvbForEachSubImage();
-            }
-
-            InitializeDvbSubColor();
-            SubtitleListView1SelectedIndexChanged(null, null);
-        }
-
         private void MergeDvbForEachSubImage()
         {
             int i = 0;
