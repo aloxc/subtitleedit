@@ -2,7 +2,6 @@
 using Nikse.SubtitleEdit.Core.BluRaySup;
 using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.ContainerFormats.TransportStream;
-using Nikse.SubtitleEdit.Core.Enums;
 using Nikse.SubtitleEdit.Core.Interfaces;
 using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using Nikse.SubtitleEdit.Core.VobSub;
@@ -13,16 +12,13 @@ using Nikse.SubtitleEdit.Logic.Ocr.Binary;
 using PaddleOCRSharp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -89,18 +85,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 Italic = italic;
                 ExpandCount = expandCount;
                 Name = name;
-            }
-
-            public CompareMatch(string text, bool italic, int expandCount, string name, NOcrChar character)
-                : this(text, italic, expandCount, name)
-            {
-                NOcrCharacter = character;
-            }
-
-            public CompareMatch(string text, bool italic, int expandCount, string name, ImageSplitterItem imageSplitterItem)
-                : this(text, italic, expandCount, name)
-            {
-                ImageSplitterItem = imageSplitterItem;
             }
 
             public override string ToString()
@@ -176,17 +160,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private List<BluRaySupParser.PcsData> _bluRaySubtitlesOriginal;
         private List<BluRaySupParser.PcsData> _bluRaySubtitles;
 
-
-
-        private string _importLanguageString;
-
-
         private List<ImageCompareAddition> _lastAdditions = new List<ImageCompareAddition>();
-        private readonly VobSubOcrCharacter _vobSubOcrCharacter = new VobSubOcrCharacter();
-
-        public const int NOcrMinColor = 300;
-
-
         private bool _okClicked;
 
         // optimization vars
@@ -220,9 +194,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             groupBoxSubtitleImage.Text = string.Empty;
 
-
-            FillSpellCheckDictionaries();
-
             if (Configuration.Settings.VobSubOcr.ItalicFactor >= 0.1 && Configuration.Settings.VobSubOcr.ItalicFactor < 1)
             {
                 _unItalicFactor = Configuration.Settings.VobSubOcr.ItalicFactor;
@@ -230,11 +201,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             toolStripMenuItemSaveSubtitleAs.Text = LanguageSettings.Current.Main.SaveSubtitleAs;
 
-
-
             UiUtil.InitializeSubtitleFont(subtitleListView1);
             subtitleListView1.AutoSizeAllColumns(this);
-
 
             splitContainerBottom.Panel1MinSize = 400;
             splitContainerBottom.Panel2MinSize = 250;
@@ -247,28 +215,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void FillSpellCheckDictionaries()
-        {
-        }
-
-
         internal void Initialize(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
-
-            _importLanguageString = languageString;
-        }
-
-
-        internal void InitializeQuick(List<VobSubMergedPack> vobSubMergedPackist, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
-        {
-            SetButtonsStartOcr();
-
-            _importLanguageString = languageString;
-            if (_importLanguageString != null && _importLanguageString.Contains('(') && !_importLanguageString.StartsWith('('))
-            {
-                _importLanguageString = _importLanguageString.Substring(0, languageString.IndexOf('(') - 1).Trim();
-            }
         }
 
         internal void InitializeBatch(IList<IBinaryParagraph> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
@@ -288,8 +237,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             }
         }
-
-
 
         internal void InitializeBatch(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
         {
@@ -324,8 +271,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             autoTransparentBackgroundToolStripMenuItem.Checked = false;
             autoTransparentBackgroundToolStripMenuItem.Visible = false;
         }
-
-
 
         private void LoadBluRaySup()
         {
@@ -398,7 +343,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Color emphasis2;
 
             var makeTransparent = true;
-if (_bluRaySubtitlesOriginal != null)
+            if (_bluRaySubtitlesOriginal != null)
             {
                 if (_bluRaySubtitles != null)
                 {
@@ -512,8 +457,6 @@ if (_bluRaySubtitlesOriginal != null)
         /// </summary>
         private void GetSubtitleTopAndHeight(int index, out int left, out int top, out int width, out int height)
         {
-
-         
             if (_bluRaySubtitlesOriginal != null)
             {
                 var item = _bluRaySubtitles[index];
@@ -525,8 +468,6 @@ if (_bluRaySubtitlesOriginal != null)
                 top = item.PcsObjects.Min(p => p.Origin.Y);
                 return;
             }
-
-
 
             left = 0;
             top = 0;
@@ -586,9 +527,6 @@ if (_bluRaySubtitlesOriginal != null)
                 // can crash if user is clicking around...
             }
         }
-
-        public static int _italicFixes = 0;
-
 
         internal static ImageSplitterItem GetExpandedSelectionNew(NikseBitmap bitmap, List<ImageSplitterItem> expandSelectionList)
         {
@@ -658,9 +596,7 @@ if (_bluRaySubtitlesOriginal != null)
                 }
 
             }
-
             VobSubOcr_Resize(null, null);
-
         }
 
         private void SetButtonsStartOcr()
@@ -685,13 +621,10 @@ if (_bluRaySubtitlesOriginal != null)
             }
             InitializeTopAlign();
 
-           
-
             _mainOcrBitmap = null;
 
             SetButtonsStartOcr();
             _fromMenuItem = false;
-
 
             int max = GetSubtitleCount();
 
@@ -757,9 +690,7 @@ if (_bluRaySubtitlesOriginal != null)
                             maxHeight = height;
                         }
                     }
-                    
                 }
-
 
                 if (maxHeight >= 720)
                 {
@@ -967,10 +898,7 @@ if (_bluRaySubtitlesOriginal != null)
                 FileName = bdnSubtitle.FileName;
             }
 
-
-
             SetButtonsStartOcr();
-
 
             Text = LanguageSettings.Current.VobSubOcr.TitleBluRay;
 
@@ -1098,11 +1026,7 @@ if (_bluRaySubtitlesOriginal != null)
                 }
             }
 
-
-
             System.Threading.Thread.Sleep(100);
-
-
             Configuration.Settings.VobSubOcr.ItalicFactor = _unItalicFactor;
 
             if (!e.Cancel)
@@ -1117,20 +1041,15 @@ if (_bluRaySubtitlesOriginal != null)
                 });
             }
         }
- 
         private PreprocessingSettings _preprocessingSettings;
-
 
         private void timerHideStatus_Tick(object sender, EventArgs e)
         {
             timerHideStatus.Stop();
         }
-
-
         internal void Initialize(List<TransportStreamSubtitle> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, string language, bool skipMakeBinary = false)
         {
             SetButtonsStartOcr();
-
             ShowDvbSubs();
 
             FileName = fileName;
@@ -1139,7 +1058,6 @@ if (_bluRaySubtitlesOriginal != null)
 
             _fromMenuItem = skipMakeBinary;
         }
-
         private void ShowDvbSubs()
         {
             _subtitle.Paragraphs.Clear();

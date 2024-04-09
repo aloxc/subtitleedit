@@ -206,7 +206,7 @@ namespace Nikse.SubtitleEdit.Forms
 
             using (var formSubOcr = new VobSubOcr())
             {
-                formSubOcr.InitializeQuick(subs, _palette, Configuration.Settings.VobSubOcr, SelectedLanguageString);
+                formSubOcr.Initialize(subs, _palette, Configuration.Settings.VobSubOcr, SelectedLanguageString);
             }
         }
 
