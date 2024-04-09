@@ -427,7 +427,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             groupBoxSubtitleImage.Text = string.Empty;
-            groupBoxOCRControls.Text = string.Empty;
 
             OcrTrainingToolStripMenuItem.Text = language.OcrTraining;
             toolStripMenuItemSetUnItalicFactor.Text = language.SetItalicAngle;
@@ -439,10 +438,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             pasteToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Paste;
             deleteToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Delete;
             selectAllToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.SelectAll;
-            normalToolStripMenuItem1.Text = LanguageSettings.Current.Main.Menu.ContextMenu.RemoveFormattingAll;
-            boldToolStripMenuItem1.Text = LanguageSettings.Current.General.Bold;
-            italicToolStripMenuItem1.Text = LanguageSettings.Current.General.Italic;
-            underlineToolStripMenuItem1.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Underline;
 
             InitializeModi();
 
@@ -490,7 +485,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             UiUtil.InitializeSubtitleFont(subtitleListView1);
             subtitleListView1.AutoSizeAllColumns(this);
 
-            UiUtil.InitializeSubtitleFont(textBoxCurrentText);
 
             italicToolStripMenuItem.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewItalic);
 
@@ -537,7 +531,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             System.Threading.Thread.Sleep(1000);
             subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
-            textBoxCurrentText.TextChanged -= TextBoxCurrentTextTextChanged;
 
             _abort = false;
             for (int i = 0; i < max; i++)
@@ -785,7 +778,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 System.Threading.Thread.Sleep(1000);
             }
 
-            textBoxCurrentText.TextChanged -= TextBoxCurrentTextTextChanged;
             for (int i = 0; i < max; i++)
             {
                 _selectedIndex = i;
@@ -3841,7 +3833,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 SelectBestImageCompareDatabase();
             }
 
-            textBoxCurrentText.BackColor = SystemColors.ActiveBorder;
         }
 
         public void DoHide()
@@ -4116,7 +4107,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                 if (_abort)
                 {
-                    textBoxCurrentText.Text = text;
                     _mainOcrRunning = false;
                     SetButtonsEnabledAfterOcrDone();
                 }
@@ -4145,7 +4135,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                 if (subtitleListView1.SelectedItems.Count == 1 && subtitleListView1.SelectedItems[0].Index == index)
                 {
-                    textBoxCurrentText.Text = text;
                 }
                 else
                 {
@@ -4276,11 +4265,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (_abort)
             {
                 // Only overwrite text when empty
-                if (textBoxCurrentText.Text == String.Empty)
-                {
-                    textBoxCurrentText.Text = text;
-                }
-
                 _mainOcrRunning = false;
                 SetButtonsEnabledAfterOcrDone();
                 return true;
@@ -4301,7 +4285,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (subtitleListView1.SelectedItems.Count == 1 && subtitleListView1.SelectedItems[0].Index == i)
             {
-                textBoxCurrentText.Text = text;
             }
             else
             {
@@ -5173,7 +5156,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _selectedIndex = _slvSelIdx.Value;
                 if (_selectedIndex < 0)
                 {
-                    textBoxCurrentText.Text = string.Empty;
                     return;
                 }
                 SelectedIndexChangedAction();
@@ -5222,13 +5204,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             else
             {
                 _selectedIndex = -1;
-                textBoxCurrentText.Text = string.Empty;
             }
         }
 
         private void SelectedIndexChangedAction()
         {
-            textBoxCurrentText.Text = _subtitle.Paragraphs[_selectedIndex].Text;
             if (_mainOcrRunning && _mainOcrBitmap != null)
             {
                 ShowSubtitleImage(_selectedIndex, _mainOcrBitmap);
@@ -5239,40 +5219,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 bmp.Dispose();
             }
 
-        }
-
-        private void TextBoxCurrentTextTextChanged(object sender, EventArgs e)
-        {
-            if (_selectedIndex >= 0)
-            {
-                string text = textBoxCurrentText.Text.TrimEnd();
-                _subtitle.Paragraphs[_selectedIndex].Text = text;
-                subtitleListView1.SetText(_selectedIndex, text);
-            }
-
-            FixVerticalScrollBars(textBoxCurrentText);
-        }
-
-        private static void FixVerticalScrollBars(SETextBox tb)
-        {
-            if (Utilities.GetNumberOfLines(tb.Text) > 5)
-            {
-                tb.ScrollBars = RichTextBoxScrollBars.Vertical;
-            }
-            else
-            {
-                tb.ScrollBars = RichTextBoxScrollBars.None;
-            }
-        }
-
-        private void ButtonNewCharacterDatabaseClick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ComboBoxCharacterDatabaseSelectedIndexChanged(object sender, EventArgs e)
-        {
-            LoadImageCompareBitmaps();
         }
 
 
@@ -5496,27 +5442,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private int _findNextLastTextPosition = -1;
         private void FindNext()
         {
-            if (_findHelper == null)
-            {
-                return;
-            }
-
-            var idx = _selectedIndex;
-            if (_findHelper.Find(_subtitle, null, idx, textBoxCurrentText.SelectionStart + 1))
-            {
-                if (_findHelper.SelectedLineIndex == _findNextLastLineIndex &&
-                    _findHelper.SelectedPosition == _findNextLastTextPosition &&
-                    !_findHelper.Find(_subtitle, null, idx, textBoxCurrentText.SelectionStart + _findHelper.FindTextLength))
-                {
-                    return;
-                }
-
-                subtitleListView1.SelectIndexAndEnsureVisible(_findHelper.SelectedLineIndex, true);
-                textBoxCurrentText.SelectionStart = _findHelper.SelectedPosition;
-                textBoxCurrentText.SelectionLength = _findHelper.FindTextLength;
-                _findNextLastLineIndex = idx;
-                _findNextLastTextPosition = _findHelper.SelectedPosition;
-            }
         }
 
 
@@ -5752,10 +5677,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     {
                         p.Text = HtmlUtil.RemoveHtmlTags(p.Text);
                         subtitleListView1.SetText(item.Index, p.Text);
-                        if (item.Index == _selectedIndex)
-                        {
-                            textBoxCurrentText.Text = p.Text;
-                        }
+                       
                     }
                 }
             }
@@ -5800,10 +5722,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         }
 
                         subtitleListView1.SetText(item.Index, p.Text);
-                        if (item.Index == _selectedIndex)
-                        {
-                            textBoxCurrentText.Text = p.Text;
-                        }
+              
                     }
                 }
             }
@@ -6352,28 +6271,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.SelectIndexAndEnsureVisible(0);
         }
 
-        private void textBoxCurrentText_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == _italicShortcut) // Ctrl+I (or custom) = Italic
-            {
-                var tb = textBoxCurrentText;
-                string text = tb.SelectedText;
-                int selectionStart = tb.SelectionStart;
-                if (text.Contains("<i>"))
-                {
-                    text = HtmlUtil.RemoveOpenCloseTags(text, HtmlUtil.TagItalic);
-                }
-                else
-                {
-                    text = $"<i>{text}</i>";
-                }
-
-                tb.SelectedText = text;
-                tb.SelectionStart = selectionStart;
-                tb.SelectionLength = text.Length;
-                e.SuppressKeyPress = true;
-            }
-        }
 
         internal void Initialize(List<SubPicturesWithSeparateTimeCodes> subPicturesWithTimeCodes, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {
@@ -7494,186 +7391,22 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBoxCurrentText.Cut();
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBoxCurrentText.Copy();
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBoxCurrentText.Paste();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            textBoxCurrentText.SelectedText = string.Empty;
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            textBoxCurrentText.SelectAll();
-        }
-
-        private void normalToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            var tb = textBoxCurrentText;
-            if (tb.SelectionLength == 0)
-            {
-                var allText = HtmlUtil.RemoveHtmlTags(tb.Text);
-                allText = NetflixImsc11Japanese.RemoveTags(allText);
-                tb.Text = allText;
-                return;
-            }
-
-            string text = tb.SelectedText;
-            int selectionStart = tb.SelectionStart;
-            text = HtmlUtil.RemoveHtmlTags(text);
-            text = NetflixImsc11Japanese.RemoveTags(text);
-            tb.SelectedText = text;
-            tb.SelectionStart = selectionStart;
-            tb.SelectionLength = text.Length;
-        }
-
-        private void TextBoxListViewToggleTag(string tag)
-        {
-            var tb = textBoxCurrentText;
-            string text;
-            int selectionStart = tb.SelectionStart;
-
-            // No text selected.
-            if (tb.SelectedText.Length == 0)
-            {
-                text = tb.Text;
-
-                // Split lines (split a subtitle into its lines).
-                var lines = text.SplitToLines();
-
-                // Get current line index (the line where the cursor is current located).
-                int numberOfNewLines = 0;
-                for (int i = 0; i < tb.SelectionStart && i < text.Length; i++)
-                {
-                    if (text[i] == '\n')
-                    {
-                        numberOfNewLines++;
-                    }
-                }
-                int selectedLineIdx = numberOfNewLines; // Do not use 'GetLineFromCharIndex' as it also counts when lines are wrapped
-
-                // Get line from index.
-                string selectedLine = lines[selectedLineIdx];
-
-                // Test if line at where cursor is current at is a dialog.
-                bool isDialog = selectedLine.StartsWith('-') ||
-                                selectedLine.StartsWith("<" + tag + ">-", StringComparison.OrdinalIgnoreCase);
-
-                // Will be used keep cursor in its previous location after toggle/untoggle.
-                int textLen = text.Length;
-
-                // 1st set the cursor position to zero.
-                tb.SelectionStart = 0;
-
-                // If is dialog, only toggle/Untoggle line where caret/cursor is current at.
-                if (isDialog)
-                {
-                    lines[selectedLineIdx] = HtmlUtil.ToggleTag(selectedLine, tag, false, false);
-                    text = string.Join(Environment.NewLine, lines);
-                }
-                else
-                {
-                    text = HtmlUtil.ToggleTag(text, tag, false, false);
-                }
-
-                tb.Text = text;
-                // Note: Math.Max will prevent blowing if caret is at the begining and tag was untoggled.
-                tb.SelectionStart = textLen > text.Length ? Math.Max(selectionStart - 3, 0) : selectionStart + 3;
-            }
-            else
-            {
-                string post = string.Empty;
-                string pre = string.Empty;
-                // There is text selected
-                text = tb.SelectedText;
-                while (text.EndsWith(' ') || text.EndsWith(Environment.NewLine, StringComparison.Ordinal) || text.StartsWith(' ') || text.StartsWith(Environment.NewLine, StringComparison.Ordinal))
-                {
-                    if (text.EndsWith(' '))
-                    {
-                        post += " ";
-                        text = text.Remove(text.Length - 1);
-                    }
-
-                    if (text.EndsWith(Environment.NewLine, StringComparison.Ordinal))
-                    {
-                        post += Environment.NewLine;
-                        text = text.Remove(text.Length - 2);
-                    }
-
-                    if (text.StartsWith(' '))
-                    {
-                        pre += " ";
-                        text = text.Remove(0, 1);
-                    }
-
-                    if (text.StartsWith(Environment.NewLine, StringComparison.Ordinal))
-                    {
-                        pre += Environment.NewLine;
-                        text = text.Remove(0, 2);
-                    }
-                }
-
-                text = HtmlUtil.ToggleTag(text, tag, false, false);
-                // Update text and maintain selection.
-                if (pre.Length > 0)
-                {
-                    text = pre + text;
-                    selectionStart += pre.Length;
-                }
-
-                if (post.Length > 0)
-                {
-                    text = text + post;
-                }
-
-                tb.SelectedText = text;
-                tb.SelectionStart = selectionStart;
-                tb.SelectionLength = text.Length;
-            }
-        }
-
-        private void boldToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            TextBoxListViewToggleTag(HtmlUtil.TagBold);
-        }
-
-        private void italicToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            TextBoxListViewToggleTag(HtmlUtil.TagItalic);
-        }
-
-        private void underlineToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            TextBoxListViewToggleTag(HtmlUtil.TagUnderline);
-        }
-
-        public void Initialize(IList<IBinaryParagraphWithPosition> list, VobSubOcrSettings vobSubOcrSettings, string fileName, string languageString)
-        {
-            SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
-            _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
-
-            _binaryParagraphWithPositions = list;
-
-            SetTesseractLanguageFromLanguageString(languageString);
-            _importLanguageString = languageString;
         }
 
         private void imageWithTimeCodeInFileNameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -7809,91 +7542,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         public void FindDialogFind(string findText, ReplaceType findReplaceType, Regex regex)
         {
-            _findHelper = _findHelper ?? _findDialog.GetFindDialogHelper(_selectedIndex);
-            _findHelper.FindText = findText;
-            _findHelper.FindTextLength = findText.Length;
-            _findHelper.FindReplaceType = findReplaceType;
-            _findHelper.InProgress = true;
-            _findHelper.SetRegex(regex);
-            if (!string.IsNullOrWhiteSpace(_findHelper.FindText))
-            {
-                if (Configuration.Settings.Tools.FindHistory.Count == 0 || Configuration.Settings.Tools.FindHistory[0] != _findHelper.FindText)
-                {
-                    Configuration.Settings.Tools.FindHistory.Insert(0, _findHelper.FindText);
-                }
-            }
-
-            ShowStatus(string.Format(LanguageSettings.Current.Main.SearchingForXFromLineY, _findHelper.FindText, _selectedIndex + 1));
-
-            var tb = textBoxCurrentText;
-            int startPos = tb.SelectedText.Length > 0 ? tb.SelectionStart + 1 : tb.SelectionStart;
-            bool found = _findHelper.Find(_subtitle, null, _selectedIndex, startPos);
-
-            // if we fail to find the text, we might want to start searching from the top of the file.
-            if (!found && _findHelper.StartLineIndex >= 1)
-            {
-                if (MessageBox.Show(LanguageSettings.Current.Main.FindContinue, LanguageSettings.Current.Main.FindContinueTitle, MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                {
-                    found = _findHelper.Find(_subtitle, null, -1);
-                }
-            }
-
-            if (found)
-            {
-                subtitleListView1.SelectIndexAndEnsureVisible(_findHelper.SelectedLineIndex, true);
-                tb.Focus();
-                tb.SelectionStart = _findHelper.SelectedPosition;
-                tb.SelectionLength = _findHelper.FindTextLength;
-                ShowStatus(string.Format(LanguageSettings.Current.Main.XFoundAtLineNumberY, _findHelper.FindText, _findHelper.SelectedLineIndex + 1));
-                _findHelper.SelectedPosition++;
-            }
-            else
-            {
-                ShowStatus(string.Format(LanguageSettings.Current.Main.XNotFound, _findHelper.FindText));
-            }
+           
         }
 
         public void FindDialogFindPrevious(string findText)
         {
-            if (_findHelper == null)
-            {
-                return;
-            }
-
-            _findHelper.FindText = findText;
-            _findHelper.FindTextLength = findText.Length;
-            _findHelper.InProgress = true;
-            var tb = textBoxCurrentText;
-
-            var selectedIndex = -1;
-            if (subtitleListView1.SelectedItems.Count > 0)
-            {
-                selectedIndex = subtitleListView1.SelectedItems[0].Index;
-            }
-
-            var textBoxStart = tb.SelectionStart;
-            if (_findHelper.SelectedPosition - 1 == tb.SelectionStart && tb.SelectionLength > 0 ||
-                _findHelper.FindText.Equals(tb.SelectedText, StringComparison.OrdinalIgnoreCase))
-            {
-                textBoxStart = tb.SelectionStart - 1;
-            }
-
-            if (_findHelper.FindPrevious(_subtitle, null, selectedIndex, textBoxStart, Configuration.Settings.General.AllowEditOfOriginalSubtitle))
-            {
-                tb = textBoxCurrentText;
-                subtitleListView1.SelectIndexAndEnsureVisible(_findHelper.SelectedLineIndex, true);
-                ShowStatus(string.Format(LanguageSettings.Current.Main.XFoundAtLineNumberY, _findHelper.FindText, _findHelper.SelectedLineIndex + 1));
-                tb.Focus();
-                tb.SelectionStart = _findHelper.SelectedPosition;
-                tb.SelectionLength = _findHelper.FindTextLength;
-                _findHelper.SelectedPosition--;
-            }
-            else
-            {
-                ShowStatus(string.Format(LanguageSettings.Current.Main.XNotFound, _findHelper.FindText));
-            }
-
-            _findHelper.InProgress = false;
+            
         }
 
         public void FindDialogClose()

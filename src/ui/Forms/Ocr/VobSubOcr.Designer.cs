@@ -53,7 +53,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.groupBoxOCRControls = new System.Windows.Forms.GroupBox();
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
@@ -80,7 +79,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
-            this.textBoxCurrentText = new Nikse.SubtitleEdit.Controls.SETextBox();
             this.contextMenuStripTextBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,14 +87,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
-            this.normalToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.boldToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.italicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.underlineToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
-            this.groupBoxOCRControls.SuspendLayout();
+            this.groupBoxOcrAutoFix.SuspendLayout();
             this.contextMenuStripAllFixes.SuspendLayout();
             this.contextMenuStripUnknownWords.SuspendLayout();
             this.contextMenuStripGuessesUsed.SuspendLayout();
@@ -393,22 +387,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonCancel.Text = "C&ancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
-            // groupBoxOCRControls
-            // 
-            this.groupBoxOCRControls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxOCRControls.Controls.Add(this.buttonPause);
-            this.groupBoxOCRControls.Controls.Add(this.buttonStartOcr);
-            this.groupBoxOCRControls.Location = new System.Drawing.Point(624, 207);
-            this.groupBoxOCRControls.Name = "groupBoxOCRControls";
-            this.groupBoxOCRControls.Size = new System.Drawing.Size(287, 84);
-            this.groupBoxOCRControls.TabIndex = 2;
-            this.groupBoxOCRControls.TabStop = false;
-            this.groupBoxOCRControls.Text = "OCR Start/stop";
-            // 
             // buttonPause
             // 
             this.buttonPause.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.buttonPause.Location = new System.Drawing.Point(11, 52);
+            this.buttonPause.Location = new System.Drawing.Point(11, 70);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(105, 23);
             this.buttonPause.TabIndex = 2;
@@ -420,7 +402,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.buttonStartOcr.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonStartOcr.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.buttonStartOcr.Location = new System.Drawing.Point(11, 24);
+            this.buttonStartOcr.Location = new System.Drawing.Point(11, 21);
             this.buttonStartOcr.Name = "buttonStartOcr";
             this.buttonStartOcr.Size = new System.Drawing.Size(105, 23);
             this.buttonStartOcr.TabIndex = 0;
@@ -430,13 +412,15 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // groupBoxOcrAutoFix
             // 
+            this.groupBoxOcrAutoFix.Controls.Add(this.buttonPause);
+            this.groupBoxOcrAutoFix.Controls.Add(this.buttonStartOcr);
             this.groupBoxOcrAutoFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxOcrAutoFix.Location = new System.Drawing.Point(0, 0);
             this.groupBoxOcrAutoFix.Name = "groupBoxOcrAutoFix";
             this.groupBoxOcrAutoFix.Size = new System.Drawing.Size(144, 333);
             this.groupBoxOcrAutoFix.TabIndex = 0;
             this.groupBoxOcrAutoFix.TabStop = false;
-            this.groupBoxOcrAutoFix.Text = "OCR auto correction / spell checking";
+            this.groupBoxOcrAutoFix.Text = "OCR Start/stop";
             // 
             // contextMenuStripAllFixes
             // 
@@ -648,8 +632,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // splitContainerBottom.Panel1
             // 
-            this.splitContainerBottom.Panel1.Controls.Add(this.textBoxCurrentText);
-            this.splitContainerBottom.Panel1.Controls.Add(this.groupBoxOCRControls);
             this.splitContainerBottom.Panel1.Controls.Add(this.subtitleListView1);
             this.splitContainerBottom.Panel1.Controls.Add(this.labelSubtitleText);
             this.splitContainerBottom.Panel1MinSize = 100;
@@ -662,39 +644,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.splitContainerBottom.SplitterDistance = 914;
             this.splitContainerBottom.TabIndex = 39;
             // 
-            // textBoxCurrentText
-            // 
-            this.textBoxCurrentText.AllowDrop = true;
-            this.textBoxCurrentText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxCurrentText.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.textBoxCurrentText.ContextMenuStrip = this.contextMenuStripTextBox;
-            this.textBoxCurrentText.CurrentLanguage = "";
-            this.textBoxCurrentText.CurrentLineIndex = 0;
-            this.textBoxCurrentText.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCurrentText.HideSelection = true;
-            this.textBoxCurrentText.IsDictionaryDownloaded = true;
-            this.textBoxCurrentText.IsSpellCheckerInitialized = false;
-            this.textBoxCurrentText.IsSpellCheckRequested = false;
-            this.textBoxCurrentText.IsWrongWord = false;
-            this.textBoxCurrentText.LanguageChanged = false;
-            this.textBoxCurrentText.Location = new System.Drawing.Point(8, 214);
-            this.textBoxCurrentText.MaxLength = 32767;
-            this.textBoxCurrentText.Multiline = true;
-            this.textBoxCurrentText.Name = "textBoxCurrentText";
-            this.textBoxCurrentText.Padding = new System.Windows.Forms.Padding(1);
-            this.textBoxCurrentText.ReadOnly = false;
-            this.textBoxCurrentText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Both;
-            this.textBoxCurrentText.SelectedText = "";
-            this.textBoxCurrentText.SelectionLength = 0;
-            this.textBoxCurrentText.SelectionStart = 0;
-            this.textBoxCurrentText.Size = new System.Drawing.Size(610, 77);
-            this.textBoxCurrentText.TabIndex = 1;
-            this.textBoxCurrentText.TextBoxFont = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
-            this.textBoxCurrentText.UseSystemPasswordChar = false;
-            this.textBoxCurrentText.TextChanged += new System.EventHandler(this.TextBoxCurrentTextTextChanged);
-            this.textBoxCurrentText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxCurrentText_KeyDown);
-            // 
             // contextMenuStripTextBox
             // 
             this.contextMenuStripTextBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -704,11 +653,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItem1,
             this.toolStripSeparator18,
             this.selectAllToolStripMenuItem,
-            this.toolStripSeparator17,
-            this.normalToolStripMenuItem1,
-            this.boldToolStripMenuItem1,
-            this.italicToolStripMenuItem1,
-            this.underlineToolStripMenuItem1});
+            this.toolStripSeparator17});
             this.contextMenuStripTextBox.Name = "contextMenuStripTextBoxListView";
             this.contextMenuStripTextBox.Size = new System.Drawing.Size(173, 214);
             // 
@@ -760,35 +705,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.toolStripSeparator17.Name = "toolStripSeparator17";
             this.toolStripSeparator17.Size = new System.Drawing.Size(169, 6);
-            // 
-            // normalToolStripMenuItem1
-            // 
-            this.normalToolStripMenuItem1.Name = "normalToolStripMenuItem1";
-            this.normalToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
-            this.normalToolStripMenuItem1.Text = "Normal";
-            this.normalToolStripMenuItem1.Click += new System.EventHandler(this.normalToolStripMenuItem1_Click);
-            // 
-            // boldToolStripMenuItem1
-            // 
-            this.boldToolStripMenuItem1.Name = "boldToolStripMenuItem1";
-            this.boldToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
-            this.boldToolStripMenuItem1.Text = "Bold";
-            this.boldToolStripMenuItem1.Click += new System.EventHandler(this.boldToolStripMenuItem1_Click);
-            // 
-            // italicToolStripMenuItem1
-            // 
-            this.italicToolStripMenuItem1.Name = "italicToolStripMenuItem1";
-            this.italicToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.italicToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
-            this.italicToolStripMenuItem1.Text = "Italic";
-            this.italicToolStripMenuItem1.Click += new System.EventHandler(this.italicToolStripMenuItem1_Click);
-            // 
-            // underlineToolStripMenuItem1
-            // 
-            this.underlineToolStripMenuItem1.Name = "underlineToolStripMenuItem1";
-            this.underlineToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
-            this.underlineToolStripMenuItem1.Text = "Underline";
-            this.underlineToolStripMenuItem1.Click += new System.EventHandler(this.underlineToolStripMenuItem1_Click);
+          
             // 
             // subtitleListView1
             // 
@@ -848,7 +765,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.VobSubOcr_KeyDown);
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
-            this.groupBoxOCRControls.ResumeLayout(false);
+            this.groupBoxOcrAutoFix.ResumeLayout(false);
             this.contextMenuStripAllFixes.ResumeLayout(false);
             this.contextMenuStripUnknownWords.ResumeLayout(false);
             this.contextMenuStripGuessesUsed.ResumeLayout(false);
@@ -876,8 +793,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
         private SubtitleListView subtitleListView1;
-        private SETextBox textBoxCurrentText;
-        private System.Windows.Forms.GroupBox groupBoxOCRControls;
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonStartOcr;
         private System.Windows.Forms.GroupBox groupBoxOcrAutoFix;
@@ -938,10 +853,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
         private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
-        private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem boldToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem italicToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem underlineToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem imageWithTimeCodeInFileNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeAllXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
