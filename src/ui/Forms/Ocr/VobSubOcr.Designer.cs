@@ -30,13 +30,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemExport = new System.Windows.Forms.ToolStripMenuItem();
-            this.bDNXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bluraySupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vobSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dOSTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.finalCutProImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.imageWithTimeCodeInFileNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorImageCompare = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemInspectNOcrMatches = new System.Windows.Forms.ToolStripMenuItem();
             this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,7 +111,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator2,
             this.saveImageAsToolStripMenuItem,
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem,
-            this.toolStripMenuItemExport,
             this.toolStripSeparatorImageCompare,
             this.toolStripMenuItemInspectNOcrMatches,
             this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem,
@@ -204,61 +196,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Text = "Save all images with HTML index view...";
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Click += new System.EventHandler(this.SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItemExport
-            // 
-            this.toolStripMenuItemExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bDNXMLToolStripMenuItem,
-            this.bluraySupToolStripMenuItem,
-            this.vobSubToolStripMenuItem,
-            this.dOSTToolStripMenuItem,
-            this.finalCutProImageToolStripMenuItem,
-            this.imageWithTimeCodeInFileNameToolStripMenuItem});
-            this.toolStripMenuItemExport.Name = "toolStripMenuItemExport";
-            this.toolStripMenuItemExport.Size = new System.Drawing.Size(332, 22);
-            this.toolStripMenuItemExport.Text = "Export all images as...";
-            // 
-            // bDNXMLToolStripMenuItem
-            // 
-            this.bDNXMLToolStripMenuItem.Name = "bDNXMLToolStripMenuItem";
-            this.bDNXMLToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.bDNXMLToolStripMenuItem.Text = "BDN XML...";
-            this.bDNXMLToolStripMenuItem.Click += new System.EventHandler(this.BDNXMLToolStripMenuItem_Click);
-            // 
-            // bluraySupToolStripMenuItem
-            // 
-            this.bluraySupToolStripMenuItem.Name = "bluraySupToolStripMenuItem";
-            this.bluraySupToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.bluraySupToolStripMenuItem.Text = "Blu-ray sup...";
-            this.bluraySupToolStripMenuItem.Click += new System.EventHandler(this.BluraySupToolStripMenuItem_Click);
-            // 
-            // vobSubToolStripMenuItem
-            // 
-            this.vobSubToolStripMenuItem.Name = "vobSubToolStripMenuItem";
-            this.vobSubToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.vobSubToolStripMenuItem.Text = "VobSub...";
-            this.vobSubToolStripMenuItem.Click += new System.EventHandler(this.VobSubToolStripMenuItem_Click);
-            // 
-            // dOSTToolStripMenuItem
-            // 
-            this.dOSTToolStripMenuItem.Name = "dOSTToolStripMenuItem";
-            this.dOSTToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.dOSTToolStripMenuItem.Text = "DOST...";
-            this.dOSTToolStripMenuItem.Click += new System.EventHandler(this.DOSTToolStripMenuItem_Click);
-            // 
-            // finalCutProImageToolStripMenuItem
-            // 
-            this.finalCutProImageToolStripMenuItem.Name = "finalCutProImageToolStripMenuItem";
-            this.finalCutProImageToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.finalCutProImageToolStripMenuItem.Text = "Final Cut Pro + image...";
-            this.finalCutProImageToolStripMenuItem.Click += new System.EventHandler(this.finalCutProImageToolStripMenuItem_Click);
-            // 
-            // imageWithTimeCodeInFileNameToolStripMenuItem
-            // 
-            this.imageWithTimeCodeInFileNameToolStripMenuItem.Name = "imageWithTimeCodeInFileNameToolStripMenuItem";
-            this.imageWithTimeCodeInFileNameToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.imageWithTimeCodeInFileNameToolStripMenuItem.Text = "Images with time code in file name...";
-            this.imageWithTimeCodeInFileNameToolStripMenuItem.Click += new System.EventHandler(this.imageWithTimeCodeInFileNameToolStripMenuItem_Click);
             // 
             // toolStripSeparatorImageCompare
             // 
@@ -815,10 +752,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSetUnItalicFactor;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExport;
-        private System.Windows.Forms.ToolStripMenuItem vobSubToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bluraySupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bDNXMLToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUnknownWords;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
@@ -828,7 +761,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearGuesses;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemInspectNOcrMatches;
         private System.Windows.Forms.Timer timerHideStatus;
-        private System.Windows.Forms.ToolStripMenuItem dOSTToolStripMenuItem;
         private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownAutoTransparentAlphaMax;
         private System.Windows.Forms.Label labelMinAlpha;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripImage;
@@ -844,7 +776,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem imagePreprocessingToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem setItalicAngleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoTransparentBackgroundToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem finalCutProImageToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTextBox;
         private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
@@ -853,7 +784,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
         private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
-        private System.Windows.Forms.ToolStripMenuItem imageWithTimeCodeInFileNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeAllXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;

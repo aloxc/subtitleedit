@@ -333,7 +333,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         // Dictionaries/spellchecking/fixing
         private OcrFixEngine _ocrFixEngine;
-        private int _tesseractOcrAutoFixes;
         private string Tesseract5Version = "5.3.3";
 
         private Subtitle _bdnXmlOriginal;
@@ -471,11 +470,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             ImagePreProcessingToolStripMenuItem.Text = language.ImagePreProcessing;
             autoTransparentBackgroundToolStripMenuItem.Text = language.AutoTransparentBackground;
             toolStripMenuItemSaveSubtitleAs.Text = LanguageSettings.Current.Main.SaveSubtitleAs;
-            toolStripMenuItemExport.Text = LanguageSettings.Current.Main.Menu.File.Export;
-            vobSubToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.File.ExportVobSub;
-            bDNXMLToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.File.ExportBdnXml;
-            bluraySupToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.File.ExportBluRaySup;
-            imageWithTimeCodeInFileNameToolStripMenuItem.Text = language.ImagesWithTimeCodesInFileName;
 
             toolStripMenuItemClearFixes.Text = LanguageSettings.Current.DvdSubRip.Clear;
             toolStripMenuItemClearGuesses.Text = LanguageSettings.Current.DvdSubRip.Clear;
@@ -3068,7 +3062,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (textWithOutFixes.Trim() != line.Trim())
             {
-                _tesseractOcrAutoFixes++;
                 LogOcrFix(listViewIndex, textWithOutFixes, line);
             }
 
@@ -3451,7 +3444,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (textWithOutFixes != null && textWithOutFixes.Trim() != line.Trim())
             {
-                _tesseractOcrAutoFixes++;
                 LogOcrFix(listViewIndex, textWithOutFixes, line);
             }
 
@@ -4735,7 +4727,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (textWithOutFixes.Trim() != line.Trim())
             {
-                _tesseractOcrAutoFixes++;
                 LogOcrFix(index, textWithOutFixes, line);
             }
 
@@ -5012,7 +5003,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (textWithOutFixes.Trim() != line.Trim())
             {
-                _tesseractOcrAutoFixes++;
                 LogOcrFix(listViewIndex, textWithOutFixes, line);
             }
 
@@ -6695,20 +6685,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        internal void VobSubToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportToPngXml(ExportPngXml.ExportFormats.VobSub);
-        }
-
-        internal void BluraySupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportToPngXml(ExportPngXml.ExportFormats.BluraySup);
-        }
-
-        internal void BDNXMLToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportToPngXml(ExportPngXml.ExportFormats.BdnXml);
-        }
+ 
 
         private void ExportToPngXml(string exportType)
         {
@@ -6895,27 +6872,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             labelStatus.Text = string.Empty;
         }
 
-        internal void DOSTToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var exportBdnXmlPng = new ExportPngXml())
-            {
-                _fromMenuItem = true;
-                exportBdnXmlPng.InitializeFromVobSubOcr(_subtitle, new SubRip(), ExportPngXml.ExportFormats.Dost, FileName, this, _importLanguageString);
-                exportBdnXmlPng.ShowDialog(this);
-                _fromMenuItem = false;
-            }
-        }
-
-        internal void finalCutProImageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var exportBdnXmlPng = new ExportPngXml())
-            {
-                _fromMenuItem = true;
-                exportBdnXmlPng.InitializeFromVobSubOcr(_subtitle, new SubRip(), ExportPngXml.ExportFormats.Fcp, FileName, this, _importLanguageString);
-                exportBdnXmlPng.ShowDialog(this);
-                _fromMenuItem = false;
-            }
-        }
 
         internal void Initialize(List<TransportStreamSubtitle> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, string language, bool skipMakeBinary = false)
         {
@@ -7270,17 +7226,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return lowercaseHeight;
         }
 
-        private int GetLastBinOcrUppercaseHeight()
-        {
-            var uppercaseHeight = 35;
-            if (_ocrUppercaseHeightsTotalCount > 5)
-            {
-                uppercaseHeight = (int)Math.Round((double)_ocrUppercaseHeightsTotal / _ocrUppercaseHeightsTotalCount);
-            }
-
-            return uppercaseHeight;
-        }
-
         private void contextMenuStripImage_Opening(object sender, CancelEventArgs e)
         {
             GetSubtitleScreenSize(_selectedIndex, out var width, out var height);
@@ -7409,103 +7354,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
         }
 
-        private void imageWithTimeCodeInFileNameToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            saveFileDialog1.Title = "Save images in folder";
-            saveFileDialog1.AddExtension = true;
-            saveFileDialog1.FileName = "Dummy";
-            saveFileDialog1.Filter = "PNG image|*.png|BMP image|*.bmp|JPG image|*.jpg|GIF image|*.gif|TIFF image|*.tiff";
-            saveFileDialog1.FilterIndex = 0;
-
-            DialogResult result = saveFileDialog1.ShowDialog(this);
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
-            var path = Path.GetDirectoryName(saveFileDialog1.FileName);
-            var oldOcrIndex = _ocrMethodIndex;
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                Application.DoEvents();
-                var ext = ".png";
-                var imageFormat = System.Drawing.Imaging.ImageFormat.Png;
-                if (saveFileDialog1.FilterIndex == 2)
-                {
-                    ext = ".bmp";
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
-                }
-                else if (saveFileDialog1.FilterIndex == 3)
-                {
-                    ext = ".jpg";
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
-                }
-                else if (saveFileDialog1.FilterIndex == 4)
-                {
-                    ext = ".gif";
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Gif;
-                }
-                else if (saveFileDialog1.FilterIndex == 5)
-                {
-                    ext = ".tiff";
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Tiff;
-                }
-
-                // force pre processing to be used
-                _fromMenuItem = false;
-                _ocrMethodIndex = _ocrMethodTesseract5;
-                if (_preprocessingSettings == null)
-                {
-                    _preprocessingSettings = new PreprocessingSettings
-                    {
-                        BinaryImageCompareThreshold = Configuration.Settings.Tools.OcrTesseract4RgbThreshold,
-                        InvertColors = _preprocessingSettings != null ? _preprocessingSettings.InvertColors : false,
-                        CropTransparentColors = _preprocessingSettings != null ? _preprocessingSettings.CropTransparentColors : false,
-                    };
-                }
-
-                SetButtonsStartOcr();
-                for (var i = 0; i < _subtitle.Paragraphs.Count; i++)
-                {
-                    var bmp = GetSubtitleBitmap(i);
-                    if (bmp == null)
-                    {
-                        continue;
-                    }
-
-                    // 0_00_01_042__0_00_03_919_01.jpeg
-                    var p = _subtitle.Paragraphs[i];
-                    var fileName = $"{p.StartTime.Hours}_{p.StartTime.Minutes:00}_{p.StartTime.Seconds:00}_{p.StartTime.Milliseconds:000}__" +
-                                   $"{p.EndTime.Hours}_{p.EndTime.Minutes:00}_{p.EndTime.Seconds:00}_{p.EndTime.Milliseconds:000}_{(i + 1):00}{ext}";
-                    bmp.Save(Path.Combine(path, fileName), imageFormat);
-                    bmp.Dispose();
-                    Application.DoEvents();
-                }
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-                _ocrMethodIndex = oldOcrIndex;
-                SetButtonsEnabledAfterOcrDone();
-            }
-
-            var text = string.Format(LanguageSettings.Current.ExportPngXml.XImagesSavedInY, _subtitle.Paragraphs.Count, path);
-            using (var f = new ExportPngXmlDialogOpenFolder(text, path))
-            {
-                f.ShowDialog(this);
-            }
-        }
-
-        private string GetUnknownComboBoxWord(string s)
-        {
-            if (s == null || !s.Contains(':'))
-            {
-                return string.Empty;
-            }
-
-            return s.Remove(0, s.IndexOf(':') + 1).Trim();
-        }
 
         private void removeAllXToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -7532,11 +7380,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             _mainOcrSelectedIndices = subtitleListView1.GetSelectedIndices().ToList();
             ButtonStartOcrClick(null, null);
-        }
-
-        private string GetVSFOriginalImageFileName(string fileName)
-        {
-            return fileName.Replace("\\RGBResults", "\\RGBImages").Replace("\\TXTImages", "\\RGBImages").Replace(".jpeg.png", ".jpeg").Replace(".png", ".jpeg");
         }
 
 
