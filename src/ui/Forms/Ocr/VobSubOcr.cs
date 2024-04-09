@@ -6283,37 +6283,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.SelectIndexAndEnsureVisible(0);
         }
 
-        internal void Initialize(List<XSub> subPictures, VobSubOcrSettings vobSubOcrSettings, string fileName)
-        {
-            _xSubList = subPictures;
-
-            SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
-            _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            autoTransparentBackgroundToolStripMenuItem.Checked = false;
-            autoTransparentBackgroundToolStripMenuItem.Visible = false;
-
-            SetOcrMethod();
-
-            FileName = fileName;
-            Text += " - " + Path.GetFileName(FileName);
-
-            foreach (XSub subItem in _xSubList)
-            {
-                var p = new Paragraph(string.Empty, subItem.Start.TotalMilliseconds, subItem.End.TotalMilliseconds);
-                _subtitle.Paragraphs.Add(p);
-            }
-
-            _subtitle.Renumber();
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
-        }
 
         private bool HasChangesBeenMade()
         {
@@ -6564,65 +6533,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.EndUpdate();
         }
 
-        private void UpdateLogLineNumbersAfterDelete(ListBox listBox, List<int> indices)
-        {
-            int index;
-            listBox.BeginUpdate();
-            for (int i = listBox.Items.Count - 1; i >= 0; i--)
-            {
-                if (listBox.Items[i] is LogItem item && (index = item.Line - 1) >= 0)
-                {
-                    if (indices.Contains(index))
-                    {
-                        listBox.Items.RemoveAt(i);
-                    }
-                    else
-                    {
-                        var c = indices.Count(p => p < index);
-                        if (c > 0)
-                        {
-                            item.Line -= c;
-                        }
-                    }
-                }
-            }
-            listBox.EndUpdate();
-        }
-
-
-        private void UpdateUnknownWordColoring(string name, StringComparison comparison)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return;
-            }
-
-            for (int i = 0; i < _subtitle.Paragraphs.Count; i++)
-            {
-                var p = _subtitle.Paragraphs[i];
-                if (_unknownWordsDictionary.ContainsKey(p.Id))
-                {
-                    string text = " " + HtmlUtil.RemoveHtmlTags(p.Text, true).Replace(Environment.NewLine, " ") + " ";
-                    int start = 0;
-                    int count = 0;
-                    while (text.IndexOf(name, start, comparison) > start)
-                    {
-                        count++;
-                        start = text.IndexOf(name, start, comparison) + 1;
-                    }
-
-                    if (count > 0)
-                    {
-                        ColorLineByNumberOfUnknownWords(i, _unknownWordsDictionary[p.Id] - count, p.Text);
-                    }
-                }
-            }
-        }
-
-
-
-
-
         private void toolStripMenuItemSetUnItalicFactor_Click(object sender, EventArgs e)
         {
             using (var form = new VobSubOcrSetItalicFactor(GetSubtitleBitmap(_selectedIndex), _unItalicFactor))
@@ -6679,28 +6589,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
  
 
-        private void ExportToPngXml(string exportType)
-        {
-            using (var exportBdnXmlPng = new ExportPngXml())
-            {
-                _fromMenuItem = true;
-                exportBdnXmlPng.InitializeFromVobSubOcr(_subtitle, new SubRip(), exportType, FileName, this, _importLanguageString);
-
-                if (_dvbPesSubtitles != null && _dvbPesSubtitles.Count > 0)
-                {
-                    var size = _dvbPesSubtitles[0].GetScreenSize();
-                    exportBdnXmlPng.SetResolution(new Point(size.Width, size.Height));
-                }
-                else if (_dvbSubtitles != null && _dvbSubtitles.Count > 0)
-                {
-                    var size = _dvbSubtitles[0].GetScreenSize();
-                    exportBdnXmlPng.SetResolution(new Point(size.Width, size.Height));
-                }
-
-                exportBdnXmlPng.ShowDialog(this);
-                _fromMenuItem = false;
-            }
-        }
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -6771,91 +6659,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     Cursor = Cursors.Default;
                 }
             }
-        }
-
-        private void buttonLineOcrEditLanguage_Click(object sender, EventArgs e)
-        {
-            if (_nOcrDb == null)
-            {
-                if (string.IsNullOrEmpty(GetNOcrLanguageFileName()))
-                {
-                    MessageBox.Show("No line OCR language loaded - please re-install");
-                    return;
-                }
-
-                LoadNOcrWithCurrentLanguage();
-            }
-
-            using (var form = new VobSubNOcrEdit(_nOcrDb, null, _nOcrDb.FileName))
-            {
-                if (form.ShowDialog(this) == DialogResult.OK && form.Changed)
-                {
-                    Cursor = Cursors.WaitCursor;
-                    try
-                    {
-                        SaveNOcrWithCurrentLanguage();
-                    }
-                    finally
-                    {
-                        Cursor = Cursors.Default;
-                    }
-                }
-                else
-                {
-                    LoadNOcrWithCurrentLanguage();
-                }
-            }
-        }
-
-        private void buttonLineOcrNewLanguage_Click(object sender, EventArgs e)
-        {
-            using (var newFolder = new VobSubOcrNewFolder(false))
-            {
-                if (newFolder.ShowDialog(this) == DialogResult.OK)
-                {
-                    string s = newFolder.FolderName;
-                    if (string.IsNullOrEmpty(s))
-                    {
-                        return;
-                    }
-
-                    s = s.RemoveChar('?', '/', '*', '\\');
-                    if (string.IsNullOrEmpty(s))
-                    {
-                        return;
-                    }
-
-                    if (File.Exists(Configuration.DictionariesDirectory + "nOCR_" + newFolder.FolderName + ".xml"))
-                    {
-                        MessageBox.Show("Line OCR language file already exists!");
-                        return;
-                    }
-
-                    _nOcrDb = null;
-                }
-            }
-        }
-
-
-        private void buttonSpellCheckDownload_Click(object sender, EventArgs e)
-        {
-            using (var form = new GetDictionaries())
-            {
-                form.ShowDialog(this);
-                FillSpellCheckDictionaries();
-                if (form.LastDownload != null && form.LastDownload.Length > 3 && !string.IsNullOrEmpty(form.SelectedEnglishName))
-                {
-                    var lc = Path.GetFileNameWithoutExtension(form.LastDownload.Substring(0, 4).Replace('_', '-'));
-                }
-            }
-
-
-        }
-
-        private void ShowStatus(string msg)
-        {
-            labelStatus.Text = msg;
-            timerHideStatus.Start();
         }
 
         private void timerHideStatus_Tick(object sender, EventArgs e)
@@ -6931,69 +6734,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.SelectIndexAndEnsureVisible(0);
         }
 
-        private void SplitDvbForEachSubImage()
-        {
-            var list = new List<TransportStreamSubtitle>();
-            foreach (var dvbSub in _dvbSubtitles)
-            {
-                if (dvbSub.ActiveImageIndex == null)
-                {
-                    var tempList = new List<TransportStreamSubtitle>();
-                    for (int i = 0; i < dvbSub.Pes.ObjectDataList.Count; i++)
-                    {
-                        var ods = dvbSub.Pes.ObjectDataList[i];
-                        if (ods.TopFieldDataBlockLength > 8)
-                        {
-                            var pos = dvbSub.Pes.GetImagePosition(ods);
-                            tempList.Add(new TransportStreamSubtitle
-                            {
-                                Pes = dvbSub.Pes,
-                                ActiveImageIndex = i,
-                                StartMilliseconds = dvbSub.StartMilliseconds,
-                                EndMilliseconds = dvbSub.EndMilliseconds,
-                                TransportStreamPosition = new Position(pos.X, pos.Y)
-                            });
-                        }
-                    }
-
-                    if (tempList.Count > 1)
-                    {
-                        var lastColor = Color.Transparent;
-                        bool allAlike = true;
-                        foreach (var item in tempList)
-                        {
-                            var dvbBmp = item.GetBitmap();
-                            var nDvbBmp = new NikseBitmap(dvbBmp);
-                            var color = nDvbBmp.GetBrightestColor();
-                            if (lastColor != Color.Transparent && (Math.Abs(color.R - lastColor.R) > 10 || Math.Abs(color.G - lastColor.G) > 10 || Math.Abs(color.B - lastColor.B) > 10))
-                            {
-                                allAlike = false;
-                                break;
-                            }
-
-                            lastColor = color;
-                        }
-
-                        if (allAlike)
-                        {
-                            tempList.Clear();
-                            tempList.Add(dvbSub);
-                        }
-                    }
-
-                    list.AddRange(tempList);
-                }
-                else
-                {
-                    list.Add(dvbSub);
-                }
-            }
-
-            _dvbSubtitles = list;
-            _tesseractAsyncStrings = null;
-            ShowDvbSubs();
-        }
-
         private void ShowDvbSubs()
         {
             _subtitle.Paragraphs.Clear();
@@ -7033,61 +6773,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     form.Initialize();
                     form.ShowDialog(this);
                     ComboBoxOcrMethodSelectedIndexChanged(null, null);
-                }
-            }
-        }
-
-        private OcrFixEngine.AutoGuessLevel GetAutoGuessLevel()
-        {
-            var autoGuessLevel = OcrFixEngine.AutoGuessLevel.None;
-            
-
-            return autoGuessLevel;
-        }
-
-        private void importNewTimeCodesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.Title = LanguageSettings.Current.General.OpenSubtitle;
-            openFileDialog1.FileName = string.Empty;
-            openFileDialog1.Filter = UiUtil.SubtitleExtensionFilter.Value;
-            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
-            {
-                string fileName = openFileDialog1.FileName;
-                if (!File.Exists(fileName))
-                {
-                    return;
-                }
-
-                var fi = new FileInfo(fileName);
-                if (fi.Length > 1024 * 1024 * 10) // max 10 mb
-                {
-                    if (MessageBox.Show(string.Format(LanguageSettings.Current.Main.FileXIsLargerThan10MB + Environment.NewLine +
-                                                      Environment.NewLine +
-                                                      LanguageSettings.Current.Main.ContinueAnyway,
-                            fileName), Text, MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                }
-
-                var sub = new Subtitle();
-                SubtitleFormat format = sub.LoadSubtitle(fileName, out _, null);
-                if (format == null)
-                {
-                    return;
-                }
-
-                int index = 0;
-                int newSubCount = sub.Paragraphs.Count;
-                int currentSubCount = _subtitle.Paragraphs.Count;
-                while (index < newSubCount && index < currentSubCount)
-                {
-                    Paragraph newP = sub.Paragraphs[index];
-                    Paragraph currentP = _subtitle.Paragraphs[index];
-                    currentP.StartTime.TotalMilliseconds = newP.StartTime.TotalMilliseconds;
-                    currentP.EndTime.TotalMilliseconds = newP.EndTime.TotalMilliseconds;
-                    subtitleListView1.SetStartTimeAndDuration(index, currentP, _subtitle.GetParagraphOrDefault(index + 1), _subtitle.GetParagraphOrDefault(index - 1));
-                    index++;
                 }
             }
         }
