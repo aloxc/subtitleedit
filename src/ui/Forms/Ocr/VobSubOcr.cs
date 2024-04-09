@@ -405,7 +405,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _unknownWordsDictionary = new Dictionary<string, int>();
             var language = LanguageSettings.Current.VobSubOcr;
             Text = language.Title;
-            groupBoxOcrMethod.Text = language.OcrMethod;
             buttonStartOcr.Text = language.StartOcr;
             buttonPause.Text = LanguageSettings.Current.Settings.Pause;
             labelStartFrom.Text = language.StartOcrFrom;
@@ -480,35 +479,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             underlineToolStripMenuItem1.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Underline;
 
             InitializeModi();
-            comboBoxOcrMethod.Items.Clear();
-            _ocrMethodBinaryImageCompare = comboBoxOcrMethod.Items.Add(language.OcrViaImageCompare);
-            if (Configuration.IsRunningOnLinux || Configuration.IsRunningOnMac)
-            {
-                Tesseract5Version = "5";
 
-                if (Configuration.IsRunningOnLinux && Configuration.TesseractDataDirectory.EndsWith("/4.00/tessdata", StringComparison.Ordinal))
-                {
-                    Tesseract5Version = "4";
-                }
-            }
-            else
-            {
-                _ocrMethodTesseract302 = comboBoxOcrMethod.Items.Add(string.Format(language.OcrViaTesseractVersionX, "3.02"));
-            }
-
-            if (IntPtr.Size * 8 == 64)
-            {
-                _ocrMethodTesseract5 = comboBoxOcrMethod.Items.Add(string.Format(language.OcrViaTesseractVersionX, Tesseract5Version));
-            }
-
-            if (_modiEnabled)
-            {
-                _ocrMethodModi = comboBoxOcrMethod.Items.Add(language.OcrViaModi);
-            }
-
-            _ocrMethodNocr = comboBoxOcrMethod.Items.Add(language.OcrViaNOCR);
-            _ocrMethodCloudVision = comboBoxOcrMethod.Items.Add(language.OcrViaCloudVision);
-
+      
 
             toolStripMenuItemCaptureTopAlign.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
             captureTopAlignmentToolStripMenuItem.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
@@ -6217,7 +6189,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _abort = true;
             _binaryOcrDb = null;
             _nOcrDb = null;
-            _ocrMethodIndex = comboBoxOcrMethod.SelectedIndex;
             if (_ocrMethodIndex == _ocrMethodTesseract5)
             {
                 ResetTesseractThread();
@@ -6228,7 +6199,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     if (IntPtr.Size * 8 == 32)
                     {
                         MessageBox.Show("Sorry, Tesseract {Tesseract5Version} requires a 64-bit processor");
-                        comboBoxOcrMethod.SelectedIndex = _ocrMethodBinaryImageCompare;
                         return;
                     }
                     else if (MessageBox.Show($"{LanguageSettings.Current.GetTesseractDictionaries.Download} Tesseract {Tesseract5Version}", LanguageSettings.Current.General.Title, MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
@@ -6243,7 +6213,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                     else
                     {
-                        comboBoxOcrMethod.SelectedIndex = _ocrMethodBinaryImageCompare;
                         return;
                     }
                 }
@@ -6264,7 +6233,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                     else
                     {
-                        comboBoxOcrMethod.SelectedIndex = _ocrMethodBinaryImageCompare;
                         return;
                     }
                 }
@@ -6297,15 +6265,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
 
             return null;
-        }
-
-        private void ShowOcrMethodGroupBox(GroupBox groupBox)
-        {
-
-            groupBox.Visible = true;
-            groupBox.BringToFront();
-            groupBox.Left = comboBoxOcrMethod.Left;
-            groupBox.Top = 50;
         }
 
         private void ListBoxLogSelectedIndexChanged(object sender, EventArgs e)
@@ -6774,34 +6733,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void SetOcrMethod()
         {
-            if (Configuration.Settings.VobSubOcr.LastOcrMethod == "BinaryImageCompare" && comboBoxOcrMethod.Items.Count > _ocrMethodBinaryImageCompare)
-            {
-                comboBoxOcrMethod.SelectedIndex = _ocrMethodBinaryImageCompare;
-            }
-            else if (Configuration.Settings.VobSubOcr.LastOcrMethod == "CloudVision" && comboBoxOcrMethod.Items.Count > _ocrMethodCloudVision)
-            {
-                comboBoxOcrMethod.SelectedIndex = _ocrMethodCloudVision;
-            }
-            else if (Configuration.Settings.VobSubOcr.LastOcrMethod == "MODI" && comboBoxOcrMethod.Items.Count > _ocrMethodModi)
-            {
-                comboBoxOcrMethod.SelectedIndex = _ocrMethodModi;
-            }
-            else if (Configuration.Settings.VobSubOcr.LastOcrMethod == "nOCR" && comboBoxOcrMethod.Items.Count > _ocrMethodNocr)
-            {
-                comboBoxOcrMethod.SelectedIndex = _ocrMethodNocr;
-            }
-            else if (Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract302" && comboBoxOcrMethod.Items.Count > _ocrMethodTesseract302)
-            {
-                comboBoxOcrMethod.SelectedIndex = _ocrMethodTesseract302;
-            }
-            else if (Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" && comboBoxOcrMethod.Items.Count > _ocrMethodTesseract302)
-            {
-                comboBoxOcrMethod.SelectedIndex = _ocrMethodTesseract5;
-            }
-            else
-            {
-                comboBoxOcrMethod.SelectedIndex = 0;
-            }
+            
         }
 
         internal void StartOcrFromDelayed()
@@ -6823,7 +6755,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             int adjustPercent = (int)(Height * 0.15);
             groupBoxSubtitleImage.Height = originalTopHeight + adjustPercent;
-            groupBoxOcrMethod.Height = groupBoxSubtitleImage.Height;
 
             splitContainerBottom.Top = groupBoxSubtitleImage.Bottom + 5;
             splitContainerBottom.Height = buttonOK.Top - (splitContainerBottom.Top + 20);

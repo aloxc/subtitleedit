@@ -53,8 +53,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.groupBoxOcrMethod = new System.Windows.Forms.GroupBox();
-            this.comboBoxOcrMethod = new Nikse.SubtitleEdit.Controls.NikseComboBox();
             this.groupBoxOCRControls = new System.Windows.Forms.GroupBox();
             this.labelStartFrom = new System.Windows.Forms.Label();
             this.numericUpDownStartNumber = new Nikse.SubtitleEdit.Controls.NikseUpDown();
@@ -134,7 +132,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
-            this.groupBoxOcrMethod.SuspendLayout();
             this.groupBoxOCRControls.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
             this.tabControlLogs.SuspendLayout();
@@ -442,46 +439,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "C&ancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxOcrMethod
-            // 
-            this.groupBoxOcrMethod.Controls.Add(this.comboBoxOcrMethod);
-            this.groupBoxOcrMethod.Location = new System.Drawing.Point(13, 5);
-            this.groupBoxOcrMethod.Name = "groupBoxOcrMethod";
-            this.groupBoxOcrMethod.Size = new System.Drawing.Size(392, 192);
-            this.groupBoxOcrMethod.TabIndex = 0;
-            this.groupBoxOcrMethod.TabStop = false;
-            this.groupBoxOcrMethod.Text = "OCR method";
-            // 
-            // comboBoxOcrMethod
-            // 
-            this.comboBoxOcrMethod.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxOcrMethod.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxOcrMethod.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxOcrMethod.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxOcrMethod.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxOcrMethod.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxOcrMethod.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxOcrMethod.DropDownHeight = 400;
-            this.comboBoxOcrMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxOcrMethod.DropDownWidth = 366;
-            this.comboBoxOcrMethod.FormattingEnabled = true;
-            this.comboBoxOcrMethod.Items.AddRange(new object[] {
-            "OCR via Tesseract",
-            "OCR via image compare",
-            "OCR via Microsoft MODI",
-            "OCR via nOCR",
-            "OCR via Tesseract 3.02"});
-            this.comboBoxOcrMethod.Location = new System.Drawing.Point(13, 20);
-            this.comboBoxOcrMethod.MaxLength = 32767;
-            this.comboBoxOcrMethod.Name = "comboBoxOcrMethod";
-            this.comboBoxOcrMethod.SelectedIndex = -1;
-            this.comboBoxOcrMethod.SelectedItem = null;
-            this.comboBoxOcrMethod.SelectedText = "";
-            this.comboBoxOcrMethod.Size = new System.Drawing.Size(366, 21);
-            this.comboBoxOcrMethod.TabIndex = 0;
-            this.comboBoxOcrMethod.UsePopupWindow = false;
-            this.comboBoxOcrMethod.SelectedIndexChanged += new System.EventHandler(this.ComboBoxOcrMethodSelectedIndexChanged);
             // 
             // groupBoxOCRControls
             // 
@@ -1410,7 +1367,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.groupBoxOcrMethod);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(920, 560);
@@ -1425,7 +1381,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.VobSubOcr_KeyDown);
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
-            this.groupBoxOcrMethod.ResumeLayout(false);
             this.groupBoxOCRControls.ResumeLayout(false);
             this.groupBoxOCRControls.PerformLayout();
             this.groupBoxOcrAutoFix.ResumeLayout(false);
@@ -1469,7 +1424,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
         private SubtitleListView subtitleListView1;
-        private System.Windows.Forms.GroupBox groupBoxOcrMethod;
         private SETextBox textBoxCurrentText;
         private System.Windows.Forms.GroupBox groupBoxOCRControls;
         private System.Windows.Forms.Label labelStartFrom;
@@ -1576,6 +1530,5 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem removeAllXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
-        private NikseComboBox comboBoxOcrMethod;
     }
 }
