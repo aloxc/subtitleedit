@@ -429,10 +429,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             checkBoxEmphasis2Transparent.Text = language.Transparent;
             toolStripMenuItemCaptureTopAlign.Text = language.CaptureTopAlign;
             captureTopAlignmentToolStripMenuItem.Text = language.CaptureTopAlign;
-            checkBoxPromptForUnknownWords.Text = language.PromptForUnknownWords;
-            checkBoxPromptForUnknownWords.Checked = Configuration.Settings.VobSubOcr.PromptForUnknownWords;
-            checkBoxGuessUnknownWords.Checked = Configuration.Settings.VobSubOcr.GuessUnknownWords;
-            checkBoxAutoFixCommonErrors.Checked = Configuration.Settings.VobSubOcr.FixOcrErrors;
 
             groupBoxTransportStream.Text = language.TransportStream;
             checkBoxTransportStreamGrayscale.Text = language.TransportStreamGrayscale;
@@ -440,9 +436,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             checkBoxTransportStreamGetColorAndSplit.Left = checkBoxTransportStreamGrayscale.Left + checkBoxTransportStreamGrayscale.Width + 9;
 
             groupBoxOcrAutoFix.Text = language.OcrAutoCorrectionSpellChecking;
-            checkBoxGuessUnknownWords.Text = language.TryToGuessUnknownWords;
-            checkBoxAutoBreakLines.Text = language.AutoBreakSubtitleIfMoreThanTwoLines;
-            checkBoxAutoBreakLines.Checked = Configuration.Settings.VobSubOcr.AutoBreakSubtitleIfMoreThanTwoLines;
             tabControlLogs.TabPages[0].Text = language.UnknownWords;
             tabControlLogs.TabPages[1].Text = language.AllFixes;
             tabControlLogs.TabPages[2].Text = language.GuessesUsed;
@@ -453,14 +446,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             buttonGoogleIt.Text = LanguageSettings.Current.Main.VideoControls.GoogleIt;
 
             groupBoxSubtitleImage.Text = string.Empty;
-            labelFixesMade.Text = string.Empty;
-            labelFixesMade.Left = checkBoxAutoFixCommonErrors.Left + checkBoxAutoFixCommonErrors.Width;
-
-            labelDictionaryLoaded.Text = string.Format(language.DictionaryX, string.Empty);
-            comboBoxDictionaries.Left = labelDictionaryLoaded.Left + labelDictionaryLoaded.Width;
-
-
-            checkBoxAutoFixCommonErrors.Text = language.FixOcrErrors;
             groupBoxOCRControls.Text = string.Empty;
 
             OcrTrainingToolStripMenuItem.Text = language.OcrTraining;
@@ -545,11 +530,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             pictureBoxEmphasis2.Left = checkBoxEmphasis1Transparent.Left + checkBoxEmphasis1Transparent.Width + 8;
             checkBoxEmphasis2Transparent.Left = pictureBoxEmphasis2.Left + pictureBoxEmphasis2.Width + 3;
 
-            if (comboBoxDictionaries.SelectedIndex == -1)
-            {
-                comboBoxDictionaries.SelectedIndex = 0;
-            }
-
             var ocrLanguages = new GoogleOcrService(new GoogleCloudVisionApi(string.Empty)).GetLanguages().OrderBy(p => p.ToString());
             var selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == Configuration.Settings.VobSubOcr.CloudVisionLanguage);
             if (selectedOcrLanguage == null)
@@ -560,15 +540,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void FillSpellCheckDictionaries()
         {
-            comboBoxDictionaries.SelectedIndexChanged -= comboBoxDictionaries_SelectedIndexChanged;
-            comboBoxDictionaries.Items.Clear();
-            comboBoxDictionaries.Items.Add(LanguageSettings.Current.General.None);
-            foreach (string name in Utilities.GetDictionaryLanguages())
-            {
-                comboBoxDictionaries.Items.Add(name);
-            }
-
-            comboBoxDictionaries.SelectedIndexChanged += comboBoxDictionaries_SelectedIndexChanged;
         }
 
         internal void InitializeBatch(string vobSubFileName, VobSubOcrSettings vobSubOcrSettings, bool forcedOnly, string ocrEngine, string language, CancellationToken cancellationToken)
@@ -577,10 +548,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Initialize(vobSubFileName, vobSubOcrSettings, null, true);
             FormVobSubOcr_Shown(null, null);
             checkBoxShowOnlyForced.Checked = forcedOnly;
-            checkBoxPromptForUnknownWords.Checked = false;
-
-
-
             _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
             if (language == null)
             {
@@ -633,17 +600,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
 
                 // max allow 2 lines
-                if (checkBoxAutoBreakLines.Checked && Utilities.GetNumberOfLines(text) > 2)
-                {
-                    text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                    text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-                    text = text.RemoveRecursiveLineBreaks();
-
-                    if (Utilities.GetNumberOfLines(text) > 2)
-                    {
-                        text = Utilities.AutoBreakLine(text);
-                    }
-                }
 
                 text = text.Trim();
                 text = text.Replace("  ", " ");
@@ -662,7 +618,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             SetButtonsEnabledAfterOcrDone();
-            checkBoxPromptForUnknownWords.Checked = Configuration.Settings.VobSubOcr.PromptForUnknownWords;
         }
 
         internal bool Initialize(string vobSubFileName, VobSubOcrSettings vobSubOcrSettings, Main main, bool batchMode = false)
@@ -856,7 +811,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _abort = false;
             subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
             FormVobSubOcr_Shown(null, null);
-            checkBoxPromptForUnknownWords.Checked = false;
             int max = GetSubtitleCount();
             if (_ocrMethodIndex != _ocrMethodTesseract5 && _ocrMethodIndex != _ocrMethodTesseract302 && _ocrMethodIndex != _ocrMethodNocr)
             {
@@ -915,17 +869,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
 
                 // max allow 2 lines
-                if (checkBoxAutoBreakLines.Checked && Utilities.GetNumberOfLines(text) > 2)
-                {
-                    text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                    text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-                    text = text.RemoveRecursiveLineBreaks();
-
-                    if (Utilities.GetNumberOfLines(text) > 2)
-                    {
-                        text = Utilities.AutoBreakLine(text);
-                    }
-                }
 
                 text = text.Trim();
                 text = text.Replace("  ", " ");
@@ -942,8 +885,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     return;
                 }
             }
-            checkBoxPromptForUnknownWords.Checked = Configuration.Settings.VobSubOcr.PromptForUnknownWords;
-
             _ocrThreadStop = true;
             _abort = true;
 
@@ -1032,15 +973,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                             _nOcrDb = new NOcrDb(Path.Combine(Configuration.OcrDirectory, nOcrDbName + ".nocr"));
                             binaryOcrDbs.Insert(0, db);
                         }
-                    }
-                }
-
-                for (int i = 0; i < comboBoxDictionaries.Items.Count; i++)
-                {
-                    if (comboBoxDictionaries.Items[i].ToString() == Configuration.Settings.VobSubOcr.LastBinaryImageSpellCheck)
-                    {
-                        comboBoxDictionaries.SelectedIndex = i;
-                        break;
                     }
                 }
             }
@@ -3271,28 +3203,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             string line = MatchesToItalicStringConverter.GetStringWithItalicTags(matches);
 
-            if (checkBoxAutoFixCommonErrors.Checked && _ocrFixEngine != null)
-            {
-                var lastLastLine = GetLastLastText(listViewIndex);
-                line = _ocrFixEngine.FixOcrErrorsViaHardcodedRules(line, _lastLine, lastLastLine, null); // TODO: Add abbreviations list
-            }
-
             //OCR fix engine
             string textWithOutFixes = line;
             if (_ocrFixEngine != null && _ocrFixEngine.IsDictionaryLoaded)
             {
                 var autoGuessLevel = OcrFixEngine.AutoGuessLevel.None;
-                if (checkBoxGuessUnknownWords.Checked)
-                {
-                    autoGuessLevel = OcrFixEngine.AutoGuessLevel.Aggressive;
-                }
-
-                if (checkBoxAutoFixCommonErrors.Checked)
-                {
-                    var lastLastLine = GetLastLastText(listViewIndex);
-                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, listViewIndex, _lastLine, lastLastLine, true, autoGuessLevel);
-                }
-
                 int wordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(line, out var correctWords);
 
                 // smaller space pixels for italic
@@ -3324,11 +3239,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     var oldUnknownWordsFound = new List<LogItem>(_ocrFixEngine.UnknownWordsFound);
                     _ocrFixEngine.AutoGuessesUsed.Clear();
                     _ocrFixEngine.UnknownWordsFound.Clear();
-                    if (checkBoxAutoFixCommonErrors.Checked)
-                    {
-                        var lastLastLine = GetLastLastText(listViewIndex);
-                        tempLine = _ocrFixEngine.FixOcrErrors(tempLine, _subtitle, listViewIndex, _lastLine, lastLastLine, true, autoGuessLevel);
-                    }
 
                     int tempWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(tempLine, out var tempCorrectWords);
                     if (tempWordsNotFound <= wordsNotFound && tempCorrectWords > correctWords)
@@ -3348,7 +3258,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     _ocrFixEngine.AutoGuessesUsed.Clear();
                     _ocrFixEngine.UnknownWordsFound.Clear();
-                    line = _ocrFixEngine.FixUnknownWordsViaGuessOrPrompt(out wordsNotFound, line, listViewIndex, bitmap, checkBoxAutoFixCommonErrors.Checked, checkBoxPromptForUnknownWords.Checked, true, autoGuessLevel);
                 }
 
                 if (_ocrFixEngine.Abort)
@@ -3378,10 +3287,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 ColorLineByNumberOfUnknownWords(listViewIndex, wordsNotFound, line);
             }
 
-            if (textWithOutFixes.Trim() != line.Trim() && checkBoxAutoFixCommonErrors.Checked)
+            if (textWithOutFixes.Trim() != line.Trim())
             {
                 _tesseractOcrAutoFixes++;
-                labelFixesMade.Text = $" - {_tesseractOcrAutoFixes}";
                 LogOcrFix(listViewIndex, textWithOutFixes, line);
             }
 
@@ -3684,23 +3592,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 line = MatchesToItalicStringConverter.GetStringWithItalicTags(matches);
             }
 
-            var fixCommonErrors = checkBoxAutoFixCommonErrors.Checked;
-            if (fixCommonErrors)
-            {
-                line = FixNocrHardcodedStuff(line);
-                line = FixZeroInsideWords(line);
-            }
-
             //OCR fix engine
             string textWithOutFixes = line;
             var lastLastLine = GetLastLastText(listViewIndex);
             if (_ocrFixEngine != null && _ocrFixEngine.IsDictionaryLoaded)
             {
-                if (fixCommonErrors)
-                {
-                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, listViewIndex, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                }
-
                 int wordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(line, out var correctWords);
 
                 // smaller space pixels for italic
@@ -3731,10 +3627,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     var oldUnknownWordsFound = new List<LogItem>(_ocrFixEngine.UnknownWordsFound);
                     _ocrFixEngine.AutoGuessesUsed.Clear();
                     _ocrFixEngine.UnknownWordsFound.Clear();
-                    if (fixCommonErrors)
-                    {
-                        tempLine = _ocrFixEngine.FixOcrErrors(tempLine, _subtitle, listViewIndex, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                    }
 
                     int tempWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(tempLine, out var tempCorrectWords);
                     if (tempWordsNotFound <= wordsNotFound && tempCorrectWords > correctWords)
@@ -3743,11 +3635,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         correctWords = tempCorrectWords;
                         line = tempLine;
                         textWithOutFixes = tempLine;
-                        if (fixCommonErrors)
-                        {
-                            line = FixNocrHardcodedStuff(line);
-                            line = FixZeroInsideWords(line);
-                        }
                     }
                     else
                     {
@@ -3761,7 +3648,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     _ocrFixEngine.AutoGuessesUsed.Clear();
                     _ocrFixEngine.UnknownWordsFound.Clear();
-                    line = _ocrFixEngine.FixUnknownWordsViaGuessOrPrompt(out wordsNotFound, line, listViewIndex, bitmap, checkBoxAutoFixCommonErrors.Checked, checkBoxPromptForUnknownWords.Checked, true, GetAutoGuessLevel());
                 }
 
                 if (_ocrFixEngine.Abort)
@@ -3787,17 +3673,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                 // Log unknown words guess (found via spelling dictionaries)
                 LogUnknownWords();
-
-                if (fixCommonErrors || checkBoxPromptForUnknownWords.Checked)
-                {
-                    ColorLineByNumberOfUnknownWords(listViewIndex, wordsNotFound, line);
-                }
             }
 
             if (textWithOutFixes != null && textWithOutFixes.Trim() != line.Trim())
             {
                 _tesseractOcrAutoFixes++;
-                labelFixesMade.Text = $" - {_tesseractOcrAutoFixes}";
                 LogOcrFix(listViewIndex, textWithOutFixes, line);
             }
 
@@ -4050,40 +3930,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 line = line.Replace("8-O", "8-0");
                 line = line.Replace("9-O", "9-0");
             }
-
-            if (checkBoxAutoFixCommonErrors.Checked && _ocrFixEngine != null)
-            {
-                string lastLastLine = null;
-                var lastLastP = _subtitle.GetParagraphOrDefault(_selectedIndex - 2);
-                if (lastLastP != null && !string.IsNullOrEmpty(lastLastP.Text))
-                {
-                    lastLastLine = lastLastP.Text;
-                }
-
-                line = _ocrFixEngine.FixOcrErrorsViaHardcodedRules(line, _lastLine, lastLastLine, null); // TODO: Add abbreviations list
-            }
-
-            return line;
-        }
-
-        private static string ReverseNumberStrings(string line)
-        {
-            Regex regex = new Regex(@"\b\d+\b");
-            var matches = regex.Matches(line);
-            foreach (Match match in matches)
-            {
-                if (match.Length > 1)
-                {
-                    string number = string.Empty;
-                    for (int i = match.Index; i < match.Index + match.Length; i++)
-                    {
-                        number = line[i] + number;
-                    }
-
-                    line = line.Remove(match.Index, match.Length).Insert(match.Index, number);
-                }
-            }
-
             return line;
         }
 
@@ -4326,12 +4172,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 return;
             }
-
-            if (comboBoxDictionaries.SelectedIndex <= 0)
-            {
-                _ocrFixEngine = new OcrFixEngine(string.Empty, string.Empty, this, _ocrMethodIndex == _ocrMethodBinaryImageCompare || _ocrMethodIndex == _ocrMethodNocr);
-            }
-
             InitializeTopAlign();
 
             if (_ocrMethodIndex == _ocrMethodTesseract302 || _ocrMethodIndex == _ocrMethodTesseract5)
@@ -4349,7 +4189,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             SetButtonsStartOcr();
             _fromMenuItem = false;
             _abort = false;
-            _autoBreakLines = checkBoxAutoBreakLines.Checked;
 
             CleanLogsGreaterThanOrEqualTo(numericUpDownStartNumber.Value);
 
@@ -5128,14 +4967,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             textWithOutFixes = FixItalics(textWithOutFixes);
 
             string line = textWithOutFixes.Trim();
-            var fixCommonErrors = checkBoxAutoFixCommonErrors.Checked;
             if (_ocrFixEngine.IsDictionaryLoaded)
             {
-                if (fixCommonErrors)
-                {
-                    var lastLastLine = GetLastLastText(index);
-                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                }
+                
 
                 int wordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(line, out int correctWords);
                 int oldCorrectWords = correctWords;
@@ -5149,11 +4983,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     var newUnfixedText = TesseractResizeAndRetry(bitmap);
                     var lastLastLine = GetLastLastText(index);
                     var newText = newUnfixedText;
-                    if (fixCommonErrors)
-                    {
-                        _ocrFixEngine.FixOcrErrors(newUnfixedText, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                    }
-
+                   
                     int newWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(newText, out correctWords);
 
                    
@@ -5232,10 +5062,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                             var lastLastLine = GetLastLastText(index);
                             int modiWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(oneColorText, out var modiCorrectWords);
                             string modiTextOcrFixed = oneColorText;
-                            if (fixCommonErrors)
-                            {
-                                modiTextOcrFixed = _ocrFixEngine.FixOcrErrors(oneColorText, _subtitle, index, _lastLine, lastLastLine, false, GetAutoGuessLevel());
-                            }
 
                             int modiOcrCorrectedWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(modiTextOcrFixed, out var modiOcrCorrectedCorrectWords);
                             if (modiOcrCorrectedWordsNotFound <= modiWordsNotFound)
@@ -5250,20 +5076,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                                 line = FixItalics(oneColorText); // use one-color text
                                 wordsNotFound = modiWordsNotFound;
                                 correctWords = modiCorrectWords;
-                                if (fixCommonErrors)
-                                {
-                                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                                }
                             }
                             else if (wordsNotFound == modiWordsNotFound && oneColorText.EndsWith('!') && (line.EndsWith('l') || line.EndsWith('ﬂ')))
                             {
                                 line = FixItalics(oneColorText);
                                 wordsNotFound = modiWordsNotFound;
                                 correctWords = modiCorrectWords;
-                                if (fixCommonErrors)
-                                {
-                                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                                }
                             }
                         }
                     }
@@ -5278,7 +5096,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     {
                         subtitleListView1.SelectIndexAndEnsureVisible(index);
                     }
-                    line = _ocrFixEngine.FixUnknownWordsViaGuessOrPrompt(out wordsNotFound, line, index, bitmap, checkBoxAutoFixCommonErrors.Checked, checkBoxPromptForUnknownWords.Checked, true, GetAutoGuessLevel());
                 }
 
                 if (_ocrFixEngine.Abort)
@@ -5303,19 +5120,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
             else
             { // no dictionary :(
-                if (fixCommonErrors)
-                {
-                    var lastLastLine = GetLastLastText(index);
-                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                }
 
                 ColorLineByNumberOfUnknownWords(index, badWords, line);
             }
 
-            if (textWithOutFixes.Trim() != line.Trim() && fixCommonErrors)
+            if (textWithOutFixes.Trim() != line.Trim())
             {
                 _tesseractOcrAutoFixes++;
-                labelFixesMade.Text = $" - {_tesseractOcrAutoFixes}";
                 LogOcrFix(index, textWithOutFixes, line);
             }
 
@@ -5561,28 +5372,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             string line = string.Empty;
 
-
-            if (checkBoxAutoFixCommonErrors.Checked && _ocrFixEngine != null)
-            {
-                var lastLastLine = GetLastLastText(listViewIndex);
-                line = _ocrFixEngine.FixOcrErrorsViaHardcodedRules(line, _lastLine, lastLastLine, null); // TODO: Add abbreviations list
-            }
-
             //OCR fix engine
             string textWithOutFixes = line;
             if (_ocrFixEngine != null && _ocrFixEngine.IsDictionaryLoaded)
             {
                 var autoGuessLevel = OcrFixEngine.AutoGuessLevel.None;
-                if (checkBoxGuessUnknownWords.Checked)
-                {
-                    autoGuessLevel = OcrFixEngine.AutoGuessLevel.Aggressive;
-                }
-
-                if (checkBoxAutoFixCommonErrors.Checked)
-                {
-                    var lastLastLine = GetLastLastText(listViewIndex);
-                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, listViewIndex, _lastLine, lastLastLine, true, autoGuessLevel);
-                }
 
                 int wordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(line, out var correctWords);
 
@@ -5590,7 +5384,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     _ocrFixEngine.AutoGuessesUsed.Clear();
                     _ocrFixEngine.UnknownWordsFound.Clear();
-                    line = _ocrFixEngine.FixUnknownWordsViaGuessOrPrompt(out wordsNotFound, line, listViewIndex, bitmap, checkBoxAutoFixCommonErrors.Checked, checkBoxPromptForUnknownWords.Checked, true, autoGuessLevel);
                 }
 
                 if (_ocrFixEngine.Abort)
@@ -5618,7 +5411,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (textWithOutFixes.Trim() != line.Trim())
             {
                 _tesseractOcrAutoFixes++;
-                labelFixesMade.Text = $" - {_tesseractOcrAutoFixes}";
                 LogOcrFix(listViewIndex, textWithOutFixes, line);
             }
 
@@ -6141,42 +5933,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _ocrFixEngine?.Dispose();
                 _ocrFixEngine = tempOcrFixEngine;
                 string loadedDictionaryName = _ocrFixEngine.SpellCheckDictionaryName;
-                var found = false;
-                comboBoxDictionaries.SelectedIndexChanged -= comboBoxDictionaries_SelectedIndexChanged;
-                if (_ocrMethodIndex == _ocrMethodTesseract5 &&
-                    !string.IsNullOrEmpty(Configuration.Settings.VobSubOcr.LastTesseractSpellCheck) &&
-                    Configuration.Settings.VobSubOcr.LastTesseractSpellCheck.Length > 1 &&
-                    loadedDictionaryName.Length > 1 &&
-                    Configuration.Settings.VobSubOcr.LastTesseractSpellCheck.StartsWith(loadedDictionaryName.Substring(0, 2), StringComparison.OrdinalIgnoreCase))
-                {
-                    for (var index = 0; index < comboBoxDictionaries.Items.Count; index++)
-                    {
-                        var item = (string)comboBoxDictionaries.Items[index];
-                        if (item.Contains("[" + Configuration.Settings.VobSubOcr.LastTesseractSpellCheck + "]"))
-                        {
-                            comboBoxDictionaries.SelectedIndex = index;
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!found)
-                {
-                    for (var index = 0; index < comboBoxDictionaries.Items.Count; index++)
-                    {
-                        var item = (string)comboBoxDictionaries.Items[index];
-                        if (item.Contains("[" + loadedDictionaryName + "]"))
-                        {
-                            comboBoxDictionaries.SelectedIndex = index;
-                            break;
-                        }
-                    }
-                }
-
-                comboBoxDictionaries.SelectedIndexChanged += comboBoxDictionaries_SelectedIndexChanged;
-                comboBoxDictionaries.Left = labelDictionaryLoaded.Left + labelDictionaryLoaded.Width;
-                comboBoxDictionaries.Width = groupBoxOcrAutoFix.Width - (comboBoxDictionaries.Left + 10 + buttonSpellCheckDownload.Width);
             }
             else
             {
@@ -6606,16 +6362,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             get
             {
-                if (comboBoxDictionaries.SelectedItem != null)
-                {
-                    var name = comboBoxDictionaries.SelectedItem.ToString();
-                    int start = name.LastIndexOf('[') + 1;
-                    int end = name.LastIndexOf(']');
-                    if (start > 0 && end > start)
-                    {
-                        return name.Substring(start, end - start);
-                    }
-                }
                 return null;
             }
         }
@@ -6625,17 +6371,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (string.IsNullOrEmpty(languageString))
             {
                 return;
-            }
-
-            int i = 0;
-            foreach (string item in comboBoxDictionaries.Items)
-            {
-                if (item.Contains("[" + languageString + "]"))
-                {
-                    comboBoxDictionaries.SelectedIndex = i;
-                }
-
-                i++;
             }
         }
 
@@ -7174,20 +6909,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             Configuration.Settings.VobSubOcr.ItalicFactor = _unItalicFactor;
-            Configuration.Settings.VobSubOcr.FixOcrErrors = checkBoxAutoFixCommonErrors.Checked;
-            Configuration.Settings.VobSubOcr.PromptForUnknownWords = checkBoxPromptForUnknownWords.Checked;
-            Configuration.Settings.VobSubOcr.GuessUnknownWords = checkBoxGuessUnknownWords.Checked;
-            Configuration.Settings.VobSubOcr.AutoBreakSubtitleIfMoreThanTwoLines = checkBoxAutoBreakLines.Checked;
             Configuration.Settings.VobSubOcr.CaptureTopAlign = toolStripMenuItemCaptureTopAlign.Checked;
 
-            if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
-            {
-
-                if (comboBoxDictionaries.SelectedItem != null)
-                {
-                    Configuration.Settings.VobSubOcr.LastBinaryImageSpellCheck = comboBoxDictionaries.SelectedItem.ToString();
-                }
-            }
 
             if (_ocrMethodIndex == _ocrMethodTesseract5 || _ocrMethodTesseract5 == _ocrMethodTesseract302)
             {
@@ -7440,7 +7163,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                     using (var form = new AddToNameList())
                     {
-                        form.Initialize(_subtitle, comboBoxDictionaries.Text, uw.Text);
                         if (form.ShowDialog(this) == DialogResult.OK)
                         {
                             comboBoxDictionaries_SelectedIndexChanged(null, null);
@@ -7493,7 +7215,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     using (var form = new AddToUserDic())
                     {
-                        form.Initialize(comboBoxDictionaries.Text, uw.Text.ToLowerInvariant());
                         if (form.ShowDialog(this) == DialogResult.OK)
                         {
                             comboBoxDictionaries_SelectedIndexChanged(null, null);
@@ -7517,7 +7238,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     using (var form = new AddToOcrReplaceList())
                     {
-                        form.Initialize(_languageId, comboBoxDictionaries.Text, uw.Text);
                         if (form.ShowDialog(this) == DialogResult.OK)
                         {
                             comboBoxDictionaries_SelectedIndexChanged(null, null);
@@ -7801,22 +7521,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 if (form.LastDownload != null && form.LastDownload.Length > 3 && !string.IsNullOrEmpty(form.SelectedEnglishName))
                 {
                     var lc = Path.GetFileNameWithoutExtension(form.LastDownload.Substring(0, 4).Replace('_', '-'));
-                    for (int i = 0; i < comboBoxDictionaries.Items.Count; i++)
-                    {
-                        string item = (string)comboBoxDictionaries.Items[i];
-                        if (item.Contains("[" + lc) || item.Contains(form.SelectedEnglishName))
-                        {
-                            comboBoxDictionaries.SelectedIndex = i;
-                            break;
-                        }
-                    }
                 }
             }
 
-            if (comboBoxDictionaries.Items.Count > 0 && comboBoxDictionaries.SelectedIndex < 0)
-            {
-                comboBoxDictionaries.SelectedIndex = 0;
-            }
+
         }
 
         private void ShowStatus(string msg)
@@ -8062,10 +7770,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private OcrFixEngine.AutoGuessLevel GetAutoGuessLevel()
         {
             var autoGuessLevel = OcrFixEngine.AutoGuessLevel.None;
-            if (checkBoxGuessUnknownWords.Checked)
-            {
-                autoGuessLevel = OcrFixEngine.AutoGuessLevel.Aggressive;
-            }
+            
 
             return autoGuessLevel;
         }

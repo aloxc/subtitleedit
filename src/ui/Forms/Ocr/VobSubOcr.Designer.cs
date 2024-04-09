@@ -59,10 +59,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
-            this.buttonSpellCheckDownload = new System.Windows.Forms.Button();
-            this.labelFixesMade = new System.Windows.Forms.Label();
-            this.comboBoxDictionaries = new Nikse.SubtitleEdit.Controls.NikseComboBox();
-            this.checkBoxGuessUnknownWords = new System.Windows.Forms.CheckBox();
             this.tabControlLogs = new System.Windows.Forms.TabControl();
             this.contextMenuStripAllFixes = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,10 +77,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.listBoxLogSuggestions = new System.Windows.Forms.ListBox();
             this.contextMenuStripGuessesUsed = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearGuesses = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkBoxPromptForUnknownWords = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutoBreakLines = new System.Windows.Forms.CheckBox();
-            this.labelDictionaryLoaded = new System.Windows.Forms.Label();
-            this.checkBoxAutoFixCommonErrors = new System.Windows.Forms.CheckBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxImagePalette = new System.Windows.Forms.GroupBox();
             this.checkBoxBackgroundTransparent = new System.Windows.Forms.CheckBox();
@@ -525,15 +517,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // groupBoxOcrAutoFix
             // 
-            this.groupBoxOcrAutoFix.Controls.Add(this.buttonSpellCheckDownload);
-            this.groupBoxOcrAutoFix.Controls.Add(this.labelFixesMade);
-            this.groupBoxOcrAutoFix.Controls.Add(this.comboBoxDictionaries);
-            this.groupBoxOcrAutoFix.Controls.Add(this.checkBoxGuessUnknownWords);
             this.groupBoxOcrAutoFix.Controls.Add(this.tabControlLogs);
-            this.groupBoxOcrAutoFix.Controls.Add(this.checkBoxPromptForUnknownWords);
-            this.groupBoxOcrAutoFix.Controls.Add(this.checkBoxAutoBreakLines);
-            this.groupBoxOcrAutoFix.Controls.Add(this.labelDictionaryLoaded);
-            this.groupBoxOcrAutoFix.Controls.Add(this.checkBoxAutoFixCommonErrors);
             this.groupBoxOcrAutoFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxOcrAutoFix.Location = new System.Drawing.Point(0, 0);
             this.groupBoxOcrAutoFix.Name = "groupBoxOcrAutoFix";
@@ -541,64 +525,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOcrAutoFix.TabIndex = 0;
             this.groupBoxOcrAutoFix.TabStop = false;
             this.groupBoxOcrAutoFix.Text = "OCR auto correction / spell checking";
-            // 
-            // buttonSpellCheckDownload
-            // 
-            this.buttonSpellCheckDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSpellCheckDownload.Location = new System.Drawing.Point(367, 19);
-            this.buttonSpellCheckDownload.Name = "buttonSpellCheckDownload";
-            this.buttonSpellCheckDownload.Size = new System.Drawing.Size(28, 21);
-            this.buttonSpellCheckDownload.TabIndex = 42;
-            this.buttonSpellCheckDownload.Text = "...";
-            this.buttonSpellCheckDownload.UseVisualStyleBackColor = true;
-            this.buttonSpellCheckDownload.Click += new System.EventHandler(this.buttonSpellCheckDownload_Click);
-            // 
-            // labelFixesMade
-            // 
-            this.labelFixesMade.AutoSize = true;
-            this.labelFixesMade.Location = new System.Drawing.Point(151, 48);
-            this.labelFixesMade.Name = "labelFixesMade";
-            this.labelFixesMade.Size = new System.Drawing.Size(98, 13);
-            this.labelFixesMade.TabIndex = 3;
-            this.labelFixesMade.Text = "NumberOfOcrFixes";
-            // 
-            // comboBoxDictionaries
-            // 
-            this.comboBoxDictionaries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxDictionaries.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxDictionaries.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxDictionaries.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxDictionaries.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxDictionaries.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxDictionaries.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxDictionaries.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxDictionaries.DropDownHeight = 400;
-            this.comboBoxDictionaries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxDictionaries.DropDownWidth = 229;
-            this.comboBoxDictionaries.FormattingEnabled = true;
-            this.comboBoxDictionaries.Location = new System.Drawing.Point(127, 20);
-            this.comboBoxDictionaries.MaxLength = 32767;
-            this.comboBoxDictionaries.Name = "comboBoxDictionaries";
-            this.comboBoxDictionaries.SelectedIndex = -1;
-            this.comboBoxDictionaries.SelectedItem = null;
-            this.comboBoxDictionaries.SelectedText = "";
-            this.comboBoxDictionaries.Size = new System.Drawing.Size(229, 21);
-            this.comboBoxDictionaries.TabIndex = 1;
-            this.comboBoxDictionaries.UsePopupWindow = false;
-            this.comboBoxDictionaries.SelectedIndexChanged += new System.EventHandler(this.comboBoxDictionaries_SelectedIndexChanged);
-            // 
-            // checkBoxGuessUnknownWords
-            // 
-            this.checkBoxGuessUnknownWords.AutoSize = true;
-            this.checkBoxGuessUnknownWords.Checked = true;
-            this.checkBoxGuessUnknownWords.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxGuessUnknownWords.Location = new System.Drawing.Point(11, 91);
-            this.checkBoxGuessUnknownWords.Name = "checkBoxGuessUnknownWords";
-            this.checkBoxGuessUnknownWords.Size = new System.Drawing.Size(164, 17);
-            this.checkBoxGuessUnknownWords.TabIndex = 5;
-            this.checkBoxGuessUnknownWords.Text = "Try to guess unknown words";
-            this.checkBoxGuessUnknownWords.UseVisualStyleBackColor = true;
             // 
             // tabControlLogs
             // 
@@ -792,51 +718,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemClearGuesses.Size = new System.Drawing.Size(106, 22);
             this.toolStripMenuItemClearGuesses.Text = "Clear";
             this.toolStripMenuItemClearGuesses.Click += new System.EventHandler(this.toolStripMenuItemClearGuesses_Click);
-            // 
-            // checkBoxPromptForUnknownWords
-            // 
-            this.checkBoxPromptForUnknownWords.AutoSize = true;
-            this.checkBoxPromptForUnknownWords.Checked = true;
-            this.checkBoxPromptForUnknownWords.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxPromptForUnknownWords.Location = new System.Drawing.Point(11, 69);
-            this.checkBoxPromptForUnknownWords.Name = "checkBoxPromptForUnknownWords";
-            this.checkBoxPromptForUnknownWords.Size = new System.Drawing.Size(255, 17);
-            this.checkBoxPromptForUnknownWords.TabIndex = 4;
-            this.checkBoxPromptForUnknownWords.Text = "Prompt for unknown words (requires dictionary)";
-            this.checkBoxPromptForUnknownWords.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAutoBreakLines
-            // 
-            this.checkBoxAutoBreakLines.AutoSize = true;
-            this.checkBoxAutoBreakLines.Checked = true;
-            this.checkBoxAutoBreakLines.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoBreakLines.Location = new System.Drawing.Point(11, 113);
-            this.checkBoxAutoBreakLines.Name = "checkBoxAutoBreakLines";
-            this.checkBoxAutoBreakLines.Size = new System.Drawing.Size(208, 17);
-            this.checkBoxAutoBreakLines.TabIndex = 6;
-            this.checkBoxAutoBreakLines.Text = "Auto break subtitle, if line number > 2";
-            this.checkBoxAutoBreakLines.UseVisualStyleBackColor = true;
-            // 
-            // labelDictionaryLoaded
-            // 
-            this.labelDictionaryLoaded.AutoSize = true;
-            this.labelDictionaryLoaded.Location = new System.Drawing.Point(11, 24);
-            this.labelDictionaryLoaded.Name = "labelDictionaryLoaded";
-            this.labelDictionaryLoaded.Size = new System.Drawing.Size(112, 13);
-            this.labelDictionaryLoaded.TabIndex = 0;
-            this.labelDictionaryLoaded.Text = "labelDictionaryLoaded";
-            // 
-            // checkBoxAutoFixCommonErrors
-            // 
-            this.checkBoxAutoFixCommonErrors.AutoSize = true;
-            this.checkBoxAutoFixCommonErrors.Checked = true;
-            this.checkBoxAutoFixCommonErrors.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoFixCommonErrors.Location = new System.Drawing.Point(11, 47);
-            this.checkBoxAutoFixCommonErrors.Name = "checkBoxAutoFixCommonErrors";
-            this.checkBoxAutoFixCommonErrors.Size = new System.Drawing.Size(139, 17);
-            this.checkBoxAutoFixCommonErrors.TabIndex = 2;
-            this.checkBoxAutoFixCommonErrors.Text = "Fix common OCR errors";
-            this.checkBoxAutoFixCommonErrors.UseVisualStyleBackColor = true;
             // 
             // groupBoxImagePalette
             // 
@@ -1384,7 +1265,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOCRControls.ResumeLayout(false);
             this.groupBoxOCRControls.PerformLayout();
             this.groupBoxOcrAutoFix.ResumeLayout(false);
-            this.groupBoxOcrAutoFix.PerformLayout();
             this.tabControlLogs.ResumeLayout(false);
             this.contextMenuStripAllFixes.ResumeLayout(false);
             this.tabPageUnknownWords.ResumeLayout(false);
@@ -1431,11 +1311,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonStartOcr;
         private System.Windows.Forms.GroupBox groupBoxOcrAutoFix;
-        private System.Windows.Forms.Label labelFixesMade;
-        private System.Windows.Forms.CheckBox checkBoxAutoFixCommonErrors;
-        private System.Windows.Forms.CheckBox checkBoxAutoBreakLines;
-        private System.Windows.Forms.Label labelDictionaryLoaded;
-        private System.Windows.Forms.CheckBox checkBoxPromptForUnknownWords;
         private System.Windows.Forms.ListBox listBoxLog;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripListview;
         private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
@@ -1447,7 +1322,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.TabPage tabPageAllFixes;
         private System.Windows.Forms.TabPage tabPageSuggestions;
         private System.Windows.Forms.ListBox listBoxLogSuggestions;
-        private System.Windows.Forms.CheckBox checkBoxGuessUnknownWords;
         private System.Windows.Forms.TabPage tabPageUnknownWords;
         private System.Windows.Forms.ListBox listBoxUnknownWords;
         private System.Windows.Forms.GroupBox groupBoxImagePalette;
@@ -1462,7 +1336,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.CheckBox checkBoxShowOnlyForced;
         private System.Windows.Forms.CheckBox checkBoxUseTimeCodesFromIdx;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private Nikse.SubtitleEdit.Controls.NikseComboBox comboBoxDictionaries;
         private System.Windows.Forms.CheckBox checkBoxBackgroundTransparent;
         private System.Windows.Forms.PictureBox pictureBoxBackground;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -1492,7 +1365,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ContextMenuStrip contextMenuStripGuessesUsed;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearGuesses;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemInspectNOcrMatches;
-        private System.Windows.Forms.Button buttonSpellCheckDownload;
         private System.Windows.Forms.Timer timerHideStatus;
         private System.Windows.Forms.ToolStripMenuItem dOSTToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBoxTransportStream;
