@@ -1262,20 +1262,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void inspectLastAdditionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var formVobSubEditCharacters = new VobSubEditCharacters(_lastAdditions, _binaryOcrDb))
-            {
-                if (formVobSubEditCharacters.ShowDialog(this) == DialogResult.OK)
-                {
-                    _lastAdditions = formVobSubEditCharacters.Additions;
-                    if (_binaryOcrDb != null)
-                    {
-                        _binaryOcrDb.Save();
-                    }
-                }
-            }
-        }
 
         internal void Initialize(List<SubPicturesWithSeparateTimeCodes> subPicturesWithTimeCodes, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {

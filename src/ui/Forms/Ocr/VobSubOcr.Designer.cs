@@ -59,8 +59,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripListview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSaveSubtitleAs,
             this.saveImageAsToolStripMenuItem,
-            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem,
-            this.EditLastAdditionsToolStripMenuItem});
+            this.saveAllImagesWithHtmlIndexViewToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
             this.contextMenuStripListview.Size = new System.Drawing.Size(305, 104);
             // 
@@ -84,13 +83,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Text = "Save all images with HTML index view...";
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Click += new System.EventHandler(this.SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click);
-            // 
-            // EditLastAdditionsToolStripMenuItem
-            // 
-            this.EditLastAdditionsToolStripMenuItem.Name = "EditLastAdditionsToolStripMenuItem";
-            this.EditLastAdditionsToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
-            this.EditLastAdditionsToolStripMenuItem.Text = "Edit last OCR image additions...";
-            this.EditLastAdditionsToolStripMenuItem.Click += new System.EventHandler(this.inspectLastAdditionsToolStripMenuItem_Click);
             // 
             // labelSubtitleText
             // 
