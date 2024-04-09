@@ -20,14 +20,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.components = new System.ComponentModel.Container();
             this.contextMenuStripListview = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemSaveSubtitleAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparatorImageCompare = new System.Windows.Forms.ToolStripSeparator();
             this.EditLastAdditionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparatorOcrSelected = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.labelSubtitleText = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
@@ -63,10 +58,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.contextMenuStripListview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSaveSubtitleAs,
-            this.toolStripSeparator2,
             this.saveImageAsToolStripMenuItem,
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem,
-            this.toolStripSeparatorImageCompare,
             this.EditLastAdditionsToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
             this.contextMenuStripListview.Size = new System.Drawing.Size(305, 104);
@@ -77,11 +70,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemSaveSubtitleAs.Size = new System.Drawing.Size(304, 22);
             this.toolStripMenuItemSaveSubtitleAs.Text = "Save subtitle as...";
             this.toolStripMenuItemSaveSubtitleAs.Click += new System.EventHandler(this.toolStripMenuItemSaveSubtitleAs_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(301, 6);
             // 
             // saveImageAsToolStripMenuItem
             // 
@@ -97,32 +85,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Text = "Save all images with HTML index view...";
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem.Click += new System.EventHandler(this.SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click);
             // 
-            // toolStripSeparatorImageCompare
-            // 
-            this.toolStripSeparatorImageCompare.Name = "toolStripSeparatorImageCompare";
-            this.toolStripSeparatorImageCompare.Size = new System.Drawing.Size(301, 6);
-            // 
             // EditLastAdditionsToolStripMenuItem
             // 
             this.EditLastAdditionsToolStripMenuItem.Name = "EditLastAdditionsToolStripMenuItem";
             this.EditLastAdditionsToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
             this.EditLastAdditionsToolStripMenuItem.Text = "Edit last OCR image additions...";
             this.EditLastAdditionsToolStripMenuItem.Click += new System.EventHandler(this.inspectLastAdditionsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparatorOcrSelected
-            // 
-            this.toolStripSeparatorOcrSelected.Name = "toolStripSeparatorOcrSelected";
-            this.toolStripSeparatorOcrSelected.Size = new System.Drawing.Size(329, 6);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(329, 6);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(329, 6);
             // 
             // labelSubtitleText
             // 
@@ -390,17 +358,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.Button buttonStartOcr;
         private System.Windows.Forms.GroupBox groupBoxOcrAutoFix;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripListview;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveImageAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem saveAllImagesWithHtmlIndexViewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorImageCompare;
         private System.Windows.Forms.ToolStripMenuItem EditLastAdditionsToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainerBottom;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUnknownWords;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearFixes;
@@ -411,6 +375,5 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImageSaveAs;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSaveSubtitleAs;
         private System.Windows.Forms.ToolStripMenuItem autoTransparentBackgroundToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
     }
 }
