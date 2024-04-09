@@ -207,8 +207,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             UiUtil.InitializeSubtitleFont(subtitleListView1);
             subtitleListView1.AutoSizeAllColumns(this);
 
-            splitContainerBottom.Panel1MinSize = 400;
-            splitContainerBottom.Panel2MinSize = 250;
 
             var ocrLanguages = new GoogleOcrService(new GoogleCloudVisionApi(string.Empty)).GetLanguages().OrderBy(p => p.ToString());
             var selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == Configuration.Settings.VobSubOcr.CloudVisionLanguage);
@@ -936,12 +934,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             int adjustPercent = (int)(Height * 0.15);
             groupBoxSubtitleImage.Height = originalTopHeight + adjustPercent;
 
-            splitContainerBottom.Top = groupBoxSubtitleImage.Bottom + 5;
 
 
             // Hack for resize after minimize...
             groupBoxSubtitleImage.Width = Width - groupBoxSubtitleImage.Left - 25;
-            splitContainerBottom.Width = Width - 40;
         }
 
         private void VobSubOcr_ResizeEnd(object sender, EventArgs e)
