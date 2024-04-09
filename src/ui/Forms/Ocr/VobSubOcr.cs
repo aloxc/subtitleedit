@@ -167,8 +167,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private bool _captureTopAlign;
         private int _captureTopAlignHeight = -1;
 
-        private Timer _mainOcrTimer;
-        private bool _mainOcrRunning;
         private Bitmap _mainOcrBitmap;
         private bool _hasForcedSubtitles;
 
@@ -328,11 +326,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         }
 
 
-  
-
-        private void DisposeImageCompareBitmaps()
-        {
-        }
 
         private void LoadBluRaySup()
         {
@@ -674,7 +667,6 @@ if (_bluRaySubtitlesOriginal != null)
         {
             buttonStartOcr.Enabled = false;
             buttonPause.Enabled = true;
-            _mainOcrRunning = true;
             subtitleListView1.MultiSelect = false;
         }
 
@@ -682,7 +674,6 @@ if (_bluRaySubtitlesOriginal != null)
         {
             buttonStartOcr.Enabled = true;
             buttonPause.Enabled = false;
-            _mainOcrRunning = false;
             subtitleListView1.MultiSelect = true;
         }
 
@@ -741,12 +732,7 @@ if (_bluRaySubtitlesOriginal != null)
 
             }).Start();
 
-            _mainOcrTimer = new Timer();
-            //_mainOcrTimer.Tick += mainOcrTimer_Tick;
-            _mainOcrTimer.Interval = 5;
-            _mainOcrRunning = true;
             subtitleListView1.MultiSelect = false;
-            //mainOcrTimer_Tick(null, null);
         }
 
         private void InitializeTopAlign()
@@ -817,7 +803,6 @@ if (_bluRaySubtitlesOriginal != null)
 
         private void ButtonPauseClick(object sender, EventArgs e)
         {
-            _mainOcrTimer?.Stop();
             buttonPause.Enabled = false;
             SetButtonsEnabledAfterOcrDone();
         }
@@ -886,7 +871,7 @@ if (_bluRaySubtitlesOriginal != null)
 
         private void SelectedIndexChangedAction()
         {
-            if (_mainOcrRunning && _mainOcrBitmap != null)
+            if ( _mainOcrBitmap != null)
             {
                 ShowSubtitleImage(_selectedIndex, _mainOcrBitmap);
             }
@@ -1113,11 +1098,9 @@ if (_bluRaySubtitlesOriginal != null)
                 }
             }
 
-            _mainOcrTimer?.Stop();
 
 
             System.Threading.Thread.Sleep(100);
-            DisposeImageCompareBitmaps();
 
 
             Configuration.Settings.VobSubOcr.ItalicFactor = _unItalicFactor;
