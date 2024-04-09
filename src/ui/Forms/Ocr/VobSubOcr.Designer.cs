@@ -40,6 +40,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
             this.groupBoxSubtitleImage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerBottom)).BeginInit();
             this.splitContainerBottom.Panel1.SuspendLayout();
             this.splitContainerBottom.Panel2.SuspendLayout();
             this.splitContainerBottom.SuspendLayout();
@@ -52,7 +54,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveImageAsToolStripMenuItem,
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
-            this.contextMenuStripListview.Size = new System.Drawing.Size(305, 104);
+            this.contextMenuStripListview.Size = new System.Drawing.Size(305, 70);
             // 
             // toolStripMenuItemSaveSubtitleAs
             // 

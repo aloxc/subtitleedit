@@ -162,6 +162,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private List<ImageCompareAddition> _lastAdditions = new List<ImageCompareAddition>();
         private bool _okClicked;
+        private static SubtitleListView __list;
+        private static VobSubOcr __this;
 
         // optimization vars
 
@@ -183,6 +185,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             InitializeComponent();
             UiUtil.FixFonts(this);
             SetDoubleBuffered(subtitleListView1);
+            CheckForIllegalCrossThreadCalls = false;
 
             buttonPause.Text = LanguageSettings.Current.Settings.Pause;
             subtitleListView1.InitializeLanguage(LanguageSettings.Current.General, Configuration.Settings);
@@ -213,6 +216,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == "en");
             }
+            __this = this;
         }
 
         internal void Initialize(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
@@ -612,7 +616,42 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             buttonPause.Enabled = false;
             subtitleListView1.MultiSelect = true;
         }
-
+        static void PaddleOCR(Object stateInfo )
+        {
+            // 任务处理逻辑
+            int number = (int)stateInfo;
+            Console.WriteLine("任务处理器正在处理任务：{0}", number);
+            ListViewItem item = __list.Items[number];
+            var ocrResult = new OCRResult();
+            PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
+            Bitmap bitmap = __this.GetSubtitleBitmap(number);
+            //_subtitle.Paragraphs[2].
+            if (bitmap == null)
+            {
+                return;
+            }
+            ocrResult = engine.DetectText(bitmap);
+            var txt = "";
+            if (ocrResult.TextBlocks.Count > 0)
+            {
+                List<TextBlock> list = ocrResult.TextBlocks;
+                if (list.Count == 1)
+                {
+                    txt = list[0].Text;
+                }
+                else
+                {
+                    for (int i = 0; i < list.Count - 1; i++)
+                    {
+                        txt += list[i].Text + " ";
+                    }
+                    txt += list[list.Count - 1].Text;
+                }
+            }
+            __this._subtitle.Paragraphs[number].Text = txt;
+            item.SubItems[4].Text = txt;
+            // 模拟任务处理，使用线程睡眠
+        }
         private void ButtonStartOcrClick(object sender, EventArgs e)
         {
             if (_subtitle.Paragraphs.Count == 0)
@@ -627,44 +666,15 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _fromMenuItem = false;
 
             int max = GetSubtitleCount();
-
-            new Task(() =>
+            __list = subtitleListView1;
+            WaitCallback callback = new WaitCallback(PaddleOCR);
+            for (int i = 0; i < max; i++)
             {
-                //识别结果对象
-                var ocrResult = new OCRResult();
-                 PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
-                Bitmap bitmap = GetSubtitleBitmap(_selectedIndex);
-                //_subtitle.Paragraphs[2].
-                if (bitmap == null)
-                {
-                    MessageBox.Show("No image!");
-                    return;
-                }
-                ocrResult = engine.DetectText(bitmap);
-                var txt = "";
-                if (ocrResult.TextBlocks.Count > 0)
-                {
-                    List<TextBlock> list = ocrResult.TextBlocks;
-                    if (list.Count == 1)
-                    {
-                        txt = list[0].Text;
-                    }
-                    else
-                    {
-                        for (int i = 0; i < list.Count - 1; i++)
-                        {
-                            txt += list[i].Text + "\r\n";
-                        }
-                        txt += list[list.Count - 1].Text;
-                    }
-                }
-                this.BeginInvoke(new Action(() =>
-                {
-                    Clipboard.SetText(txt);
-                }));
+                ListViewItem item = subtitleListView1.Items[0];
 
-            }).Start();
-
+                ThreadPool.QueueUserWorkItem(callback, i);
+            }
+           
             subtitleListView1.MultiSelect = false;
         }
 
