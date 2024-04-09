@@ -43,7 +43,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.autoTransparentBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemImageSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
             this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
@@ -275,8 +274,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.contextMenuStripImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoTransparentBackgroundToolStripMenuItem,
-            this.toolStripMenuItemImageSaveAs,
-            this.previewToolStripMenuItem});
+            this.toolStripMenuItemImageSaveAs});
             this.contextMenuStripImage.Name = "contextMenuStripUnknownWords";
             this.contextMenuStripImage.Size = new System.Drawing.Size(250, 70);
             this.contextMenuStripImage.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripImage_Opening);
@@ -294,14 +292,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemImageSaveAs.Size = new System.Drawing.Size(249, 22);
             this.toolStripMenuItemImageSaveAs.Text = "Save image as...";
             this.toolStripMenuItemImageSaveAs.Click += new System.EventHandler(this.toolStripMenuItemImageSaveAs_Click);
-            // 
-            // previewToolStripMenuItem
-            // 
-            this.previewToolStripMenuItem.Name = "previewToolStripMenuItem";
-            this.previewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.previewToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.previewToolStripMenuItem.Text = "Preview...";
-            this.previewToolStripMenuItem.Click += new System.EventHandler(this.previewToolStripMenuItem_Click);
             // 
             // splitContainerBottom
             // 
@@ -420,7 +410,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ContextMenuStrip contextMenuStripImage;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImageSaveAs;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSaveSubtitleAs;
-        private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoTransparentBackgroundToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
     }

@@ -266,7 +266,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _unItalicFactor = Configuration.Settings.VobSubOcr.ItalicFactor;
             }
 
-            previewToolStripMenuItem.Text = LanguageSettings.Current.General.Preview;
             toolStripMenuItemSaveSubtitleAs.Text = LanguageSettings.Current.Main.SaveSubtitleAs;
 
             toolStripMenuItemClearFixes.Text = LanguageSettings.Current.DvdSubRip.Clear;
@@ -1663,7 +1662,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void contextMenuStripImage_Opening(object sender, CancelEventArgs e)
         {
             GetSubtitleScreenSize(_selectedIndex, out var width, out var height);
-            previewToolStripMenuItem.Visible = width > 0 && height > 0;
         }
 
         private void previewToolStripMenuItem_Click(object sender, EventArgs e)
