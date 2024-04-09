@@ -503,8 +503,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (Configuration.IsRunningOnLinux || Configuration.IsRunningOnMac)
             {
                 Tesseract5Version = "5";
-                checkBoxTesseractMusicOn.Checked = false;
-                checkBoxTesseractMusicOn.Visible = false;
                 checkBoxTesseractFallback.Checked = false;
                 checkBoxTesseractFallback.Visible = false;
 
@@ -531,8 +529,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _ocrMethodNocr = comboBoxOcrMethod.Items.Add(language.OcrViaNOCR);
             _ocrMethodCloudVision = comboBoxOcrMethod.Items.Add(language.OcrViaCloudVision);
 
-            checkBoxTesseractItalicsOn.Checked = Configuration.Settings.VobSubOcr.UseItalicsInTesseract;
-            checkBoxTesseractItalicsOn.Text = LanguageSettings.Current.General.Italic;
 
             comboBoxTesseractEngineMode.Items.Clear();
             comboBoxTesseractEngineMode.Items.Add(language.TesseractEngineModeLegacy);
@@ -547,9 +543,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             comboBoxTesseractEngineMode.Left = labelTesseractEngineMode.Left + labelTesseractEngineMode.Width + 5;
             comboBoxTesseractEngineMode.Width = GroupBoxTesseractMethod.Width - comboBoxTesseractEngineMode.Left - 10;
 
-            checkBoxTesseractMusicOn.Checked = Configuration.Settings.VobSubOcr.UseMusicSymbolsInTesseract;
-            checkBoxTesseractMusicOn.Text = LanguageSettings.Current.Settings.MusicSymbol;
-            checkBoxTesseractMusicOn.Left = checkBoxTesseractItalicsOn.Left + checkBoxTesseractItalicsOn.Width + 15;
             checkBoxTesseractFallback.Checked = Configuration.Settings.VobSubOcr.UseTesseractFallback;
             toolStripMenuItemCaptureTopAlign.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
             captureTopAlignmentToolStripMenuItem.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
@@ -5224,7 +5217,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             var bmp = GetSubtitleBitmap(i);
             bool is302 = _ocrMethodIndex == _ocrMethodTesseract302;
-            _tesseractThreadRunner.AddImageJob(bmp, i, _languageId, string.Empty, _tesseractEngineMode.ToString(CultureInfo.InvariantCulture), is302, is302 && checkBoxTesseractMusicOn.Checked);
             _tesseractThreadRunner.CheckQueue();
             return false;
         }
@@ -5467,21 +5459,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
             }
 
-            if (!checkBoxTesseractItalicsOn.Checked)
-            {
-                textWithOutFixes = HtmlUtil.RemoveOpenCloseTags(textWithOutFixes, HtmlUtil.TagItalic);
-            }
-
+           
             // Sometimes Tesseract has problems with small fonts - it helps to make the image larger
             if (HtmlUtil.RemoveOpenCloseTags(textWithOutFixes, HtmlUtil.TagItalic).Replace("@", string.Empty).Replace("%", string.Empty).Replace("|", string.Empty).Trim().Length < 3
                 || Utilities.CountTagInText(textWithOutFixes, '\n') > 2)
             {
                 string rs = TesseractResizeAndRetry(bitmap);
                 textWithOutFixes = rs;
-                if (!checkBoxTesseractItalicsOn.Checked)
-                {
-                    textWithOutFixes = HtmlUtil.RemoveOpenCloseTags(textWithOutFixes, HtmlUtil.TagItalic);
-                }
             }
 
             // fix italics
@@ -5638,423 +5622,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                 }
 
-                if (checkBoxTesseractItalicsOn.Checked)
-                {
-                    if (line.Contains("<i>") || wordsNotFound > 0 || correctWords == 0 || textWithOutFixes != null && textWithOutFixes.Replace("~", string.Empty).Trim().Length < 2)
-                    {
-                        _ocrFixEngine.AutoGuessesUsed.Clear();
-                        _ocrFixEngine.UnknownWordsFound.Clear();
-
-                        // which is best - normal image or de-italic'ed? We find out here
-                        var unItalicedBmp = UnItalic(bitmap, _unItalicFactor);
-                        string unItalicText = Tesseract3DoOcrViaExe(unItalicedBmp, _languageId, "6", _tesseractEngineMode); // 6 = Assume a single uniform block of text.
-                        unItalicedBmp.Dispose();
-
-                        if (unItalicText.Replace("<i>", string.Empty).Replace("</i>", string.Empty).Length > 1)
-                        {
-                            int modiCorrectWords;
-                            int modiWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(unItalicText, out modiCorrectWords);
-                            string modiTextOcrFixed = unItalicText;
-                            if (fixCommonErrors)
-                            {
-                                var lastLastLine = GetLastLastText(index);
-                                modiTextOcrFixed = _ocrFixEngine.FixOcrErrors(unItalicText, _subtitle, index, _lastLine, lastLastLine, false, GetAutoGuessLevel());
-                            }
-
-                            int modiOcrCorrectedCorrectWords;
-                            int modiOcrCorrectedWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(modiTextOcrFixed, out modiOcrCorrectedCorrectWords);
-                            if (modiOcrCorrectedWordsNotFound <= modiWordsNotFound)
-                            {
-                                unItalicText = modiTextOcrFixed;
-                                modiWordsNotFound = modiOcrCorrectedWordsNotFound;
-                                modiCorrectWords = modiOcrCorrectedCorrectWords;
-                            }
-
-                            bool ok = modiWordsNotFound < wordsNotFound || (textWithOutFixes.Length == 1 && modiWordsNotFound == 0);
-
-                            if (!ok)
-                            {
-                                ok = wordsNotFound == modiWordsNotFound && unItalicText.EndsWith('!') && (line.EndsWith('l') || line.EndsWith('ﬂ'));
-                            }
-
-                            if (!ok)
-                            {
-                                ok = wordsNotFound == modiWordsNotFound && line.StartsWith("<i>", StringComparison.Ordinal) && line.EndsWith("</i>", StringComparison.Ordinal);
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, '/') > Utilities.CountTagInText(line, '/') + 1)
-                            {
-                                ok = false;
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, '\\') > Utilities.CountTagInText(line, '\\'))
-                            {
-                                ok = false;
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, ')') > Utilities.CountTagInText(line, ')') + 1)
-                            {
-                                ok = false;
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, '(') > Utilities.CountTagInText(line, '(') + 1)
-                            {
-                                ok = false;
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, '$') > Utilities.CountTagInText(line, '$') + 1)
-                            {
-                                ok = false;
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, '€') > Utilities.CountTagInText(line, '€') + 1)
-                            {
-                                ok = false;
-                            }
-
-                            if (ok && Utilities.CountTagInText(unItalicText, '•') > Utilities.CountTagInText(line, '•'))
-                            {
-                                ok = false;
-                            }
-
-                            if (ok)
-                            {
-                                wordsNotFound = modiWordsNotFound;
-                                correctWords = modiCorrectWords;
-
-                                line = HtmlUtil.RemoveOpenCloseTags(line, HtmlUtil.TagItalic).Trim();
-
-                                if (line.Length > 7 && unItalicText.Length > 7 && unItalicText.StartsWith("I ", StringComparison.Ordinal) &&
-                                    line.StartsWith(unItalicText.Remove(0, 2).Substring(0, 4), StringComparison.Ordinal))
-                                {
-                                    unItalicText = unItalicText.Remove(0, 2);
-                                }
-
-                                if (checkBoxTesseractMusicOn.Checked)
-                                {
-                                    if ((line.StartsWith("J' ", StringComparison.Ordinal) || line.StartsWith("J“ ", StringComparison.Ordinal) || line.StartsWith("J* ", StringComparison.CurrentCulture) || line.StartsWith("♪ ", StringComparison.Ordinal)) && unItalicText.Length > 3 && HtmlUtil.RemoveOpenCloseTags(unItalicText, HtmlUtil.TagItalic).Substring(1, 2) == "' ")
-                                    {
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 2).TrimStart();
-                                    }
-
-                                    if ((line.StartsWith("J' ", StringComparison.Ordinal) || line.StartsWith("J“ ", StringComparison.Ordinal) || line.StartsWith("J* ", StringComparison.Ordinal) || line.StartsWith("♪ ", StringComparison.Ordinal)) && unItalicText.Length > 3 && HtmlUtil.RemoveOpenCloseTags(unItalicText, HtmlUtil.TagItalic)[1] == ' ')
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 2).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if ((line.StartsWith("J' ", StringComparison.Ordinal) || line.StartsWith("J“ ", StringComparison.Ordinal) || line.StartsWith("J* ", StringComparison.Ordinal) || line.StartsWith("♪ ", StringComparison.Ordinal)) && unItalicText.Length > 3 && HtmlUtil.RemoveOpenCloseTags(unItalicText, HtmlUtil.TagItalic)[2] == ' ')
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 2).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if (unItalicText.StartsWith("J'", StringComparison.Ordinal) && (line.StartsWith('♪') || textWithOutFixes.StartsWith('♪') || textWithOutFixes.StartsWith("<i>♪", StringComparison.Ordinal) || unItalicText.EndsWith('♪')))
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 2).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if ((line.StartsWith("J` ", StringComparison.Ordinal) || line.StartsWith("J“ ", StringComparison.Ordinal) || line.StartsWith("J' ", StringComparison.Ordinal) || line.StartsWith("J* ", StringComparison.Ordinal)) && unItalicText.StartsWith("S ", StringComparison.Ordinal))
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 2).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if ((line.StartsWith("J` ", StringComparison.Ordinal) || line.StartsWith("J“ ", StringComparison.Ordinal) || line.StartsWith("J' ", StringComparison.Ordinal) || line.StartsWith("J* ", StringComparison.Ordinal)) && unItalicText.StartsWith("<i>S</i> ", StringComparison.Ordinal))
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 8).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if (unItalicText.StartsWith(";'", StringComparison.Ordinal) && (line.StartsWith('♪') || textWithOutFixes.StartsWith('♪') || textWithOutFixes.StartsWith("<i>♪", StringComparison.Ordinal) || unItalicText.EndsWith('♪')))
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 2).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if (unItalicText.StartsWith(",{*", StringComparison.Ordinal) && (line.StartsWith('♪') || textWithOutFixes.StartsWith('♪') || textWithOutFixes.StartsWith("<i>♪", StringComparison.Ordinal) || unItalicText.EndsWith('♪')))
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = "♪ " + unItalicText.Remove(0, 3).TrimStart();
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-
-                                    if (unItalicText.EndsWith("J'", StringComparison.Ordinal) && (line.EndsWith('♪') || textWithOutFixes.EndsWith('♪') || textWithOutFixes.EndsWith("♪</i>", StringComparison.Ordinal) || unItalicText.StartsWith('♪')))
-                                    {
-                                        bool ita = unItalicText.StartsWith("<i>", StringComparison.Ordinal) && unItalicText.EndsWith("</i>", StringComparison.Ordinal);
-                                        unItalicText = HtmlUtil.RemoveHtmlTags(unItalicText);
-                                        unItalicText = unItalicText.Remove(unItalicText.Length - 3, 2).TrimEnd() + " ♪";
-                                        if (ita)
-                                        {
-                                            unItalicText = "<i>" + unItalicText + "</i>";
-                                        }
-                                    }
-                                }
-
-                                if (unItalicText.StartsWith('[') && !line.StartsWith('['))
-                                {
-                                    unItalicText = unItalicText.Remove(0, 1);
-                                    if (unItalicText.EndsWith(']'))
-                                    {
-                                        unItalicText = unItalicText.TrimEnd(']');
-                                    }
-                                }
-
-                                if (unItalicText.StartsWith('{') && !line.StartsWith('{'))
-                                {
-                                    unItalicText = unItalicText.Remove(0, 1);
-                                    if (unItalicText.EndsWith('}'))
-                                    {
-                                        unItalicText = unItalicText.TrimEnd('}');
-                                    }
-                                }
-
-                                if (unItalicText.EndsWith('}') && !line.EndsWith('}'))
-                                {
-                                    unItalicText = unItalicText.TrimEnd('}');
-                                }
-
-                                if (line.EndsWith("...", StringComparison.Ordinal) && unItalicText.EndsWith("”!", StringComparison.Ordinal))
-                                {
-                                    unItalicText = unItalicText.TrimEnd('!').TrimEnd('”') + ".";
-                                }
-
-                                if (line.EndsWith("...", StringComparison.Ordinal) && unItalicText.EndsWith("\"!", StringComparison.Ordinal))
-                                {
-                                    unItalicText = unItalicText.TrimEnd('!').TrimEnd('"') + ".";
-                                }
-
-                                if (line.EndsWith('.') && !unItalicText.EndsWith('.') && !unItalicText.EndsWith(".</i>", StringComparison.Ordinal))
-                                {
-                                    string post = string.Empty;
-                                    if (unItalicText.EndsWith("</i>", StringComparison.Ordinal))
-                                    {
-                                        post = "</i>";
-                                        unItalicText = unItalicText.Remove(unItalicText.Length - 4);
-                                    }
-
-                                    if (unItalicText.EndsWith('\'') && !line.EndsWith("'.", StringComparison.Ordinal))
-                                    {
-                                        unItalicText = unItalicText.TrimEnd('\'');
-                                    }
-
-                                    unItalicText += "." + post;
-                                }
-
-                                if (unItalicText.EndsWith('.') && !unItalicText.EndsWith("...", StringComparison.Ordinal) && !unItalicText.EndsWith("...</i>", StringComparison.Ordinal) && line.EndsWith("...", StringComparison.Ordinal))
-                                {
-                                    string post = string.Empty;
-                                    if (unItalicText.EndsWith("</i>", StringComparison.Ordinal))
-                                    {
-                                        post = "</i>";
-                                        unItalicText = unItalicText.Remove(unItalicText.Length - 4);
-                                    }
-
-                                    unItalicText += ".." + post;
-                                }
-
-                                if (unItalicText.EndsWith("..", StringComparison.Ordinal) && !unItalicText.EndsWith("...", StringComparison.Ordinal) && !unItalicText.EndsWith("...</i>", StringComparison.Ordinal) && line.EndsWith("...", StringComparison.Ordinal))
-                                {
-                                    string post = string.Empty;
-                                    if (unItalicText.EndsWith("</i>", StringComparison.Ordinal))
-                                    {
-                                        post = "</i>";
-                                        unItalicText = unItalicText.Remove(unItalicText.Length - 4);
-                                    }
-
-                                    unItalicText += "." + post;
-                                }
-
-                                if (line.EndsWith('!') && !unItalicText.EndsWith('!') && !unItalicText.EndsWith("!</i>", StringComparison.Ordinal))
-                                {
-                                    if (unItalicText.EndsWith("!'", StringComparison.Ordinal))
-                                    {
-                                        unItalicText = unItalicText.TrimEnd('\'');
-                                    }
-                                    else
-                                    {
-                                        if (unItalicText.EndsWith("l</i>", StringComparison.Ordinal) && _ocrFixEngine != null)
-                                        {
-                                            string w = unItalicText.Substring(0, unItalicText.Length - 4);
-                                            int wIdx = w.Length - 1;
-                                            while (wIdx >= 0 && !@" .,!?<>:;'-$@£()[]<>/""".Contains(w[wIdx]))
-                                            {
-                                                wIdx--;
-                                            }
-
-                                            if (wIdx + 1 < w.Length && unItalicText.Length > 5)
-                                            {
-                                                w = w.Substring(wIdx + 1);
-                                                if (!_ocrFixEngine.DoSpell(w))
-                                                {
-                                                    unItalicText = unItalicText.Remove(unItalicText.Length - 5, 1);
-                                                }
-                                            }
-
-                                            unItalicText = unItalicText.Insert(unItalicText.Length - 4, "!");
-                                        }
-                                        else if (unItalicText.EndsWith('l') && _ocrFixEngine != null)
-                                        {
-                                            string w = unItalicText;
-                                            int wIdx = w.Length - 1;
-                                            while (wIdx >= 0 && !@" .,!?<>:;'-$@£()[]<>/""".Contains(w[wIdx]))
-                                            {
-                                                wIdx--;
-                                            }
-
-                                            if (wIdx + 1 < w.Length && unItalicText.Length > 5)
-                                            {
-                                                w = w.Substring(wIdx + 1);
-                                                if (!_ocrFixEngine.DoSpell(w))
-                                                {
-                                                    unItalicText = unItalicText.Remove(unItalicText.Length - 1, 1);
-                                                }
-                                            }
-
-                                            unItalicText += "!";
-                                        }
-                                        else
-                                        {
-                                            unItalicText += "!";
-                                        }
-                                    }
-                                }
-
-                                if (line.EndsWith('?') && !unItalicText.EndsWith('?') && !unItalicText.EndsWith("?</i>", StringComparison.Ordinal))
-                                {
-                                    if (unItalicText.EndsWith("?'", StringComparison.Ordinal))
-                                    {
-                                        unItalicText = unItalicText.TrimEnd('\'');
-                                    }
-                                    else
-                                    {
-                                        unItalicText += "?";
-                                    }
-                                }
-
-                                line = HtmlUtil.RemoveOpenCloseTags(unItalicText, HtmlUtil.TagItalic);
-                                if (fixCommonErrors)
-                                {
-                                    if (line.Contains("'.") && !textWithOutFixes.Contains("'.") && textWithOutFixes.Contains(':') && !line.EndsWith("'.", StringComparison.Ordinal) && Configuration.Settings.Tools.OcrFixUseHardcodedRules)
-                                    {
-                                        line = line.Replace("'.", ":");
-                                    }
-
-                                    var lastLastLine = GetLastLastText(index);
-                                    line = _ocrFixEngine.FixOcrErrors(line, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                                }
-
-                                line = "<i>" + line + "</i>";
-                            }
-                            else
-                            {
-                                unItalicText = unItalicText.Replace("</i>", string.Empty);
-                                if (line.EndsWith("</i>", StringComparison.Ordinal) && unItalicText.EndsWith('.'))
-                                {
-                                    line = line.Remove(line.Length - 4, 4);
-                                    if (line.EndsWith('-'))
-                                    {
-                                        line = line.TrimEnd('-') + ".";
-                                    }
-
-                                    if (char.IsLetter(line[line.Length - 1]))
-                                    {
-                                        line += ".";
-                                    }
-
-                                    line += "</i>";
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (checkBoxTesseractMusicOn.Checked)
-                {
-                    if (line == "[J'J'J~]" || line == "[J'J'J']")
-                    {
-                        line = "[ ♪ ♪ ♪ ]";
-                    }
-
-                    line = line.Replace(" J' ", " ♪ ");
-
-                    if (line.StartsWith("J'", StringComparison.Ordinal))
-                    {
-                        line = "♪ " + line.Remove(0, 2).TrimStart();
-                    }
-
-                    if (line.StartsWith("<i>J'", StringComparison.Ordinal))
-                    {
-                        line = "<i>♪ " + line.Remove(0, 5).TrimStart();
-                    }
-
-                    if (line.StartsWith("[J'", StringComparison.Ordinal))
-                    {
-                        line = "[♪ " + line.Remove(0, 3).TrimStart();
-                    }
-
-                    if (line.StartsWith("<i>[J'", StringComparison.Ordinal))
-                    {
-                        line = "<i>[♪ " + line.Remove(0, 6).TrimStart();
-                    }
-
-                    if (line.EndsWith("J'", StringComparison.Ordinal))
-                    {
-                        line = line.Remove(line.Length - 2, 2).TrimEnd() + " ♪";
-                    }
-
-                    if (line.EndsWith("J'</i>", StringComparison.Ordinal))
-                    {
-                        line = line.Remove(line.Length - 6, 6).TrimEnd() + " ♪</i>";
-                    }
-
-                    if (line.Contains(Environment.NewLine + "J'"))
-                    {
-                        line = line.Replace(Environment.NewLine + "J'", Environment.NewLine + "♪ ");
-                        line = line.Replace("  ", " ");
-                    }
-
-                    if (line.Contains("J'" + Environment.NewLine))
-                    {
-                        line = line.Replace("J'" + Environment.NewLine, " ♪" + Environment.NewLine);
-                        line = line.Replace("  ", " ");
-                    }
-                }
 
                 if (wordsNotFound > 0 || correctWords == 0 || textWithOutFixes != null && textWithOutFixes.Replace("~", string.Empty).Trim().Length < 2)
                 {
@@ -8180,7 +7747,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             System.Threading.Thread.Sleep(100);
             DisposeImageCompareBitmaps();
 
-            Configuration.Settings.VobSubOcr.UseItalicsInTesseract = checkBoxTesseractItalicsOn.Checked;
             if (comboBoxTesseractEngineMode.SelectedIndex != -1)
             {
                 Configuration.Settings.VobSubOcr.TesseractEngineMode = comboBoxTesseractEngineMode.SelectedIndex;
