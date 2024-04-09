@@ -421,16 +421,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.AutoSizeColumns();
 
             groupBoxImagePalette.Text = language.ImagePalette;
-            checkBoxCustomFourColors.Text = language.UseCustomColors;
             checkBoxBackgroundTransparent.Text = language.Transparent;
             labelMinAlpha.Text = language.TransparentMinAlpha;
-            checkBoxPatternTransparent.Text = language.Transparent;
-            checkBoxEmphasis1Transparent.Text = language.Transparent;
-            checkBoxEmphasis2Transparent.Text = language.Transparent;
             toolStripMenuItemCaptureTopAlign.Text = language.CaptureTopAlign;
             captureTopAlignmentToolStripMenuItem.Text = language.CaptureTopAlign;
-
-            groupBoxTransportStream.Text = language.TransportStream;
 
             groupBoxOcrAutoFix.Text = language.OcrAutoCorrectionSpellChecking;
             tabControlLogs.TabPages[0].Text = language.UnknownWords;
@@ -514,14 +508,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             splitContainerBottom.Panel1MinSize = 400;
             splitContainerBottom.Panel2MinSize = 250;
 
-            pictureBoxBackground.Left = checkBoxCustomFourColors.Left + checkBoxCustomFourColors.Width + 8;
             checkBoxBackgroundTransparent.Left = pictureBoxBackground.Left + pictureBoxBackground.Width + 3;
-            pictureBoxPattern.Left = checkBoxBackgroundTransparent.Left + checkBoxBackgroundTransparent.Width + 8;
-            checkBoxPatternTransparent.Left = pictureBoxPattern.Left + pictureBoxPattern.Width + 3;
-            pictureBoxEmphasis1.Left = checkBoxPatternTransparent.Left + checkBoxPatternTransparent.Width + 8;
-            checkBoxEmphasis1Transparent.Left = pictureBoxEmphasis1.Left + pictureBoxEmphasis1.Width + 3;
-            pictureBoxEmphasis2.Left = checkBoxEmphasis1Transparent.Left + checkBoxEmphasis1Transparent.Width + 8;
-            checkBoxEmphasis2Transparent.Left = pictureBoxEmphasis2.Left + pictureBoxEmphasis2.Width + 3;
 
             var ocrLanguages = new GoogleOcrService(new GoogleCloudVisionApi(string.Empty)).GetLanguages().OrderBy(p => p.ToString());
             var selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == Configuration.Settings.VobSubOcr.CloudVisionLanguage);
@@ -648,7 +635,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             _vobSubMergedPackList = vobSubMergedPackList;
             _palette = palette;
-            checkBoxCustomFourColors.Checked = _palette == null;
 
             SetTesseractLanguageFromLanguageString(languageString);
             _importLanguageString = languageString;
@@ -685,11 +671,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _vobSubOcrSettings = vobSubOcrSettings;
             _vobSubMergedPackList = vobSubMergedPackist;
             _palette = palette;
-
-            if (_palette == null)
-            {
-                checkBoxCustomFourColors.Checked = true;
-            }
 
             _importLanguageString = languageString;
             if (_importLanguageString != null && _importLanguageString.Contains('(') && !_importLanguageString.StartsWith('('))
@@ -896,11 +877,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _isSon = isSon;
             if (_isSon)
             {
-                checkBoxCustomFourColors.Checked = true;
                 pictureBoxBackground.BackColor = Color.Transparent;
-                pictureBoxPattern.BackColor = Color.DarkGray;
-                pictureBoxEmphasis1.BackColor = Color.Black;
-                pictureBoxEmphasis2.BackColor = Color.White;
             }
 
             InitializeOcrEngineBatch(language, ocrEngine);
@@ -1260,7 +1237,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return _bluRaySubtitles[index].IsForced;
             }
 
-            if (_vobSubMergedPackList != null && checkBoxCustomFourColors.Checked)
+            if (_vobSubMergedPackList != null)
             {
                 return _vobSubMergedPackList[index].SubPicture.Forced;
             }
@@ -1292,48 +1269,26 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 if (index >= 0 && index < _mp4List.Count)
                 {
-                    if (checkBoxCustomFourColors.Checked)
-                    {
-                        GetCustomColors(out background, out pattern, out emphasis1, out emphasis2);
-
-                        returnBmp = _mp4List[index].Picture.GetBitmap(null, background, pattern, emphasis1, emphasis2, true);
-                        if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                        {
-                            returnBmp.MakeTransparent();
-                        }
-                    }
-                    else
-                    {
+           
                         returnBmp = _mp4List[index].Picture.GetBitmap(null, Color.Transparent, Color.Black, Color.White, Color.Black, false);
                         if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
                         {
                             returnBmp.MakeTransparent();
                         }
-                    }
+                    
                 }
             }
             else if (_spList != null)
             {
                 if (index >= 0 && index < _spList.Count)
                 {
-                    if (checkBoxCustomFourColors.Checked)
-                    {
-                        GetCustomColors(out background, out pattern, out emphasis1, out emphasis2);
-
-                        returnBmp = _spList[index].Picture.GetBitmap(null, background, pattern, emphasis1, emphasis2, true);
-                        if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                        {
-                            returnBmp.MakeTransparent();
-                        }
-                    }
-                    else
-                    {
+                    
                         returnBmp = _spList[index].Picture.GetBitmap(null, Color.Transparent, Color.Black, Color.White, Color.Black, false);
                         if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
                         {
                             returnBmp.MakeTransparent();
                         }
-                    }
+                    
                 }
             }
             else if (_bdnXmlSubtitle != null)
@@ -1437,42 +1392,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                         if (b != null)
                         {
-                            if (_isSon && checkBoxCustomFourColors.Checked)
-                            {
-                                GetCustomColors(out background, out pattern, out emphasis1, out emphasis2);
-
-                                FastBitmap fbmp = new FastBitmap(b);
-                                fbmp.LockImage();
-                                for (int x = 0; x < fbmp.Width; x++)
-                                {
-                                    for (int y = 0; y < fbmp.Height; y++)
-                                    {
-                                        Color c = fbmp.GetPixel(x, y);
-                                        if (c.R == Color.Red.R && c.G == Color.Red.G && c.B == Color.Red.B) // normally anti-alias
-                                        {
-                                            fbmp.SetPixel(x, y, emphasis2);
-                                        }
-                                        else if (c.R == Color.Blue.R && c.G == Color.Blue.G && c.B == Color.Blue.B) // normally text?
-                                        {
-                                            fbmp.SetPixel(x, y, pattern);
-                                        }
-                                        else if (c.R == Color.White.R && c.G == Color.White.G && c.B == Color.White.B) // normally background
-                                        {
-                                            fbmp.SetPixel(x, y, background);
-                                        }
-                                        else if (c.R == Color.Black.R && c.G == Color.Black.G && c.B == Color.Black.B) // outline/border
-                                        {
-                                            fbmp.SetPixel(x, y, emphasis1);
-                                        }
-                                        else
-                                        {
-                                            fbmp.SetPixel(x, y, c);
-                                        }
-                                    }
-                                }
-
-                                fbmp.UnlockImage();
-                            }
 
                             if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
                             {
@@ -1488,15 +1407,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 if (index >= 0 && index < _xSubList.Count)
                 {
-                    if (checkBoxCustomFourColors.Checked)
-                    {
-                        GetCustomColors(out background, out pattern, out emphasis1, out emphasis2);
-                        returnBmp = _xSubList[index].GetImage(background, pattern, emphasis1, emphasis2);
-                    }
-                    else
-                    {
+                   
                         returnBmp = _xSubList[index].GetImage();
-                    }
                 }
             }
             else if (_dvbSubtitles != null)
@@ -1581,24 +1493,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
             else if (index >= 0 && index < _vobSubMergedPackList.Count)
             {
-                if (checkBoxCustomFourColors.Checked)
-                {
-                    GetCustomColors(out background, out pattern, out emphasis1, out emphasis2);
-
-                    returnBmp = _vobSubMergedPackList[index].SubPicture.GetBitmap(null, background, pattern, emphasis1, emphasis2, true);
-                    if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                    {
-                        returnBmp.MakeTransparent();
-                    }
-                }
-                else
-                {
+               
                     returnBmp = _vobSubMergedPackList[index].SubPicture.GetBitmap(_palette, Color.Transparent, Color.Black, Color.White, Color.Black, false, crop);
                     if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
                     {
                         returnBmp.MakeTransparent();
                     }
-                }
+                
             }
 
             if (returnBmp == null)
@@ -1722,29 +1623,15 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void GetCustomColors(out Color background, out Color pattern, out Color emphasis1, out Color emphasis2)
         {
             background = pictureBoxBackground.BackColor;
-            pattern = pictureBoxPattern.BackColor;
-            emphasis1 = pictureBoxEmphasis1.BackColor;
-            emphasis2 = pictureBoxEmphasis2.BackColor;
 
             if (checkBoxBackgroundTransparent.Checked)
             {
                 background = Color.Transparent;
             }
 
-            if (checkBoxPatternTransparent.Checked)
-            {
                 pattern = Color.Transparent;
-            }
-
-            if (checkBoxEmphasis1Transparent.Checked)
-            {
                 emphasis1 = Color.Transparent;
-            }
-
-            if (checkBoxEmphasis2Transparent.Checked)
-            {
                 emphasis2 = Color.Transparent;
-            }
         }
 
         private void GetSubtitleTime(int index, out TimeCode start, out TimeCode end)
@@ -6164,33 +6051,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void CheckBoxCustomFourColorsCheckedChanged(object sender, EventArgs e)
-        {
-            ResetTesseractThread();
-            if (checkBoxCustomFourColors.Checked)
-            {
-                pictureBoxPattern.BackColor = Color.White;
-                pictureBoxEmphasis1.BackColor = Color.Black;
-                pictureBoxEmphasis2.BackColor = Color.Black;
-                checkBoxBackgroundTransparent.Enabled = true;
-                checkBoxPatternTransparent.Enabled = true;
-                checkBoxEmphasis1Transparent.Enabled = true;
-                checkBoxEmphasis2Transparent.Enabled = true;
-            }
-            else
-            {
-                pictureBoxPattern.BackColor = Color.Gray;
-                pictureBoxEmphasis1.BackColor = Color.Gray;
-                pictureBoxEmphasis2.BackColor = Color.Gray;
-                checkBoxBackgroundTransparent.Enabled = false;
-                checkBoxPatternTransparent.Enabled = false;
-                checkBoxEmphasis1Transparent.Enabled = false;
-                checkBoxEmphasis2Transparent.Enabled = false;
-            }
-
-            SubtitleListView1SelectedIndexChanged(null, null);
-        }
-
         private void ResetTesseractThread()
         {
             _ocrThreadStop = true;
@@ -6413,11 +6273,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _isSon = isSon;
             if (_isSon)
             {
-                checkBoxCustomFourColors.Checked = true;
                 pictureBoxBackground.BackColor = Color.Transparent;
-                pictureBoxPattern.BackColor = Color.DarkGray;
-                pictureBoxEmphasis1.BackColor = Color.Black;
-                pictureBoxEmphasis2.BackColor = Color.White;
             }
 
             SetButtonsStartOcr();
@@ -6735,11 +6591,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             _palette = palette;
 
-            if (_palette == null)
-            {
-                checkBoxCustomFourColors.Checked = true;
-            }
-
             SetOcrMethod();
 
             FileName = fileName;
@@ -6792,11 +6643,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             InitializeTesseract();
             LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
 
-            if (_palette == null)
-            {
-                checkBoxCustomFourColors.Checked = true;
-            }
-
             SetOcrMethod();
 
             FileName = fileName;
@@ -6826,8 +6672,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             InitializeTesseract();
             LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
 
-            checkBoxCustomFourColors.Enabled = true;
-            checkBoxCustomFourColors.Checked = true;
             autoTransparentBackgroundToolStripMenuItem.Checked = false;
             autoTransparentBackgroundToolStripMenuItem.Visible = false;
 
@@ -7559,9 +7403,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Text += " - " + Path.GetFileName(fileName);
 
             groupBoxImagePalette.Visible = false;
-            groupBoxTransportStream.Left = groupBoxImagePalette.Left;
-            groupBoxTransportStream.Top = groupBoxImagePalette.Top;
-            groupBoxTransportStream.Visible = true;
             _fromMenuItem = skipMakeBinary;
         }
 

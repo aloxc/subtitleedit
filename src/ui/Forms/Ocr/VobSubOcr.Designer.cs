@@ -77,17 +77,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxImagePalette = new System.Windows.Forms.GroupBox();
             this.checkBoxBackgroundTransparent = new System.Windows.Forms.CheckBox();
             this.pictureBoxBackground = new System.Windows.Forms.PictureBox();
-            this.checkBoxEmphasis2Transparent = new System.Windows.Forms.CheckBox();
-            this.checkBoxEmphasis1Transparent = new System.Windows.Forms.CheckBox();
-            this.checkBoxPatternTransparent = new System.Windows.Forms.CheckBox();
-            this.pictureBoxEmphasis2 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxEmphasis1 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxPattern = new System.Windows.Forms.PictureBox();
-            this.checkBoxCustomFourColors = new System.Windows.Forms.CheckBox();
             this.groupBoxSubtitleImage = new System.Windows.Forms.GroupBox();
             this.labelMinAlpha = new System.Windows.Forms.Label();
             this.numericUpDownAutoTransparentAlphaMax = new Nikse.SubtitleEdit.Controls.NikseUpDown();
-            this.groupBoxTransportStream = new System.Windows.Forms.GroupBox();
             this.pictureBoxSubtitleImage = new System.Windows.Forms.PictureBox();
             this.contextMenuStripImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.autoTransparentBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -129,9 +121,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripGuessesUsed.SuspendLayout();
             this.groupBoxImagePalette.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackground)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEmphasis2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEmphasis1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPattern)).BeginInit();
             this.groupBoxSubtitleImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).BeginInit();
             this.contextMenuStripImage.SuspendLayout();
@@ -666,13 +655,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxImagePalette.Controls.Add(this.checkBoxBackgroundTransparent);
             this.groupBoxImagePalette.Controls.Add(this.pictureBoxBackground);
-            this.groupBoxImagePalette.Controls.Add(this.checkBoxEmphasis2Transparent);
-            this.groupBoxImagePalette.Controls.Add(this.checkBoxEmphasis1Transparent);
-            this.groupBoxImagePalette.Controls.Add(this.checkBoxPatternTransparent);
-            this.groupBoxImagePalette.Controls.Add(this.pictureBoxEmphasis2);
-            this.groupBoxImagePalette.Controls.Add(this.pictureBoxEmphasis1);
-            this.groupBoxImagePalette.Controls.Add(this.pictureBoxPattern);
-            this.groupBoxImagePalette.Controls.Add(this.checkBoxCustomFourColors);
             this.groupBoxImagePalette.Location = new System.Drawing.Point(13, 16);
             this.groupBoxImagePalette.Name = "groupBoxImagePalette";
             this.groupBoxImagePalette.Size = new System.Drawing.Size(644, 38);
@@ -703,90 +685,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.pictureBoxBackground.TabStop = false;
             this.pictureBoxBackground.Click += new System.EventHandler(this.PictureBoxColorChooserClick);
             // 
-            // checkBoxEmphasis2Transparent
-            // 
-            this.checkBoxEmphasis2Transparent.AutoSize = true;
-            this.checkBoxEmphasis2Transparent.Location = new System.Drawing.Point(507, 19);
-            this.checkBoxEmphasis2Transparent.Name = "checkBoxEmphasis2Transparent";
-            this.checkBoxEmphasis2Transparent.Size = new System.Drawing.Size(85, 17);
-            this.checkBoxEmphasis2Transparent.TabIndex = 6;
-            this.checkBoxEmphasis2Transparent.Text = "Transparent";
-            this.checkBoxEmphasis2Transparent.UseVisualStyleBackColor = true;
-            this.checkBoxEmphasis2Transparent.CheckedChanged += new System.EventHandler(this.CheckBoxEmphasis2TransparentCheckedChanged);
-            // 
-            // checkBoxEmphasis1Transparent
-            // 
-            this.checkBoxEmphasis1Transparent.AutoSize = true;
-            this.checkBoxEmphasis1Transparent.Location = new System.Drawing.Point(387, 19);
-            this.checkBoxEmphasis1Transparent.Name = "checkBoxEmphasis1Transparent";
-            this.checkBoxEmphasis1Transparent.Size = new System.Drawing.Size(85, 17);
-            this.checkBoxEmphasis1Transparent.TabIndex = 5;
-            this.checkBoxEmphasis1Transparent.Text = "Transparent";
-            this.checkBoxEmphasis1Transparent.UseVisualStyleBackColor = true;
-            this.checkBoxEmphasis1Transparent.CheckedChanged += new System.EventHandler(this.CheckBoxEmphasis1TransparentCheckedChanged);
-            // 
-            // checkBoxPatternTransparent
-            // 
-            this.checkBoxPatternTransparent.AutoSize = true;
-            this.checkBoxPatternTransparent.Location = new System.Drawing.Point(266, 19);
-            this.checkBoxPatternTransparent.Name = "checkBoxPatternTransparent";
-            this.checkBoxPatternTransparent.Size = new System.Drawing.Size(85, 17);
-            this.checkBoxPatternTransparent.TabIndex = 4;
-            this.checkBoxPatternTransparent.Text = "Transparent";
-            this.checkBoxPatternTransparent.UseVisualStyleBackColor = true;
-            this.checkBoxPatternTransparent.CheckedChanged += new System.EventHandler(this.CheckBoxPatternTransparentCheckedChanged);
-            // 
-            // pictureBoxEmphasis2
-            // 
-            this.pictureBoxEmphasis2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxEmphasis2.Location = new System.Drawing.Point(484, 12);
-            this.pictureBoxEmphasis2.Name = "pictureBoxEmphasis2";
-            this.pictureBoxEmphasis2.Size = new System.Drawing.Size(21, 21);
-            this.pictureBoxEmphasis2.TabIndex = 3;
-            this.pictureBoxEmphasis2.TabStop = false;
-            this.pictureBoxEmphasis2.Click += new System.EventHandler(this.PictureBoxColorChooserClick);
-            this.pictureBoxEmphasis2.DoubleClick += new System.EventHandler(this.PictureBoxColorChooserClick);
-            // 
-            // pictureBoxEmphasis1
-            // 
-            this.pictureBoxEmphasis1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxEmphasis1.Location = new System.Drawing.Point(363, 12);
-            this.pictureBoxEmphasis1.Name = "pictureBoxEmphasis1";
-            this.pictureBoxEmphasis1.Size = new System.Drawing.Size(21, 21);
-            this.pictureBoxEmphasis1.TabIndex = 2;
-            this.pictureBoxEmphasis1.TabStop = false;
-            this.pictureBoxEmphasis1.Click += new System.EventHandler(this.PictureBoxColorChooserClick);
-            this.pictureBoxEmphasis1.DoubleClick += new System.EventHandler(this.PictureBoxColorChooserClick);
-            // 
-            // pictureBoxPattern
-            // 
-            this.pictureBoxPattern.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxPattern.Location = new System.Drawing.Point(242, 12);
-            this.pictureBoxPattern.Name = "pictureBoxPattern";
-            this.pictureBoxPattern.Size = new System.Drawing.Size(21, 21);
-            this.pictureBoxPattern.TabIndex = 1;
-            this.pictureBoxPattern.TabStop = false;
-            this.pictureBoxPattern.Click += new System.EventHandler(this.PictureBoxColorChooserClick);
-            this.pictureBoxPattern.DoubleClick += new System.EventHandler(this.PictureBoxColorChooserClick);
-            // 
-            // checkBoxCustomFourColors
-            // 
-            this.checkBoxCustomFourColors.AutoSize = true;
-            this.checkBoxCustomFourColors.Location = new System.Drawing.Point(7, 16);
-            this.checkBoxCustomFourColors.Name = "checkBoxCustomFourColors";
-            this.checkBoxCustomFourColors.Size = new System.Drawing.Size(116, 17);
-            this.checkBoxCustomFourColors.TabIndex = 0;
-            this.checkBoxCustomFourColors.Text = "Use custom colors:";
-            this.checkBoxCustomFourColors.UseVisualStyleBackColor = true;
-            this.checkBoxCustomFourColors.CheckedChanged += new System.EventHandler(this.CheckBoxCustomFourColorsCheckedChanged);
-            // 
             // groupBoxSubtitleImage
             // 
             this.groupBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxSubtitleImage.Controls.Add(this.labelMinAlpha);
             this.groupBoxSubtitleImage.Controls.Add(this.numericUpDownAutoTransparentAlphaMax);
-            this.groupBoxSubtitleImage.Controls.Add(this.groupBoxTransportStream);
             this.groupBoxSubtitleImage.Controls.Add(this.groupBoxImagePalette);
             this.groupBoxSubtitleImage.Controls.Add(this.pictureBoxSubtitleImage);
             this.groupBoxSubtitleImage.Location = new System.Drawing.Point(412, 6);
@@ -847,18 +751,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             0});
             this.numericUpDownAutoTransparentAlphaMax.Visible = false;
             this.numericUpDownAutoTransparentAlphaMax.ValueChanged += new System.EventHandler(this.numericUpDownAutoTransparentAlphaMax_ValueChanged);
-            // 
-            // groupBoxTransportStream
-            // 
-            this.groupBoxTransportStream.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTransportStream.Location = new System.Drawing.Point(94, 6);
-            this.groupBoxTransportStream.Name = "groupBoxTransportStream";
-            this.groupBoxTransportStream.Size = new System.Drawing.Size(644, 38);
-            this.groupBoxTransportStream.TabIndex = 36;
-            this.groupBoxTransportStream.TabStop = false;
-            this.groupBoxTransportStream.Text = "Transport stream";
-            this.groupBoxTransportStream.Visible = false;
             // 
             // pictureBoxSubtitleImage
             // 
@@ -1192,9 +1084,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxImagePalette.ResumeLayout(false);
             this.groupBoxImagePalette.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackground)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEmphasis2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEmphasis1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPattern)).EndInit();
             this.groupBoxSubtitleImage.ResumeLayout(false);
             this.groupBoxSubtitleImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).EndInit();
@@ -1240,14 +1129,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.TabPage tabPageUnknownWords;
         private System.Windows.Forms.ListBox listBoxUnknownWords;
         private System.Windows.Forms.GroupBox groupBoxImagePalette;
-        private System.Windows.Forms.PictureBox pictureBoxEmphasis2;
-        private System.Windows.Forms.PictureBox pictureBoxEmphasis1;
-        private System.Windows.Forms.PictureBox pictureBoxPattern;
-        private System.Windows.Forms.CheckBox checkBoxCustomFourColors;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
-        private System.Windows.Forms.CheckBox checkBoxEmphasis2Transparent;
-        private System.Windows.Forms.CheckBox checkBoxEmphasis1Transparent;
-        private System.Windows.Forms.CheckBox checkBoxPatternTransparent;
         private System.Windows.Forms.CheckBox checkBoxShowOnlyForced;
         private System.Windows.Forms.CheckBox checkBoxUseTimeCodesFromIdx;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -1278,7 +1160,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemInspectNOcrMatches;
         private System.Windows.Forms.Timer timerHideStatus;
         private System.Windows.Forms.ToolStripMenuItem dOSTToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBoxTransportStream;
         private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownAutoTransparentAlphaMax;
         private System.Windows.Forms.Label labelMinAlpha;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripImage;
