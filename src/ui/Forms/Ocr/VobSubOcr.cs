@@ -157,27 +157,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private class ModiParameter
-        {
-            public Bitmap Bitmap { get; set; }
-            public string Text { get; set; }
-            public int Language { get; set; }
-        }
-
         public delegate void ProgressCallbackDelegate(string progress);
         public ProgressCallbackDelegate ProgressCallback { get; set; }
 
-        private Main _main;
         public string FileName { get; set; }
         private Subtitle _subtitle = new Subtitle();
         private List<CompareItem> _compareBitmaps;
-        private XmlDocument _compareDoc = new XmlDocument();
-        private Point _manualOcrDialogPosition = new Point(-1, -1);
-        private volatile bool _abort;
-        private CancellationToken _cancellationToken = CancellationToken.None;
         private int _selectedIndex = -1;
-        private VobSubOcrSettings _vobSubOcrSettings;
-        private bool _italicCheckedLast;
         private double _unItalicFactor = 0.33;
 
         private BinaryOcrDb _binaryOcrDb;
@@ -198,9 +184,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private Bitmap _mainOcrBitmap;
         private bool _hasForcedSubtitles;
 
-        private Type _modiType;
-        private object _modiDoc;
-
         private bool _fromMenuItem;
 
         // DVD rip/vobsub
@@ -215,19 +198,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         // SP list
         private List<SpHeader> _spList;
 
-        // SP vobsub list (mp4)
-        private List<SubPicturesWithSeparateTimeCodes> _mp4List;
-
-        // XSub (divx)
-        private List<XSub> _xSubList;
-
-        // DVB (from transport stream)
-        private List<TransportStreamSubtitle> _dvbSubtitles;
-        private List<Color> _dvbSubColor;
         private bool _transportStreamUseColor;
-
-        // DVB (from transport stream inside mkv)
-        private List<DvbSubPes> _dvbPesSubtitles;
 
         // Other
         private IList<IBinaryParagraphWithPosition> _binaryParagraphWithPositions;
@@ -330,7 +301,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void Initialize(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
 
             _vobSubMergedPackList = vobSubMergedPackList;
             _palette = palette;
@@ -342,7 +312,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void InitializeQuick(List<VobSubMergedPack> vobSubMergedPackist, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
             _vobSubMergedPackList = vobSubMergedPackist;
             _palette = palette;
 
@@ -360,8 +329,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return;
             }
 
-            _cancellationToken = cancellationToken;
-
             if (subtitles.First() is TransportStreamSubtitle)
             {
                 var tssList = new List<TransportStreamSubtitle>();
@@ -378,7 +345,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void InitializeBatch(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
         {
             Initialize(vobSubMergedPackList, palette, vobSubOcrSettings, language);
-            _cancellationToken = cancellationToken;
         }
 
         internal void InitializeBatch(List<SubPicturesWithSeparateTimeCodes> list, string fileName, string language, string ocrEngine)
@@ -396,7 +362,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void Initialize(List<BluRaySupParser.PcsData> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {
             SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
 
             _bluRaySubtitlesOriginal = subtitles;
 
@@ -531,22 +496,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return _spList[index].Picture.Forced;
             }
 
-            if (_xSubList != null)
-            {
-                return false;
-            }
-
-            if (_dvbSubtitles != null)
-            {
-                //                return _dvbSubtitles[index]. ??
-                return false;
-            }
-
-            if (_dvbPesSubtitles != null)
-            {
-                return false;
-            }
-
             if (_binaryParagraphWithPositions != null)
             {
                 return _binaryParagraphWithPositions[index].IsForced;
@@ -593,47 +542,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     
                 }
             }
-            else if (_xSubList != null)
-            {
-                if (index >= 0 && index < _xSubList.Count)
-                {
-                   
-                        returnBmp = _xSubList[index].GetImage();
-                }
-            }
-            else if (_dvbPesSubtitles != null)
-            {
-                if (index >= 0 && index < _dvbPesSubtitles.Count)
-                {
-                    var dvbBmp = _dvbPesSubtitles[index].GetImageFull();
-                    var nDvbBmp = new NikseBitmap(dvbBmp);
-                    nDvbBmp.CropTopTransparent(2);
-                    nDvbBmp.CropTransparentSidesAndBottom(2, true);
-                    if (_transportStreamUseColor)
-                    {
-                        _dvbSubColor[index] = nDvbBmp.GetBrightestColorWhiteIsTransparent();
-                    }
-
-                    if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                    {
-                        nDvbBmp.MakeBackgroundTransparent((int)numericUpDownAutoTransparentAlphaMax.Value);
-                    }
-
-     
-                    dvbBmp.Dispose();
-                    returnBmp = nDvbBmp.GetBitmap();
-                }
-            }
             else if (_binaryParagraphWithPositions != null)
             {
                 var bmp = _binaryParagraphWithPositions[index].GetBitmap();
                 var nDvbBmp = new NikseBitmap(bmp);
                 nDvbBmp.CropTopTransparent(2);
                 nDvbBmp.CropTransparentSidesAndBottom(2, true);
-                if (_transportStreamUseColor)
-                {
-                    _dvbSubColor[index] = nDvbBmp.GetBrightestColorWhiteIsTransparent();
-                }
+
 
                 if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
                 {
@@ -750,57 +665,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return n.GetBitmap();
         }
 
-        private void GetSubtitleTime(int index, out TimeCode start, out TimeCode end)
-        {
-            if (_mp4List != null)
-            {
-                var item = _mp4List[index];
-                start = new TimeCode(item.Start.TotalMilliseconds);
-                end = new TimeCode(item.End.TotalMilliseconds);
-            }
-            else if (_spList != null)
-            {
-                var item = _spList[index];
-                start = new TimeCode(item.StartTime.TotalMilliseconds);
-                end = new TimeCode(item.StartTime.TotalMilliseconds + item.Picture.Delay.TotalMilliseconds);
-            }
-            else if (_bluRaySubtitlesOriginal != null)
-            {
-                var item = _bluRaySubtitles[index];
-                start = new TimeCode(item.StartTime / 90.0);
-                end = new TimeCode(item.EndTime / 90.0);
-            }
-            else if (_xSubList != null)
-            {
-                var item = _xSubList[index];
-                start = new TimeCode(item.Start.TotalMilliseconds);
-                end = new TimeCode(item.End.TotalMilliseconds);
-            }
-            else if (_dvbSubtitles != null)
-            {
-                var item = _dvbSubtitles[index];
-                start = new TimeCode(item.StartMilliseconds);
-                end = new TimeCode(item.EndMilliseconds);
-            }
-            else if (_dvbPesSubtitles != null)
-            {
-                var item = _subtitle.Paragraphs[index];
-                start = item.StartTime;
-                end = item.EndTime;
-            }
-            else if (_binaryParagraphWithPositions != null)
-            {
-                var item = _binaryParagraphWithPositions[index];
-                start = item.StartTimeCode;
-                end = item.EndTimeCode;
-            }
-            else
-            {
-                var item = _vobSubMergedPackList[index];
-                start = new TimeCode(item.StartTime.TotalMilliseconds);
-                end = new TimeCode(item.EndTime.TotalMilliseconds);
-            }
-        }
 
         private int GetSubtitleCount()
         {
@@ -817,14 +681,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         /// </summary>
         private void GetSubtitleTopAndHeight(int index, out int left, out int top, out int width, out int height)
         {
-            if (_mp4List != null)
-            {
-                left = 0;
-                top = 0;
-                width = 0;
-                height = 0;
-                return;
-            }
 
             if (_spList != null)
             {
@@ -846,51 +702,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 bmp.Dispose();
                 left = item.PcsObjects.Min(p => p.Origin.X);
                 top = item.PcsObjects.Min(p => p.Origin.Y);
-                return;
-            }
-
-            if (_xSubList != null)
-            {
-                left = 0;
-                top = 0;
-                width = 0;
-                height = 0;
-                return;
-            }
-
-            if (_dvbSubtitles != null)
-            {
-                var item = _dvbSubtitles[index];
-                var pos = item.GetPosition();
-                var bmp = item.GetBitmap();
-                top = pos.Top;
-                left = pos.Left;
-                width = bmp.Width;
-                height = bmp.Height;
-                bmp.Dispose();
-                return;
-            }
-
-            if (_dvbPesSubtitles != null)
-            {
-                var item = _subtitle.Paragraphs[index];
-                left = 0;
-                top = 0;
-                width = 0;
-                height = 0;
-
-                if (index < _dvbPesSubtitles.Count)
-                {
-                    var pes = _dvbPesSubtitles[index];
-                    var bmp = pes.GetImageFull();
-                    var nikseBitmap = new NikseBitmap(bmp);
-                    top = nikseBitmap.CropTopTransparent(0);
-                    left = nikseBitmap.CropSidesAndBottom(0, Color.FromArgb(0, 0, 0, 0), true);
-                    width = nikseBitmap.Width;
-                    height = nikseBitmap.Height;
-                    bmp.Dispose();
-                }
-
                 return;
             }
 
@@ -952,26 +763,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 width = item.Size.Width;
             }
 
-            if (_dvbPesSubtitles != null)
-            {
-                var size = _dvbPesSubtitles[index].GetScreenSize();
-                width = size.Width;
-                height = size.Height;
-            }
-
             if (_binaryParagraphWithPositions != null)
             {
                 var size = _binaryParagraphWithPositions[index].GetScreenSize();
                 width = size.Width;
                 height = size.Height;
-            }
-
-            if (_dvbSubtitles != null)
-            {
-                var item = _dvbSubtitles[index];
-                var pos = item.GetScreenSize();
-                width = pos.Width;
-                height = pos.Height;
             }
 
             if (_vobSubMergedPackList != null && index < _vobSubMergedPackList.Count)
@@ -1964,25 +1760,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void FormVobSubOcr_Shown(object sender, EventArgs e)
         {
-            if (_mp4List != null)
+            if (_spList != null)
             {
-                SetButtonsEnabledAfterOcrDone();
-                buttonStartOcr.Focus();
-            }
-            else if (_spList != null)
-            {
-                SetButtonsEnabledAfterOcrDone();
-                buttonStartOcr.Focus();
-            }
-            else if (_dvbSubtitles != null)
-            {
-
-                SetButtonsEnabledAfterOcrDone();
-                buttonStartOcr.Focus();
-            }
-            else if (_dvbPesSubtitles != null)
-            {
-
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
@@ -2008,11 +1787,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                 }
 
-            }
-            else if (_xSubList != null)
-            {
-                SetButtonsEnabledAfterOcrDone();
-                buttonStartOcr.Focus();
             }
             else
             {
@@ -2081,7 +1855,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             SetButtonsStartOcr();
             _fromMenuItem = false;
-            _abort = false;
 
 
             int max = GetSubtitleCount();
@@ -2239,194 +2012,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return false;
         }
 
-
-        private static string FixItalics(string input)
-        {
-            int italicStartCount = Utilities.CountTagInText(input, "<i>");
-            if (italicStartCount == 0)
-            {
-                return input;
-            }
-
-            var s = input.Replace(Environment.NewLine + " ", Environment.NewLine);
-            s = s.Replace(Environment.NewLine + " ", Environment.NewLine);
-            s = s.Replace(" " + Environment.NewLine, Environment.NewLine);
-            s = s.Replace(" " + Environment.NewLine, Environment.NewLine);
-            s = s.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-            s = s.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-
-            if (italicStartCount == 1 && s.Contains("<i>-</i>"))
-            {
-                s = s.Replace("<i>-</i>", "-");
-                s = s.Replace("  ", " ");
-            }
-
-            if (s.Contains("</i> / <i>"))
-            {
-                s = s.Replace("</i> / <i>", " I ").Replace("  ", " ");
-            }
-
-            if (s.StartsWith("/ <i>", StringComparison.Ordinal))
-            {
-                s = ("<i>I " + s.Remove(0, 5)).Replace("  ", " ");
-            }
-
-            if (s.StartsWith("I <i>", StringComparison.Ordinal))
-            {
-                s = ("<i>I " + s.Remove(0, 5)).Replace("  ", " ");
-            }
-            else if (italicStartCount == 1 && s.Length > 20 &&
-                     s.IndexOf("<i>", StringComparison.Ordinal) > 1 && s.IndexOf("<i>", StringComparison.Ordinal) < 10 && s.EndsWith("</i>", StringComparison.Ordinal))
-            {
-                s = "<i>" + HtmlUtil.RemoveOpenCloseTags(s, HtmlUtil.TagItalic) + "</i>";
-            }
-
-            s = s.Replace("</i>" + Environment.NewLine + "<i>", Environment.NewLine);
-
-            s = s.Replace("</i> a <i>", " a ");
-
-            return HtmlUtil.FixInvalidItalicTags(s);
-        }
-
-        private void LogUnknownWords()
-        {
-
-
-            _ocrFixEngine.UnknownWordsFound.Clear();
-        }
-
-        private void LogOcrFix(int index, string oldLine, string newLine)
-        {
-        }
-
-        private string CallModi(int i)
-        {
-            Bitmap bmp;
-            try
-            {
-                var tmp = GetSubtitleBitmap(i);
-                if (tmp == null)
-                {
-                    return string.Empty;
-                }
-
-                bmp = tmp.Clone() as Bitmap;
-                tmp.Dispose();
-            }
-            catch
-            {
-                return string.Empty;
-            }
-
-            var mp = new ModiParameter { Bitmap = bmp, Text = "", Language = GetModiLanguage() };
-
-            // We call in a separate thread... or app will crash sometimes :(
-            var modiThread = new System.Threading.Thread(DoWork);
-            modiThread.Start(mp);
-            modiThread.Join(3000); // wait max 3 seconds
-            modiThread.Abort();
-
-            if (!string.IsNullOrEmpty(mp.Text) && mp.Text.Length > 3 && mp.Text.EndsWith(";0]", StringComparison.Ordinal))
-            {
-                mp.Text = mp.Text.Substring(0, mp.Text.Length - 3);
-            }
-
-            // Try to avoid blank lines by resizing image
-            if (string.IsNullOrEmpty(mp.Text))
-            {
-                bmp = ResizeBitmap(bmp, (int)(bmp.Width * 1.2), (int)(bmp.Height * 1.2));
-                mp = new ModiParameter { Bitmap = bmp, Text = "", Language = GetModiLanguage() };
-
-                // We call in a separate thread... or app will crash sometimes :(
-                modiThread = new System.Threading.Thread(DoWork);
-                modiThread.Start(mp);
-                modiThread.Join(3000); // wait max 3 seconds
-                modiThread.Abort();
-            }
-
-            int k = 0;
-            while (string.IsNullOrEmpty(mp.Text) && k < 5)
-            {
-                if (string.IsNullOrEmpty(mp.Text))
-                {
-                    bmp = ResizeBitmap(bmp, (int)(bmp.Width * 1.3), (int)(bmp.Height * 1.4)); // a bit scaling
-                    mp = new ModiParameter { Bitmap = bmp, Text = "", Language = GetModiLanguage() };
-
-                    // We call in a separate thread... or app will crash sometimes :(
-                    modiThread = new System.Threading.Thread(DoWork);
-                    modiThread.Start(mp);
-                    modiThread.Join(3000); // wait max 3 seconds
-                    modiThread.Abort();
-                    k++;
-                }
-            }
-
-            bmp?.Dispose();
-
-            if (mp.Text != null)
-            {
-                mp.Text = mp.Text.Replace("•", "o");
-            }
-
-            return mp.Text;
-        }
-
-        public static void DoWork(object data)
-        {
-            var paramter = (ModiParameter)data;
-            string fileName = Path.GetTempPath() + Path.DirectorySeparatorChar + Guid.NewGuid() + ".bmp";
-            Object ocrResult = null;
-            try
-            {
-                paramter.Bitmap.Save(fileName);
-
-                Type modiDocType = Type.GetTypeFromProgID("MODI.Document");
-                Object modiDoc = Activator.CreateInstance(modiDocType);
-                modiDocType.InvokeMember("Create", BindingFlags.InvokeMethod, null, modiDoc, new Object[] { fileName });
-
-                modiDocType.InvokeMember("OCR", BindingFlags.InvokeMethod, null, modiDoc, new Object[] { paramter.Language, true, true });
-
-                Object images = modiDocType.InvokeMember("Images", BindingFlags.GetProperty, null, modiDoc, new Object[] { });
-                Type imagesType = images.GetType();
-
-                Object item = imagesType.InvokeMember("Item", BindingFlags.GetProperty, null, images, new Object[] { "0" });
-                Type itemType = item.GetType();
-
-                Object layout = itemType.InvokeMember("Layout", BindingFlags.GetProperty, null, item, new Object[] { });
-                Type layoutType = layout.GetType();
-                ocrResult = layoutType.InvokeMember("Text", BindingFlags.GetProperty, null, layout, new Object[] { });
-
-                modiDocType.InvokeMember("Close", BindingFlags.InvokeMethod, null, modiDoc, new Object[] { false });
-            }
-            catch
-            {
-                paramter.Text = string.Empty;
-            }
-
-            try
-            {
-                File.Delete(fileName);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            if (ocrResult != null)
-            {
-                paramter.Text = ocrResult.ToString().Trim();
-            }
-        }
-
-        private int GetModiLanguage()
-        {
-            return -1;
-        }
-
         private void ButtonPauseClick(object sender, EventArgs e)
         {
             _mainOcrTimer?.Stop();
-            _abort = true;
             _ocrThreadStop = true;
             buttonPause.Enabled = false;
             SetButtonsEnabledAfterOcrDone();
@@ -2604,7 +2192,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
 
 
             Text = LanguageSettings.Current.VobSubOcr.TitleBluRay;
@@ -2729,7 +2316,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         }
                         else
                         {
-                            _compareDoc = inspect.ImageCompareDocument;
                             LoadImageCompareBitmaps();
                             Cursor = Cursors.Default;
                         }
@@ -2813,37 +2399,14 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void checkBoxAutoTransparentBackground_CheckedChanged(object sender, EventArgs e)
-        {
-            SubtitleListView1SelectedIndexChanged(null, null);
-            if (autoTransparentBackgroundToolStripMenuItem.Checked && _dvbSubtitles != null)
-            {
-                numericUpDownAutoTransparentAlphaMax.Visible = true;
-            }
-            else
-            {
-                numericUpDownAutoTransparentAlphaMax.Visible = false;
-            }
-
-            labelMinAlpha.Visible = numericUpDownAutoTransparentAlphaMax.Visible;
-        }
-
         internal void Initialize(List<SubPicturesWithSeparateTimeCodes> subPicturesWithTimeCodes, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {
-            _mp4List = subPicturesWithTimeCodes;
-
             SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
 
             FileName = fileName;
             Text += " - " + Path.GetFileName(FileName);
 
-            foreach (SubPicturesWithSeparateTimeCodes subItem in _mp4List)
-            {
-                var p = new Paragraph(string.Empty, subItem.Start.TotalMilliseconds, subItem.End.TotalMilliseconds);
-                _subtitle.Paragraphs.Add(p);
-            }
-
+          
             _subtitle.Renumber();
             subtitleListView1.Fill(_subtitle);
             subtitleListView1.SelectIndexAndEnsureVisible(0);
@@ -2875,7 +2438,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             _ocrThreadStop = true;
-            _abort = true;
             _mainOcrTimer?.Stop();
 
 
@@ -2929,10 +2491,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void Initialize(List<TransportStreamSubtitle> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, string language, bool skipMakeBinary = false)
         {
             SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
-
-            _dvbSubtitles = subtitles;
-            InitializeDvbSubColor();
 
             ShowDvbSubs();
 
@@ -2943,23 +2501,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _fromMenuItem = skipMakeBinary;
         }
 
-        private void InitializeDvbSubColor()
-        {
-            _dvbSubColor = new List<Color>(_dvbSubtitles.Count);
-            for (int i = 0; i < _dvbSubtitles.Count; i++)
-            {
-                _dvbSubColor.Add(Color.Transparent);
-            }
-        }
-
         private void ShowDvbSubs()
         {
             _subtitle.Paragraphs.Clear();
-            foreach (var sub in _dvbSubtitles)
-            {
-                _subtitle.Paragraphs.Add(new Paragraph(string.Empty, sub.StartMilliseconds, sub.EndMilliseconds));
-            }
-
             _subtitle.Renumber();
             subtitleListView1.Fill(_subtitle);
             subtitleListView1.SelectIndexAndEnsureVisible(0);
