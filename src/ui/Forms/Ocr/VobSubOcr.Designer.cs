@@ -59,17 +59,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
-            this.tabControlLogs = new System.Windows.Forms.TabControl();
             this.contextMenuStripAllFixes = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPageUnknownWords = new System.Windows.Forms.TabPage();
-            this.listBoxUnknownWords = new System.Windows.Forms.ListBox();
             this.contextMenuStripUnknownWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeAllXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPageAllFixes = new System.Windows.Forms.TabPage();
-            this.listBoxLog = new System.Windows.Forms.ListBox();
-            this.tabPageSuggestions = new System.Windows.Forms.TabPage();
             this.contextMenuStripGuessesUsed = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearGuesses = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -107,12 +101,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOCRControls.SuspendLayout();
-            this.groupBoxOcrAutoFix.SuspendLayout();
-            this.tabControlLogs.SuspendLayout();
             this.contextMenuStripAllFixes.SuspendLayout();
-            this.tabPageUnknownWords.SuspendLayout();
             this.contextMenuStripUnknownWords.SuspendLayout();
-            this.tabPageAllFixes.SuspendLayout();
             this.contextMenuStripGuessesUsed.SuspendLayout();
             this.groupBoxSubtitleImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).BeginInit();
@@ -492,7 +482,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // groupBoxOcrAutoFix
             // 
-            this.groupBoxOcrAutoFix.Controls.Add(this.tabControlLogs);
             this.groupBoxOcrAutoFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxOcrAutoFix.Location = new System.Drawing.Point(0, 0);
             this.groupBoxOcrAutoFix.Name = "groupBoxOcrAutoFix";
@@ -500,21 +489,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOcrAutoFix.TabIndex = 0;
             this.groupBoxOcrAutoFix.TabStop = false;
             this.groupBoxOcrAutoFix.Text = "OCR auto correction / spell checking";
-            // 
-            // tabControlLogs
-            // 
-            this.tabControlLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControlLogs.ContextMenuStrip = this.contextMenuStripAllFixes;
-            this.tabControlLogs.Controls.Add(this.tabPageUnknownWords);
-            this.tabControlLogs.Controls.Add(this.tabPageAllFixes);
-            this.tabControlLogs.Controls.Add(this.tabPageSuggestions);
-            this.tabControlLogs.Location = new System.Drawing.Point(8, 144);
-            this.tabControlLogs.Name = "tabControlLogs";
-            this.tabControlLogs.SelectedIndex = 0;
-            this.tabControlLogs.Size = new System.Drawing.Size(383, 181);
-            this.tabControlLogs.TabIndex = 7;
             // 
             // contextMenuStripAllFixes
             // 
@@ -529,32 +503,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemClearFixes.Size = new System.Drawing.Size(106, 22);
             this.toolStripMenuItemClearFixes.Text = "Clear";
             this.toolStripMenuItemClearFixes.Click += new System.EventHandler(this.toolStripMenuItemClearFixes_Click);
-            // 
-            // tabPageUnknownWords
-            // 
-            this.tabPageUnknownWords.Controls.Add(this.listBoxUnknownWords);
-            this.tabPageUnknownWords.Location = new System.Drawing.Point(4, 22);
-            this.tabPageUnknownWords.Name = "tabPageUnknownWords";
-            this.tabPageUnknownWords.Size = new System.Drawing.Size(375, 155);
-            this.tabPageUnknownWords.TabIndex = 2;
-            this.tabPageUnknownWords.Text = "Unknown words";
-            this.tabPageUnknownWords.UseVisualStyleBackColor = true;
-            // 
-            // listBoxUnknownWords
-            // 
-            this.listBoxUnknownWords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBoxUnknownWords.ContextMenuStrip = this.contextMenuStripUnknownWords;
-            this.listBoxUnknownWords.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxUnknownWords.FormattingEnabled = true;
-            this.listBoxUnknownWords.HorizontalScrollbar = true;
-            this.listBoxUnknownWords.Location = new System.Drawing.Point(3, 3);
-            this.listBoxUnknownWords.Name = "listBoxUnknownWords";
-            this.listBoxUnknownWords.Size = new System.Drawing.Size(143, 147);
-            this.listBoxUnknownWords.TabIndex = 40;
-            this.listBoxUnknownWords.SelectedIndexChanged += new System.EventHandler(this.ListBoxLogSelectedIndexChanged);
-            this.listBoxUnknownWords.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxCopyToClipboard_KeyDown);
             // 
             // contextMenuStripUnknownWords
             // 
@@ -578,40 +526,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.removeAllXToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.removeAllXToolStripMenuItem.Text = "RemoveAllX";
             this.removeAllXToolStripMenuItem.Click += new System.EventHandler(this.removeAllXToolStripMenuItem_Click);
-            // 
-            // tabPageAllFixes
-            // 
-            this.tabPageAllFixes.Controls.Add(this.listBoxLog);
-            this.tabPageAllFixes.Location = new System.Drawing.Point(4, 22);
-            this.tabPageAllFixes.Name = "tabPageAllFixes";
-            this.tabPageAllFixes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAllFixes.Size = new System.Drawing.Size(375, 155);
-            this.tabPageAllFixes.TabIndex = 0;
-            this.tabPageAllFixes.Text = "All fixes";
-            this.tabPageAllFixes.UseVisualStyleBackColor = true;
-            // 
-            // listBoxLog
-            // 
-            this.listBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxLog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxLog.FormattingEnabled = true;
-            this.listBoxLog.HorizontalScrollbar = true;
-            this.listBoxLog.Location = new System.Drawing.Point(3, 3);
-            this.listBoxLog.Name = "listBoxLog";
-            this.listBoxLog.Size = new System.Drawing.Size(369, 149);
-            this.listBoxLog.TabIndex = 0;
-            this.listBoxLog.SelectedIndexChanged += new System.EventHandler(this.ListBoxLogSelectedIndexChanged);
-            this.listBoxLog.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxCopyToClipboard_KeyDown);
-            // 
-            // tabPageSuggestions
-            // 
-            this.tabPageSuggestions.Location = new System.Drawing.Point(4, 22);
-            this.tabPageSuggestions.Name = "tabPageSuggestions";
-            this.tabPageSuggestions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSuggestions.Size = new System.Drawing.Size(375, 155);
-            this.tabPageSuggestions.TabIndex = 1;
-            this.tabPageSuggestions.Text = "Guesses used";
-            this.tabPageSuggestions.UseVisualStyleBackColor = true;
             // 
             // contextMenuStripGuessesUsed
             // 
@@ -1014,12 +928,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOCRControls.ResumeLayout(false);
             this.groupBoxOCRControls.PerformLayout();
-            this.groupBoxOcrAutoFix.ResumeLayout(false);
-            this.tabControlLogs.ResumeLayout(false);
             this.contextMenuStripAllFixes.ResumeLayout(false);
-            this.tabPageUnknownWords.ResumeLayout(false);
             this.contextMenuStripUnknownWords.ResumeLayout(false);
-            this.tabPageAllFixes.ResumeLayout(false);
             this.contextMenuStripGuessesUsed.ResumeLayout(false);
             this.groupBoxSubtitleImage.ResumeLayout(false);
             this.groupBoxSubtitleImage.PerformLayout();
@@ -1052,18 +962,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonStartOcr;
         private System.Windows.Forms.GroupBox groupBoxOcrAutoFix;
-        private System.Windows.Forms.ListBox listBoxLog;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripListview;
         private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem italicToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveImageAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.TabControl tabControlLogs;
-        private System.Windows.Forms.TabPage tabPageAllFixes;
-        private System.Windows.Forms.TabPage tabPageSuggestions;
-        private System.Windows.Forms.TabPage tabPageUnknownWords;
-        private System.Windows.Forms.ListBox listBoxUnknownWords;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.CheckBox checkBoxShowOnlyForced;
         private System.Windows.Forms.CheckBox checkBoxUseTimeCodesFromIdx;

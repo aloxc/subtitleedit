@@ -425,9 +425,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             captureTopAlignmentToolStripMenuItem.Text = language.CaptureTopAlign;
 
             groupBoxOcrAutoFix.Text = language.OcrAutoCorrectionSpellChecking;
-            tabControlLogs.TabPages[0].Text = language.UnknownWords;
-            tabControlLogs.TabPages[1].Text = language.AllFixes;
-            tabControlLogs.TabPages[2].Text = language.GuessesUsed;
 
 
             groupBoxSubtitleImage.Text = string.Empty;
@@ -4188,8 +4185,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void CleanLogsGreaterThanOrEqualTo(decimal value)
         {
             var start = (int)Math.Round(value);
-            CleanLogGreaterThanOrEqualTo(listBoxUnknownWords, start);
-            CleanLogGreaterThanOrEqualTo(listBoxLog, start);
         }
 
         private void CleanLogGreaterThanOrEqualTo(ListBox listBox, int start)
@@ -5013,10 +5008,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void LogUnknownWords()
         {
-            foreach (var unknownWord in _ocrFixEngine.UnknownWordsFound)
-            {
-                listBoxUnknownWords.Items.Add(unknownWord);
-            }
+
 
             _ocrFixEngine.UnknownWordsFound.Clear();
         }
@@ -5042,7 +5034,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void LogOcrFix(int index, string oldLine, string newLine)
         {
-            listBoxLog.Items.Add(new OcrFix(index, oldLine, newLine));
         }
 
         private string CallModi(int i)
@@ -6283,8 +6274,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             checkBoxUseTimeCodesFromIdx.Left = groupBoxOCRControls.Left + 1;
             checkBoxShowOnlyForced.Left = checkBoxUseTimeCodesFromIdx.Left;
 
-            listBoxUnknownWords.Top = listBoxLog.Top;
-            listBoxUnknownWords.Left = listBoxLog.Left;
 
             // Hack for resize after minimize...
             groupBoxSubtitleImage.Width = Width - groupBoxSubtitleImage.Left - 25;
@@ -6868,8 +6857,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
             }
 
-            UpdateLogLineNumbersAfterDelete(listBoxUnknownWords, indices);
-            UpdateLogLineNumbersAfterDelete(listBoxLog, indices);
 
             foreach (int idx in indices)
             {
@@ -6924,33 +6911,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             listBox.EndUpdate();
         }
 
-        private void buttonUknownToNames_Click(object sender, EventArgs e)
-        {
-            if (listBoxUnknownWords.Items.Count > 0 && listBoxUnknownWords.SelectedItems.Count > 0)
-            {
-                if (listBoxUnknownWords.SelectedItems[0] is LogItem uw && uw.Line > 0)
-                {
-                    if (_ocrFixEngine == null)
-                    {
-                        comboBoxDictionaries_SelectedIndexChanged(null, null);
-                    }
-
-                    using (var form = new AddToNameList())
-                    {
-                        if (form.ShowDialog(this) == DialogResult.OK)
-                        {
-                            comboBoxDictionaries_SelectedIndexChanged(null, null);
-                            UpdateUnknownWordColoring(form.NewName, StringComparison.Ordinal);
-                            ShowStatus(string.Format(LanguageSettings.Current.Main.NameXAddedToNameList, form.NewName));
-                        }
-                        else if (!string.IsNullOrEmpty(form.NewName))
-                        {
-                            MessageBox.Show(string.Format(LanguageSettings.Current.Main.NameXNotAddedToNameList, form.NewName));
-                        }
-                    }
-                }
-            }
-        }
 
         private void UpdateUnknownWordColoring(string name, StringComparison comparison)
         {
@@ -6981,80 +6941,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void buttonUnknownToUserDic_Click(object sender, EventArgs e)
-        {
-            if (listBoxUnknownWords.Items.Count > 0 && listBoxUnknownWords.SelectedItems.Count > 0)
-            {
-                if (listBoxUnknownWords.SelectedItems[0] is LogItem uw && uw.Line > 0)
-                {
-                    using (var form = new AddToUserDic())
-                    {
-                        if (form.ShowDialog(this) == DialogResult.OK)
-                        {
-                            comboBoxDictionaries_SelectedIndexChanged(null, null);
-                            UpdateUnknownWordColoring(form.NewWord, StringComparison.OrdinalIgnoreCase);
-                            ShowStatus(string.Format(LanguageSettings.Current.Main.WordXAddedToUserDic, form.NewWord));
-                        }
-                        else if (!string.IsNullOrEmpty(form.NewWord))
-                        {
-                            MessageBox.Show(string.Format(LanguageSettings.Current.Main.WordXNotAddedToUserDic, form.NewWord));
-                        }
-                    }
-                }
-            }
-        }
 
-        private void buttonAddToOcrReplaceList_Click(object sender, EventArgs e)
-        {
-            if (listBoxUnknownWords.Items.Count > 0 && listBoxUnknownWords.SelectedItems.Count > 0)
-            {
-                if (listBoxUnknownWords.SelectedItems[0] is LogItem uw && uw.Line > 0)
-                {
-                    using (var form = new AddToOcrReplaceList())
-                    {
-                        if (form.ShowDialog(this) == DialogResult.OK)
-                        {
-                            comboBoxDictionaries_SelectedIndexChanged(null, null);
-                            ShowStatus(string.Format(LanguageSettings.Current.Main.OcrReplacePairXAdded, form.NewSource, form.NewTarget));
-                        }
-                        else
-                        {
-                            MessageBox.Show(string.Format(LanguageSettings.Current.Main.OcrReplacePairXNotAdded, form.NewSource, form.NewTarget));
-                        }
-                    }
-                }
-            }
-        }
 
-        private void buttonGoogleIt_Click(object sender, EventArgs e)
-        {
-            if (listBoxUnknownWords.Items.Count > 0 && listBoxUnknownWords.SelectedItems.Count > 0)
-            {
-                if (listBoxUnknownWords.SelectedItems[0] is LogItem uw && uw.Line > 0)
-                {
-                    UiUtil.OpenUrl("https://www.google.com/search?q=" + Utilities.UrlEncode(uw.Text));
-                }
-            }
-        }
 
-        private void listBoxCopyToClipboard_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.C && e.Modifiers == Keys.Control)
-            {
-                if (sender is ListBox lb && lb.Items.Count > 0 && lb.SelectedItems.Count > 0)
-                {
-                    try
-                    {
-                        string text = lb.SelectedItems[0].ToString();
-                        Clipboard.SetText(text);
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
-                }
-            }
-        }
 
         private void toolStripMenuItemSetUnItalicFactor_Click(object sender, EventArgs e)
         {
@@ -7150,12 +7039,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            listBoxUnknownWords.Items.Clear();
         }
 
         private void toolStripMenuItemClearFixes_Click(object sender, EventArgs e)
         {
-            listBoxLog.Items.Clear();
         }
 
         private void toolStripMenuItemClearGuesses_Click(object sender, EventArgs e)
@@ -8090,41 +7977,14 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void removeAllXToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var word = GetUnknownComboBoxWord(listBoxUnknownWords.Text);
-            if (string.IsNullOrEmpty(word))
-            {
-                return;
-            }
-
+            
             var unknownWords = new List<LogItem>();
-            foreach (var item in listBoxUnknownWords.Items)
-            {
-                var raw = item as LogItem;
-                if (raw == null)
-                {
-                    continue;
-                }
 
-                if (!word.Equals(raw.Text, StringComparison.OrdinalIgnoreCase))
-                {
-                    unknownWords.Add(raw);
-                }
-            }
-
-            listBoxUnknownWords.BeginUpdate();
-            listBoxUnknownWords.Items.Clear();
-            listBoxUnknownWords.Items.AddRange(unknownWords.Cast<object>().ToArray());
-            listBoxUnknownWords.EndUpdate();
-
-            if (listBoxUnknownWords.Items.Count > 0)
-            {
-                listBoxUnknownWords.SelectedIndex = 0;
-            }
         }
 
         private void contextMenuStripUnknownWords_Opening(object sender, CancelEventArgs e)
         {
-            var word = GetUnknownComboBoxWord(listBoxUnknownWords.Text);
+            string word = null;
             if (string.IsNullOrEmpty(word))
             {
                 removeAllXToolStripMenuItem.Visible = false;
