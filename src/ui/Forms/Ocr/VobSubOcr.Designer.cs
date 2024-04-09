@@ -7,7 +7,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;       
+        private System.ComponentModel.IContainer components = null;
 
         #region Windows Form Designer generated code
 
@@ -422,7 +422,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // ImagePreProcessingToolStripMenuItem
             // 
             this.ImagePreProcessingToolStripMenuItem.Name = "ImagePreProcessingToolStripMenuItem";
-            this.ImagePreProcessingToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.ImagePreProcessingToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.P)));
             this.ImagePreProcessingToolStripMenuItem.Size = new System.Drawing.Size(305, 22);
             this.ImagePreProcessingToolStripMenuItem.Text = "Image preprocessing...";
@@ -451,7 +451,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(12, 564);
             this.progressBar1.Name = "progressBar1";
@@ -1494,7 +1494,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // comboBoxDictionaries
             // 
-            this.comboBoxDictionaries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.comboBoxDictionaries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxDictionaries.BackColor = System.Drawing.SystemColors.Window;
             this.comboBoxDictionaries.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1532,8 +1532,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // tabControlLogs
             // 
-            this.tabControlLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabControlLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlLogs.ContextMenuStrip = this.contextMenuStripAllFixes;
             this.tabControlLogs.Controls.Add(this.tabPageUnknownWords);
@@ -1623,8 +1623,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // listBoxUnknownWords
             // 
-            this.listBoxUnknownWords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.listBoxUnknownWords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxUnknownWords.ContextMenuStrip = this.contextMenuStripUnknownWords;
             this.listBoxUnknownWords.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1770,7 +1770,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // groupBoxImagePalette
             // 
-            this.groupBoxImagePalette.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxImagePalette.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxImagePalette.Controls.Add(this.checkBoxBackgroundTransparent);
             this.groupBoxImagePalette.Controls.Add(this.pictureBoxBackground);
@@ -1890,7 +1890,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // groupBoxSubtitleImage
             // 
-            this.groupBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxSubtitleImage.Controls.Add(this.labelMinAlpha);
             this.groupBoxSubtitleImage.Controls.Add(this.numericUpDownAutoTransparentAlphaMax);
@@ -1958,7 +1958,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // groupBoxTransportStream
             // 
-            this.groupBoxTransportStream.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxTransportStream.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTransportStream.Controls.Add(this.checkBoxTransportStreamGetColorAndSplit);
             this.groupBoxTransportStream.Controls.Add(this.checkBoxTransportStreamGrayscale);
@@ -1994,8 +1994,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // pictureBoxSubtitleImage
             // 
-            this.pictureBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.pictureBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxSubtitleImage.BackColor = System.Drawing.Color.DimGray;
             this.pictureBoxSubtitleImage.ContextMenuStrip = this.contextMenuStripImage;
@@ -2045,7 +2045,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // imagePreprocessingToolStripMenuItem1
             // 
             this.imagePreprocessingToolStripMenuItem1.Name = "imagePreprocessingToolStripMenuItem1";
-            this.imagePreprocessingToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.imagePreprocessingToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.P)));
             this.imagePreprocessingToolStripMenuItem1.Size = new System.Drawing.Size(266, 22);
             this.imagePreprocessingToolStripMenuItem1.Text = "Image preprocessing...";
@@ -2101,8 +2101,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // splitContainerBottom
             // 
-            this.splitContainerBottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.splitContainerBottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerBottom.Location = new System.Drawing.Point(15, 199);
             this.splitContainerBottom.Name = "splitContainerBottom";
@@ -2128,7 +2128,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // textBoxCurrentText
             // 
             this.textBoxCurrentText.AllowDrop = true;
-            this.textBoxCurrentText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxCurrentText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxCurrentText.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.textBoxCurrentText.ContextMenuStrip = this.contextMenuStripTextBox;
@@ -2256,8 +2256,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // subtitleListView1
             // 
             this.subtitleListView1.AllowColumnReorder = true;
-            this.subtitleListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.subtitleListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.subtitleListView1.ContextMenuStrip = this.contextMenuStripListview;
             this.subtitleListView1.FirstVisibleIndex = -1;

@@ -1384,19 +1384,9 @@ namespace Nikse.SubtitleEdit.Forms.Assa
         {
             var assaDrawPluginFileName = Path.Combine(Configuration.PluginsDirectory, "AssaDraw.dll");
             var pluginObject = Main.GetPropertiesAndDoAction(assaDrawPluginFileName, out var name, out var text, out var version, out var description, out var actionType, out var shortcut, out var mi);
-            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(actionType) && mi != null)
+            if (!string.IsNullOrEmpty((string)name) && !string.IsNullOrEmpty((string)actionType) && mi != null)
             {
-                mi.Invoke(pluginObject,
-                    new object[]
-                    {
-                        this,
-                        "standalone",
-                        Configuration.Settings.General.CurrentFrameRate,
-                        Configuration.Settings.General.ListViewLineSeparatorString,
-                        _drawing != null ? _drawing.FileName : string.Empty,
-                        string.Empty,
-                        string.Empty,
-                    });
+               
             }
         }
 

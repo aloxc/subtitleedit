@@ -81,7 +81,7 @@ namespace Nikse.SubtitleEdit.Core.Common
         /// <param name="list">List of shot changes in seconds</param>
         public static void SaveShotChanges(string videoFileName, List<double> list)
         {
-            var sb = new StringBuilder();
+            var sb = new System.Text.StringBuilder();
             foreach (var d in list)
             {
                 sb.AppendLine(d.ToString(CultureInfo.InvariantCulture));

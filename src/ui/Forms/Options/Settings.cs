@@ -2578,17 +2578,7 @@ namespace Nikse.SubtitleEdit.Forms.Options
             foreach (var pluginFileName in Configuration.GetPlugins())
             {
                 Main.GetPropertiesAndDoAction(pluginFileName, out var name, out _, out var version, out var description, out var actionType, out _, out var mi);
-                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(actionType) && mi != null)
-                {
-                    var text = GetPluginShortcutText(name);
-                    var shortcutNode = new ShortcutNode(text)
-                    {
-                        Text = text,
-                        ShortcutText = name,
-                        Shortcut = new ShortcutHelper(null, true, true),
-                    };
-                    pluginsNode.Nodes.Add(shortcutNode);
-                }
+               
             }
 
             if (pluginsNode.Nodes.Count > 0)
