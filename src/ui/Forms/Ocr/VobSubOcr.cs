@@ -1415,25 +1415,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return lowercaseHeight;
         }
 
-        private void contextMenuStripImage_Opening(object sender, CancelEventArgs e)
-        {
-            GetSubtitleScreenSize(_selectedIndex, out var width, out var height);
-        }
-
-
-        private void contextMenuStripUnknownWords_Opening(object sender, CancelEventArgs e)
-        {
-            string word = null;
-            if (string.IsNullOrEmpty(word))
-            {
-            }
-            else
-            {
-            }
-        }
-
-      
-
 
         public void FindDialogFind(string findText, ReplaceType findReplaceType, Regex regex)
         {
