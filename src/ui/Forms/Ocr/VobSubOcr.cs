@@ -406,8 +406,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             var language = LanguageSettings.Current.VobSubOcr;
             Text = language.Title;
             groupBoxOcrMethod.Text = language.OcrMethod;
-            labelTesseractLanguage.Text = language.Language;
-            labelTesseractEngineMode.Text = language.TesseractEngineMode;
             labelImageDatabase.Text = language.ImageDatabase;
             labelNoOfPixelsIsSpace.Text = language.NoOfPixelsIsSpace;
             labelMaxErrorPercent.Text = language.MaxErrorPercent;
@@ -469,7 +467,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             groupBoxImageCompareMethod.Text = string.Empty;
             groupBoxModiMethod.Text = string.Empty;
-            GroupBoxTesseractMethod.Text = string.Empty;
 
             checkBoxAutoFixCommonErrors.Text = language.FixOcrErrors;
             checkBoxRightToLeft.Text = language.RightToLeft;
@@ -503,8 +500,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (Configuration.IsRunningOnLinux || Configuration.IsRunningOnMac)
             {
                 Tesseract5Version = "5";
-                checkBoxTesseractFallback.Checked = false;
-                checkBoxTesseractFallback.Visible = false;
 
                 if (Configuration.IsRunningOnLinux && Configuration.TesseractDataDirectory.EndsWith("/4.00/tessdata", StringComparison.Ordinal))
                 {
@@ -530,20 +525,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _ocrMethodCloudVision = comboBoxOcrMethod.Items.Add(language.OcrViaCloudVision);
 
 
-            comboBoxTesseractEngineMode.Items.Clear();
-            comboBoxTesseractEngineMode.Items.Add(language.TesseractEngineModeLegacy);
-            comboBoxTesseractEngineMode.Items.Add(language.TesseractEngineModeNeural);
-            comboBoxTesseractEngineMode.Items.Add(language.TesseractEngineModeBoth);
-            comboBoxTesseractEngineMode.Items.Add(language.TesseractEngineModeDefault);
-            if (Configuration.Settings.VobSubOcr.TesseractEngineMode >= 0 &&
-                Configuration.Settings.VobSubOcr.TesseractEngineMode < comboBoxTesseractEngineMode.Items.Count)
-            {
-                comboBoxTesseractEngineMode.SelectedIndex = Configuration.Settings.VobSubOcr.TesseractEngineMode;
-            }
-            comboBoxTesseractEngineMode.Left = labelTesseractEngineMode.Left + labelTesseractEngineMode.Width + 5;
-            comboBoxTesseractEngineMode.Width = GroupBoxTesseractMethod.Width - comboBoxTesseractEngineMode.Left - 10;
-
-            checkBoxTesseractFallback.Checked = Configuration.Settings.VobSubOcr.UseTesseractFallback;
             toolStripMenuItemCaptureTopAlign.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
             captureTopAlignmentToolStripMenuItem.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
 
@@ -602,8 +583,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             checkBoxCloudVisionSendOriginalImages.Checked = Configuration.Settings.VobSubOcr.CloudVisionSendOriginalImages;
             checkBoxSeHandlesTextMerge.Checked = Configuration.Settings.Tools.OcrGoogleCloudVisionSeHandlesTextMerge;
 
-            comboBoxTesseractLanguages.Left = labelTesseractLanguage.Left + labelTesseractLanguage.Width;
-            buttonGetTesseractDictionaries.Left = comboBoxTesseractLanguages.Left + comboBoxTesseractLanguages.Width + 5;
 
             UiUtil.InitializeSubtitleFont(subtitleListView1);
             subtitleListView1.AutoSizeAllColumns(this);
@@ -612,8 +591,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             italicToolStripMenuItem.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewItalic);
 
-            comboBoxTesseractLanguages.Left = labelTesseractLanguage.Left + labelTesseractLanguage.Width + 3;
-            comboBoxModiLanguage.Left = label1.Left + label1.Width + 3;
 
             comboBoxCharacterDatabase.Left = labelImageDatabase.Left + labelImageDatabase.Width + 3;
             comboBoxCharacterDatabase.Width = buttonChooseEditBinaryImageCompareDb.Left - comboBoxCharacterDatabase.Left - 10;
@@ -1283,108 +1260,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void SetTesseractLanguageFromLanguageString(string languageString)
         {
             // try to match language from vob to Tesseract language
-            if (comboBoxTesseractLanguages.SelectedIndex >= 0 && comboBoxTesseractLanguages.Items.Count > 1 && languageString != null)
-            {
-                languageString = languageString.ToLowerInvariant();
-                for (int i = 0; i < comboBoxTesseractLanguages.Items.Count; i++)
-                {
-                    var tl = comboBoxTesseractLanguages.Items[i] as TesseractLanguage;
-                    if (tl.Text.StartsWith("Chinese", StringComparison.OrdinalIgnoreCase) && (languageString.StartsWith("chinese", StringComparison.OrdinalIgnoreCase) || languageString.StartsWith("中文", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Korean", StringComparison.OrdinalIgnoreCase) && (languageString.StartsWith("korean", StringComparison.OrdinalIgnoreCase) || languageString.StartsWith("한국어", StringComparison.OrdinalIgnoreCase)) ||
-                        tl.Text.StartsWith("Korean", StringComparison.OrdinalIgnoreCase) && languageString.Equals("kor", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Swedish", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("svenska", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Swedish", StringComparison.OrdinalIgnoreCase) && languageString.Equals("swe", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Norwegian", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("norsk", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Norwegian", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("nor", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Dutch", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("Nederlands", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Dutch", StringComparison.OrdinalIgnoreCase) && languageString.Equals("nld", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Danish", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("dansk", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Danish", StringComparison.OrdinalIgnoreCase) && languageString.Equals("dnk", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("English", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("English", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("French", StringComparison.OrdinalIgnoreCase) && (languageString.StartsWith("french", StringComparison.OrdinalIgnoreCase) || languageString.StartsWith("français", StringComparison.OrdinalIgnoreCase)) ||
-                        tl.Text.StartsWith("French", StringComparison.OrdinalIgnoreCase) && languageString.Equals("fra", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Spanish", StringComparison.OrdinalIgnoreCase) && (languageString.StartsWith("spanish", StringComparison.OrdinalIgnoreCase) || languageString.StartsWith("españo", StringComparison.OrdinalIgnoreCase)) ||
-                        tl.Text.StartsWith("Spanish", StringComparison.OrdinalIgnoreCase) && languageString.Equals("esp", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Finnish", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("suomi", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Finnish", StringComparison.OrdinalIgnoreCase) && languageString.Equals("fin", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Italian", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("itali", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Italian", StringComparison.OrdinalIgnoreCase) && languageString.Equals("ita", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("German", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("deutsch", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("German", StringComparison.OrdinalIgnoreCase) && languageString.Equals("ger", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Text.StartsWith("Portuguese", StringComparison.OrdinalIgnoreCase) && languageString.StartsWith("português", StringComparison.OrdinalIgnoreCase) ||
-                        tl.Text.StartsWith("Portuguese", StringComparison.OrdinalIgnoreCase) && languageString.Equals("prt", StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (tl.Id.Equals(languageString, StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-                }
-            }
         }
 
         private void LoadBdnXml()
@@ -4637,14 +4512,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _tesseractRunner = new TesseractRunner();
             }
 
-            if (_ocrMethodIndex == _ocrMethodTesseract5 && comboBoxTesseractLanguages.Items.Count == 0)
-            {
-                buttonGetTesseractDictionaries_Click(sender, e);
-                return;
-            }
 
             _mainOcrBitmap = null;
-            _tesseractEngineMode = comboBoxTesseractEngineMode.SelectedIndex;
             _isLatinDb = comboBoxCharacterDatabase.SelectedItem != null && comboBoxCharacterDatabase.SelectedItem.ToString().Equals("Latin", StringComparison.Ordinal);
             Configuration.Settings.VobSubOcr.RightToLeft = checkBoxRightToLeft.Checked;
             _lastLine = null;
@@ -5500,16 +5369,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                     int newWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(newText, out correctWords);
 
-                    if (newWordsNotFound >= wordsNotFound && oldCorrectWords >= correctWords &&
-                        checkBoxTesseractFallback.Visible && checkBoxTesseractFallback.Checked)
-                    {
-                        var oldOcrMethodIndex = _ocrMethodIndex;
-                        _ocrMethodIndex = _ocrMethodIndex == _ocrMethodTesseract5 ? _ocrMethodTesseract302 : _ocrMethodTesseract5;
-                        newUnfixedText = Tesseract3DoOcrViaExe(bitmap, _languageId, "6", _tesseractEngineMode); // 6 = Assume a single uniform block of text.
-                        newText = _ocrFixEngine.FixOcrErrors(newUnfixedText, _subtitle, index, _lastLine, lastLastLine, true, GetAutoGuessLevel());
-                        newWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(newText, out correctWords);
-                        _ocrMethodIndex = oldOcrMethodIndex;
-                    }
+                   
 
                     if (wordsNotFound == 1 && newWordsNotFound == 1 && newUnfixedText.EndsWith("!!", StringComparison.Ordinal) && textWithOutFixes.EndsWith('u') && newText.Length > 1)
                     {
@@ -5884,7 +5744,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void InitializeModi()
         {
             _modiEnabled = false;
-            comboBoxModiLanguage.Enabled = false;
 
             if (!Configuration.IsRunningOnWindows)
             {
@@ -5899,7 +5758,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _modiDoc = Activator.CreateInstance(_modiType);
 
                 _modiEnabled = _modiDoc != null;
-                comboBoxModiLanguage.Enabled = _modiEnabled;
             }
             catch
             {
@@ -6051,7 +5909,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             string dir = _ocrMethodIndex == _ocrMethodTesseract302 ? Configuration.Tesseract302DataDirectory : Configuration.TesseractDataDirectory;
             if (Directory.Exists(dir))
             {
-                comboBoxTesseractLanguages.Items.Clear();
                 var cultures = Iso639Dash2LanguageCode.List;
                 foreach (var fileName in Directory.GetFiles(dir, "*.traineddata"))
                 {
@@ -6080,38 +5937,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         {
                             cultureName = "Norwegian";
                         }
-                        comboBoxTesseractLanguages.Items.Add(new TesseractLanguage { Id = tesseractName, Text = cultureName });
                     }
                 }
             }
 
-            if (comboBoxTesseractLanguages.Items.Count > 0)
-            {
-                for (int i = 0; i < comboBoxTesseractLanguages.Items.Count; i++)
-                {
-                    if (chosenLanguage != null && chosenLanguage == (comboBoxTesseractLanguages.Items[i] as TesseractLanguage).Text)
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if (chosenLanguage != null && chosenLanguage == (comboBoxTesseractLanguages.Items[i] as TesseractLanguage).Id)
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                        break;
-                    }
-
-                    if ((comboBoxTesseractLanguages.Items[i] as TesseractLanguage).Id == Configuration.Settings.VobSubOcr.TesseractLastLanguage)
-                    {
-                        comboBoxTesseractLanguages.SelectedIndex = i;
-                    }
-                }
-
-                if (comboBoxTesseractLanguages.SelectedIndex == -1)
-                {
-                    comboBoxTesseractLanguages.SelectedIndex = 0;
-                }
-            }
 
             if (string.IsNullOrEmpty(_languageId))
             {
@@ -6128,24 +5957,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void InitializeModiLanguages()
         {
-            foreach (var ml in ModiLanguage.AllLanguages)
-            {
-                comboBoxModiLanguage.Items.Add(ml);
-                if (_vobSubOcrSettings != null && ml.Id == _vobSubOcrSettings.LastModiLanguageId)
-                {
-                    comboBoxModiLanguage.SelectedIndex = comboBoxModiLanguage.Items.Count - 1;
-                }
-            }
+            
         }
 
         private int GetModiLanguage()
         {
-            if (comboBoxModiLanguage.SelectedIndex < 0)
-            {
-                return ModiLanguage.DefaultLanguageId;
-            }
-
-            return ((ModiLanguage)comboBoxModiLanguage.SelectedItem).Id;
+            return -1;
         }
 
         private void ButtonPauseClick(object sender, EventArgs e)
@@ -6546,39 +6363,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void ComboBoxTesseractLanguagesSelectedIndexChanged(object sender, EventArgs e)
-        {
-            var l = (comboBoxTesseractLanguages.SelectedItem as TesseractLanguage).Id;
-            Configuration.Settings.VobSubOcr.TesseractLastLanguage = l;
-            LoadOcrFixEngine(string.Empty, string.Empty);
-
-            if (_ocrMethodIndex == _ocrMethodTesseract5)
-            {
-                var ok = Configuration.IsRunningOnWindows &&
-                         File.Exists(Path.Combine(Configuration.Tesseract302Directory, "tesseract.exe")) &&
-                         File.Exists(Path.Combine(Configuration.Tesseract302DataDirectory, l + ".traineddata"));
-                checkBoxTesseractFallback.Visible = ok;
-                if (!ok)
-                {
-                    checkBoxTesseractFallback.Checked = false;
-                }
-            }
-            else if (_ocrMethodIndex == _ocrMethodTesseract302)
-            {
-                var ok = File.Exists(Path.Combine(Configuration.TesseractDirectory, "tesseract.exe")) &&
-                         File.Exists(Path.Combine(Configuration.TesseractDataDirectory, l + ".traineddata"));
-                checkBoxTesseractFallback.Visible = ok;
-                if (!ok)
-                {
-                    checkBoxTesseractFallback.Checked = false;
-                }
-            }
-
-            if (comboBoxDictionaries.SelectedIndex == -1)
-            {
-                comboBoxDictionaries.SelectedIndex = 0;
-            }
-        }
 
         private void LoadOcrFixEngine(string threeLetterIsoLanguageName, string hunspellName)
         {
@@ -6597,11 +6381,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     // ignored
                 }
             }
-            else if (string.IsNullOrEmpty(threeLetterIsoLanguageName) && comboBoxTesseractLanguages.SelectedItem != null)
-            {
-                _languageId = (comboBoxTesseractLanguages.SelectedItem as TesseractLanguage).Id;
-                threeLetterIsoLanguageName = _languageId;
-            }
+
 
             var tempOcrFixEngine = new OcrFixEngine(threeLetterIsoLanguageName, hunspellName, this, _ocrMethodIndex == _ocrMethodBinaryImageCompare || _ocrMethodIndex == _ocrMethodNocr);
             var error = _ocrFixEngine?.GetOcrFixReplaceListError();
@@ -6655,7 +6435,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             else
             {
                 tempOcrFixEngine.Dispose();
-                comboBoxModiLanguage.SelectedIndex = -1;
             }
         }
 
@@ -6669,11 +6448,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 ResetTesseractThread();
                 InitializeTesseract();
-                ShowOcrMethodGroupBox(GroupBoxTesseractMethod);
                 Configuration.Settings.VobSubOcr.LastOcrMethod = "Tesseract4";
-                comboBoxTesseractEngineMode.Visible = true;
-                labelTesseractEngineMode.Visible = true;
-                checkBoxTesseractFallback.Text = string.Format(LanguageSettings.Current.VobSubOcr.FallbackToX, "Tesseract 3.02");
                 if (Configuration.IsRunningOnWindows && !File.Exists(Path.Combine(Configuration.TesseractDirectory, "tesseract.exe")))
                 {
                     if (IntPtr.Size * 8 == 32)
@@ -6684,7 +6459,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                     else if (MessageBox.Show($"{LanguageSettings.Current.GetTesseractDictionaries.Download} Tesseract {Tesseract5Version}", LanguageSettings.Current.General.Title, MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
-                        comboBoxTesseractLanguages.Items.Clear();
                         using (var form = new DownloadTesseract5(Tesseract5Version))
                         {
                             if (form.ShowDialog(this) == DialogResult.OK)
@@ -6704,11 +6478,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 ResetTesseractThread();
                 InitializeTesseract();
-                ShowOcrMethodGroupBox(GroupBoxTesseractMethod);
                 Configuration.Settings.VobSubOcr.LastOcrMethod = "Tesseract302";
-                comboBoxTesseractEngineMode.Visible = false;
-                labelTesseractEngineMode.Visible = false;
-                checkBoxTesseractFallback.Text = string.Format(LanguageSettings.Current.VobSubOcr.FallbackToX, "Tesseract " + Tesseract5Version);
                 if (!File.Exists(Path.Combine(Configuration.Tesseract302Directory, "tesseract.exe")))
                 {
                     if (MessageBox.Show(LanguageSettings.Current.GetTesseractDictionaries.Download + " Tesseract 3.02", LanguageSettings.Current.General.Title, MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
@@ -6784,7 +6554,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void ShowOcrMethodGroupBox(GroupBox groupBox)
         {
-            GroupBoxTesseractMethod.Visible = false;
             groupBoxImageCompareMethod.Visible = false;
             groupBoxModiMethod.Visible = false;
             groupBoxNOCR.Visible = false;
@@ -7747,10 +7516,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             System.Threading.Thread.Sleep(100);
             DisposeImageCompareBitmaps();
 
-            if (comboBoxTesseractEngineMode.SelectedIndex != -1)
-            {
-                Configuration.Settings.VobSubOcr.TesseractEngineMode = comboBoxTesseractEngineMode.SelectedIndex;
-            }
 
             Configuration.Settings.VobSubOcr.ItalicFactor = _unItalicFactor;
             Configuration.Settings.VobSubOcr.FixOcrErrors = checkBoxAutoFixCommonErrors.Checked;
@@ -7766,7 +7531,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 Configuration.Settings.VobSubOcr.XOrMorePixelsMakesSpace = (int)numericUpDownNumberOfPixelsIsSpaceNOCR.Value;
             }
             Configuration.Settings.VobSubOcr.LineOcrMaxErrorPixels = (int)numericUpDownNOcrMaxWrongPixels.Value;
-            Configuration.Settings.VobSubOcr.UseTesseractFallback = checkBoxTesseractFallback.Checked;
             Configuration.Settings.VobSubOcr.CaptureTopAlign = toolStripMenuItemCaptureTopAlign.Checked;
             Configuration.Settings.VobSubOcr.CloudVisionApiKey = textBoxCloudVisionApiKey.Text;
             Configuration.Settings.VobSubOcr.CloudVisionLanguage = (comboBoxCloudVisionLanguage.SelectedItem as OcrLanguage).Code;

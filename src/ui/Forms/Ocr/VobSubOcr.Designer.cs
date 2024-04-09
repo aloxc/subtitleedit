@@ -55,16 +55,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBoxOcrMethod = new System.Windows.Forms.GroupBox();
             this.comboBoxOcrMethod = new Nikse.SubtitleEdit.Controls.NikseComboBox();
-            this.GroupBoxTesseractMethod = new System.Windows.Forms.GroupBox();
-            this.checkBoxTesseractFallback = new System.Windows.Forms.CheckBox();
-            this.labelTesseractEngineMode = new System.Windows.Forms.Label();
-            this.comboBoxTesseractEngineMode = new Nikse.SubtitleEdit.Controls.NikseComboBox();
-            this.buttonGetTesseractDictionaries = new System.Windows.Forms.Button();
-            this.labelTesseractLanguage = new System.Windows.Forms.Label();
-            this.comboBoxTesseractLanguages = new Nikse.SubtitleEdit.Controls.NikseComboBox();
             this.groupBoxModiMethod = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxModiLanguage = new Nikse.SubtitleEdit.Controls.NikseComboBox();
             this.groupBoxCloudVision = new System.Windows.Forms.GroupBox();
             this.checkBoxSeHandlesTextMerge = new System.Windows.Forms.CheckBox();
             this.checkBoxCloudVisionSendOriginalImages = new System.Windows.Forms.CheckBox();
@@ -177,8 +168,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOcrMethod.SuspendLayout();
-            this.GroupBoxTesseractMethod.SuspendLayout();
-            this.groupBoxModiMethod.SuspendLayout();
             this.groupBoxCloudVision.SuspendLayout();
             this.groupBoxNOCR.SuspendLayout();
             this.groupBoxImageCompareMethod.SuspendLayout();
@@ -493,7 +482,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // groupBoxOcrMethod
             // 
             this.groupBoxOcrMethod.Controls.Add(this.comboBoxOcrMethod);
-            this.groupBoxOcrMethod.Controls.Add(this.GroupBoxTesseractMethod);
             this.groupBoxOcrMethod.Controls.Add(this.groupBoxModiMethod);
             this.groupBoxOcrMethod.Controls.Add(this.groupBoxCloudVision);
             this.groupBoxOcrMethod.Controls.Add(this.groupBoxNOCR);
@@ -535,155 +523,14 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.comboBoxOcrMethod.UsePopupWindow = false;
             this.comboBoxOcrMethod.SelectedIndexChanged += new System.EventHandler(this.ComboBoxOcrMethodSelectedIndexChanged);
             // 
-            // GroupBoxTesseractMethod
-            // 
-            this.GroupBoxTesseractMethod.Controls.Add(this.checkBoxTesseractFallback);
-            this.GroupBoxTesseractMethod.Controls.Add(this.labelTesseractEngineMode);
-            this.GroupBoxTesseractMethod.Controls.Add(this.comboBoxTesseractEngineMode);
-            this.GroupBoxTesseractMethod.Controls.Add(this.buttonGetTesseractDictionaries);
-            this.GroupBoxTesseractMethod.Controls.Add(this.labelTesseractLanguage);
-            this.GroupBoxTesseractMethod.Controls.Add(this.comboBoxTesseractLanguages);
-            this.GroupBoxTesseractMethod.Location = new System.Drawing.Point(13, 31);
-            this.GroupBoxTesseractMethod.Name = "GroupBoxTesseractMethod";
-            this.GroupBoxTesseractMethod.Size = new System.Drawing.Size(366, 131);
-            this.GroupBoxTesseractMethod.TabIndex = 1;
-            this.GroupBoxTesseractMethod.TabStop = false;
-            this.GroupBoxTesseractMethod.Text = "Tesseract";
-            // 
-            // checkBoxTesseractFallback
-            // 
-            this.checkBoxTesseractFallback.AutoSize = true;
-            this.checkBoxTesseractFallback.Location = new System.Drawing.Point(21, 104);
-            this.checkBoxTesseractFallback.Name = "checkBoxTesseractFallback";
-            this.checkBoxTesseractFallback.Size = new System.Drawing.Size(152, 17);
-            this.checkBoxTesseractFallback.TabIndex = 7;
-            this.checkBoxTesseractFallback.Text = "Fallback to Tesseract 3.02";
-            this.checkBoxTesseractFallback.UseVisualStyleBackColor = true;
-            // 
-            // labelTesseractEngineMode
-            // 
-            this.labelTesseractEngineMode.AutoSize = true;
-            this.labelTesseractEngineMode.Location = new System.Drawing.Point(18, 50);
-            this.labelTesseractEngineMode.Name = "labelTesseractEngineMode";
-            this.labelTesseractEngineMode.Size = new System.Drawing.Size(68, 13);
-            this.labelTesseractEngineMode.TabIndex = 6;
-            this.labelTesseractEngineMode.Text = "Engine mode";
-            // 
-            // comboBoxTesseractEngineMode
-            // 
-            this.comboBoxTesseractEngineMode.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxTesseractEngineMode.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxTesseractEngineMode.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxTesseractEngineMode.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxTesseractEngineMode.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxTesseractEngineMode.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxTesseractEngineMode.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxTesseractEngineMode.DropDownHeight = 400;
-            this.comboBoxTesseractEngineMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTesseractEngineMode.DropDownWidth = 195;
-            this.comboBoxTesseractEngineMode.FormattingEnabled = true;
-            this.comboBoxTesseractEngineMode.Items.AddRange(new object[] {
-            "Original Tesseract only (can detect italic)",
-            "Neural nets LSTM only",
-            "Tesseract + LSTM",
-            "Default, based on what is available"});
-            this.comboBoxTesseractEngineMode.Location = new System.Drawing.Point(98, 47);
-            this.comboBoxTesseractEngineMode.MaxLength = 32767;
-            this.comboBoxTesseractEngineMode.Name = "comboBoxTesseractEngineMode";
-            this.comboBoxTesseractEngineMode.SelectedIndex = -1;
-            this.comboBoxTesseractEngineMode.SelectedItem = null;
-            this.comboBoxTesseractEngineMode.SelectedText = "";
-            this.comboBoxTesseractEngineMode.Size = new System.Drawing.Size(195, 21);
-            this.comboBoxTesseractEngineMode.TabIndex = 5;
-            this.comboBoxTesseractEngineMode.UsePopupWindow = false;
-            this.comboBoxTesseractEngineMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxTesseractEngineMode_SelectedIndexChanged);
-            // 
-            // buttonGetTesseractDictionaries
-            // 
-            this.buttonGetTesseractDictionaries.Location = new System.Drawing.Point(300, 18);
-            this.buttonGetTesseractDictionaries.Name = "buttonGetTesseractDictionaries";
-            this.buttonGetTesseractDictionaries.Size = new System.Drawing.Size(29, 23);
-            this.buttonGetTesseractDictionaries.TabIndex = 2;
-            this.buttonGetTesseractDictionaries.Text = "...";
-            this.buttonGetTesseractDictionaries.UseVisualStyleBackColor = true;
-            this.buttonGetTesseractDictionaries.Click += new System.EventHandler(this.buttonGetTesseractDictionaries_Click);
-            // 
-            // labelTesseractLanguage
-            // 
-            this.labelTesseractLanguage.AutoSize = true;
-            this.labelTesseractLanguage.Location = new System.Drawing.Point(18, 22);
-            this.labelTesseractLanguage.Name = "labelTesseractLanguage";
-            this.labelTesseractLanguage.Size = new System.Drawing.Size(54, 13);
-            this.labelTesseractLanguage.TabIndex = 0;
-            this.labelTesseractLanguage.Text = "Language";
-            // 
-            // comboBoxTesseractLanguages
-            // 
-            this.comboBoxTesseractLanguages.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxTesseractLanguages.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxTesseractLanguages.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxTesseractLanguages.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxTesseractLanguages.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxTesseractLanguages.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxTesseractLanguages.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxTesseractLanguages.DropDownHeight = 400;
-            this.comboBoxTesseractLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTesseractLanguages.DropDownWidth = 195;
-            this.comboBoxTesseractLanguages.FormattingEnabled = true;
-            this.comboBoxTesseractLanguages.Location = new System.Drawing.Point(98, 20);
-            this.comboBoxTesseractLanguages.MaxLength = 32767;
-            this.comboBoxTesseractLanguages.Name = "comboBoxTesseractLanguages";
-            this.comboBoxTesseractLanguages.SelectedIndex = -1;
-            this.comboBoxTesseractLanguages.SelectedItem = null;
-            this.comboBoxTesseractLanguages.SelectedText = "";
-            this.comboBoxTesseractLanguages.Size = new System.Drawing.Size(195, 21);
-            this.comboBoxTesseractLanguages.TabIndex = 1;
-            this.comboBoxTesseractLanguages.UsePopupWindow = false;
-            this.comboBoxTesseractLanguages.SelectedIndexChanged += new System.EventHandler(this.ComboBoxTesseractLanguagesSelectedIndexChanged);
-            // 
             // groupBoxModiMethod
             // 
-            this.groupBoxModiMethod.Controls.Add(this.label1);
-            this.groupBoxModiMethod.Controls.Add(this.comboBoxModiLanguage);
             this.groupBoxModiMethod.Location = new System.Drawing.Point(7, 50);
             this.groupBoxModiMethod.Name = "groupBoxModiMethod";
             this.groupBoxModiMethod.Size = new System.Drawing.Size(366, 131);
             this.groupBoxModiMethod.TabIndex = 3;
             this.groupBoxModiMethod.TabStop = false;
             this.groupBoxModiMethod.Text = "MODI";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 58);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 13);
-            this.label1.TabIndex = 33;
-            this.label1.Text = "Language";
-            // 
-            // comboBoxModiLanguage
-            // 
-            this.comboBoxModiLanguage.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxModiLanguage.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxModiLanguage.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxModiLanguage.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxModiLanguage.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxModiLanguage.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxModiLanguage.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxModiLanguage.DropDownHeight = 400;
-            this.comboBoxModiLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxModiLanguage.DropDownWidth = 195;
-            this.comboBoxModiLanguage.FormattingEnabled = true;
-            this.comboBoxModiLanguage.Location = new System.Drawing.Point(108, 55);
-            this.comboBoxModiLanguage.MaxLength = 32767;
-            this.comboBoxModiLanguage.Name = "comboBoxModiLanguage";
-            this.comboBoxModiLanguage.SelectedIndex = -1;
-            this.comboBoxModiLanguage.SelectedItem = null;
-            this.comboBoxModiLanguage.SelectedText = "";
-            this.comboBoxModiLanguage.Size = new System.Drawing.Size(195, 21);
-            this.comboBoxModiLanguage.TabIndex = 0;
-            this.comboBoxModiLanguage.UsePopupWindow = false;
-            this.comboBoxModiLanguage.SelectedIndexChanged += new System.EventHandler(this.ComboBoxModiLanguageSelectedIndexChanged);
             // 
             // groupBoxCloudVision
             // 
@@ -2285,10 +2132,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOcrMethod.ResumeLayout(false);
-            this.GroupBoxTesseractMethod.ResumeLayout(false);
-            this.GroupBoxTesseractMethod.PerformLayout();
-            this.groupBoxModiMethod.ResumeLayout(false);
-            this.groupBoxModiMethod.PerformLayout();
             this.groupBoxCloudVision.ResumeLayout(false);
             this.groupBoxCloudVision.PerformLayout();
             this.groupBoxNOCR.ResumeLayout(false);
@@ -2446,16 +2289,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
         private NikseComboBox comboBoxOcrMethod;
-        private System.Windows.Forms.GroupBox GroupBoxTesseractMethod;
-        private System.Windows.Forms.CheckBox checkBoxTesseractFallback;
-        private System.Windows.Forms.Label labelTesseractEngineMode;
-        private NikseComboBox comboBoxTesseractEngineMode;
-        private System.Windows.Forms.Button buttonGetTesseractDictionaries;
-        private System.Windows.Forms.Label labelTesseractLanguage;
-        private NikseComboBox comboBoxTesseractLanguages;
         private System.Windows.Forms.GroupBox groupBoxModiMethod;
-        private System.Windows.Forms.Label label1;
-        private NikseComboBox comboBoxModiLanguage;
         private System.Windows.Forms.GroupBox groupBoxCloudVision;
         private System.Windows.Forms.CheckBox checkBoxSeHandlesTextMerge;
         private System.Windows.Forms.CheckBox checkBoxCloudVisionSendOriginalImages;

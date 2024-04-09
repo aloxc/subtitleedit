@@ -36,130 +36,21 @@ namespace Nikse.SubtitleEdit.Forms
 
 
 
-        private Subtitle _subtitle = new Subtitle();
-        private Subtitle _subtitleOriginal = new Subtitle();
-        private string _fileName;
-        private string _subtitleOriginalFileName;
-        private int _undoIndex = -1;
-        private string _listViewTextUndoLast;
-        private int _listViewTextUndoIndex = -1;
-        private long _listViewTextTicks = -1;
-        private string _listViewOriginalTextUndoLast;
-        private long _listViewOriginalTextTicks = -1;
-        private bool _listViewMouseDown;
-        private long _sourceTextTicks = -1;
-
-        private int _videoAudioTrackNumber = -1;
+        
 
 
-        private string _videoFileName;
-        private bool VideoFileNameIsUrl => _videoFileName != null &&
-                                          (_videoFileName.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                                           _videoFileName.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
-
-        private DateTime _fileDateTime;
-        private string _title;
-        private FindReplaceDialogHelper _findHelper;
-        private FindDialog _findDialog;
-        private ReplaceDialog _replaceDialog;
-        private Form _dialog;
-        private bool _sourceViewChange;
-        private int _changeSubtitleHash = -1;
-        private int _changeOriginalSubtitleHash = -1;
-        private int _changeSubtitleTextHash = -1;
-        private Timer _liveSpellCheckTimer;
-        private int _subtitleListViewIndex = -1;
-        private Paragraph _oldSelectedParagraph;
-        private bool _converted;
-        private bool _formatManuallyChanged;
-        private SubtitleFormat _oldSubtitleFormat;
-        private SubtitleFormat _currentSubtitleFormat;
-        private List<int> _selectedIndices;
-        private LanguageStructure.Main _language;
-        private LanguageStructure.General _languageGeneral;
-        private SpellCheck _spellCheckForm;
-        private bool _loading = true;
-        private bool _exitWhenLoaded;
         private bool _forceClose = false;
-        private int _repeatCount = -1;
-        private double _endSeconds = -1;
-        private int _playSelectionIndex = -1;
-        private int _playSelectionIndexLoopStart = -1;
-        private double _endSecondsNewPosition = -1;
-        private long _endSecondsNewPositionTicks;
-        private const double EndDelay = 0.05;
-        private int _autoContinueDelayCount = -1;
-        private long _lastTextKeyDownTicks;
-        private long _lastWaveformMenuCloseTicks;
-        private double? _audioWaveformRightClickSeconds;
-        private readonly Timer _timerDoSyntaxColoring = new Timer();
-        private Timer _timerAutoBackup;
         private readonly Timer _timerClearStatus = new Timer();
-        private string _textAutoBackup;
-        private string _textAutoBackupOriginal;
-        private readonly List<string> _statusLog = new List<string>();
-        private bool _disableShowStatus;
-        private StatusLog _statusLogForm;
-        private bool _saveAsCalled;
-        private string _imageSubFileName;
         private readonly Timer _timerSlow = new Timer();
         private readonly ContextMenuStrip _contextMenuStripPlayRate;
 
-        private CheckForUpdatesHelper _checkForUpdatesHelper;
-        private Timer _timerCheckForUpdates;
 
         private NikseWebServiceSession _networkSession;
-        private NetworkChat _networkChat;
 
-        private ShowEarlierLater _showEarlierOrLater;
-        private MeasurementConverter _measurementConverter;
 
-        private bool _isVideoControlsUndocked;
-        private VideoPlayerUndocked _videoPlayerUndocked;
-        private WaveformUndocked _waveformUndocked;
-        private VideoControlsUndocked _videoControlsUndocked;
-
-        private GoogleOrMicrosoftTranslate _googleOrMicrosoftTranslate;
-
-        private bool _cleanupHasRun;
-        private bool _cancelWordSpellCheck = true;
-
-        private bool IsLiveSpellCheckEnabled => Configuration.Settings.Tools.LiveSpellCheck &&
-                                                Configuration.Settings.General.SubtitleTextBoxSyntaxColor;
-
-        private bool _clearLastFind;
-        private FindType _clearLastFindType = FindType.Normal;
         private string _clearLastFindText = string.Empty;
-        private bool _videoLoadedGoToSubPosAndPause;
-        private string _cutText = string.Empty;
-        private Paragraph _mainCreateStartDownEndUpParagraph;
-        private Paragraph _mainAdjustStartDownEndUpAndGoToNextParagraph;
-        private int _lastDoNotPrompt = -1;
-        private VideoInfo _videoInfo;
-        private bool _splitDualSami;
-        private bool _openFileDialogOn;
-        private bool _resetVideo = true;
-        private bool _doAutoBreakOnTextChanged = true;
-        private readonly static object _syncUndo = new object();
         private string[] _dragAndDropFiles;
-        private readonly Timer _dragAndDropTimer = new Timer(); // to prevent locking windows explorer
-        private readonly Timer _dragAndDropVideoTimer = new Timer(); // to prevent locking windows explorer
-        private long _labelNextTicks = -1;
-        private bool _showBookmarkLabel = true;
-        private ContextMenuStrip _bookmarkContextMenu;
         private readonly MainShortcuts _shortcuts = new MainShortcuts();
-        private long _winLeftDownTicks = -1;
-        private long _winRightDownTicks = -1;
-        private FormWindowState _lastFormWindowState = FormWindowState.Normal;
-        private readonly List<string> _filesToDelete = new List<string>();
-        private bool _restorePreviewAfterSecondSubtitle;
-        private ListBox _intellisenceList;
-        private ListBox _intellisenceListOriginal;
-        private bool _updateSelectedCountStatusBar;
-        private VoskDictate _dictateForm;
-        private object _dictateTextBox;
-        private bool _hasCurrentVosk;
-        private int _openSaveCounter;
 
         public bool IsMenuOpen { get; private set; }
         public string Title { get; internal set; }
@@ -307,7 +198,6 @@ namespace Nikse.SubtitleEdit.Forms
                 return;
             }
 
-            _lastDoNotPrompt = -1;
 
             if (_networkSession != null)
             {
@@ -340,19 +230,15 @@ namespace Nikse.SubtitleEdit.Forms
 
         }
 
-        private int _layout = 0;
 
 
-        private bool _updateShowEarlier;
         private readonly object _updateShowEarlierLock = new object();
 
         string _lastTranslationDebugError = string.Empty;
 
 
-        private Control _videoPlayerUndockParent;
 
 
-        private Control _waveformUndockParent;
         internal static string MainTextBox;
 
         private void SubtitleListView1_DragDrop(object sender, DragEventArgs e)

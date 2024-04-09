@@ -2587,12 +2587,6 @@ namespace Nikse.SubtitleEdit.Forms.Options
             }
         }
 
-        private string GetPluginShortcutText(string name)
-        {
-            var shortcut = _pluginShortcuts.FirstOrDefault(p => p.Name == name);
-            return shortcut == null ? $"{name} [{LanguageSettings.Current.General.None}]" : $"{name} [{shortcut.Shortcut}]";
-        }
-
         private void comboBoxCustomSearch_SelectedIndexChanged(object sender, EventArgs e)
         {
             var cb = (NikseComboBox)sender;
