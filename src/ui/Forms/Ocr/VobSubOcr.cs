@@ -168,9 +168,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private int _ocrLowercaseHeightsTotalCount;
         private long _ocrUppercaseHeightsTotal;
         private int _ocrUppercaseHeightsTotalCount;
-        private long _ocrLetterHeightsTotal;
-        private int _ocrLetterHeightsTotalCount;
-        private int _ocrMinLineHeight = -1;
 
         private bool _captureTopAlign;
         private int _captureTopAlignHeight = -1;
@@ -205,7 +202,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         // Dictionaries/spellchecking/fixing
         private OcrFixEngine _ocrFixEngine;
 
-        private bool _isSon;
 
         private List<ImageCompareAddition> _lastAdditions = new List<ImageCompareAddition>();
         private readonly VobSubOcrCharacter _vobSubOcrCharacter = new VobSubOcrCharacter();
@@ -213,9 +209,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private NOcrDb _nOcrDb;
         private readonly VobSubOcrNOcrCharacter _vobSubOcrNOcrCharacter = new VobSubOcrNOcrCharacter();
         public const int NOcrMinColor = 300;
-        private bool _ocrThreadStop;
 
-        private IOcrStrategy _ocrService;
 
         private bool _okClicked;
         private readonly Dictionary<string, int> _unknownWordsDictionary;
@@ -349,8 +343,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void InitializeBatch(Subtitle imageListSubtitle, VobSubOcrSettings vobSubOcrSettings, bool isSon, string language, string ocrEngine)
         {
             Initialize(imageListSubtitle, vobSubOcrSettings, isSon);
-            _isSon = isSon;
-
         }
 
         internal void Initialize(List<BluRaySupParser.PcsData> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName)
@@ -1212,7 +1204,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void ButtonPauseClick(object sender, EventArgs e)
         {
             _mainOcrTimer?.Stop();
-            _ocrThreadStop = true;
             buttonPause.Enabled = false;
             SetButtonsEnabledAfterOcrDone();
         }
@@ -1385,7 +1376,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 FileName = bdnSubtitle.FileName;
             }
 
-            _isSon = isSon;
 
 
             SetButtonsStartOcr();
@@ -1531,7 +1521,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
             }
 
-            _ocrThreadStop = true;
             _mainOcrTimer?.Stop();
 
 
