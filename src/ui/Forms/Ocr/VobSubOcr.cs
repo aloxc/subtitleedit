@@ -247,8 +247,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             toolStripMenuItemSaveSubtitleAs.Text = LanguageSettings.Current.Main.SaveSubtitleAs;
 
-            toolStripMenuItemClearFixes.Text = LanguageSettings.Current.DvdSubRip.Clear;
-            clearToolStripMenuItem.Text = LanguageSettings.Current.DvdSubRip.Clear;
 
 
             UiUtil.InitializeSubtitleFont(subtitleListView1);
@@ -1333,17 +1331,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private PreprocessingSettings _preprocessingSettings;
 
-        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void toolStripMenuItemClearFixes_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void toolStripMenuItemClearGuesses_Click(object sender, EventArgs e)
-        {
-        }
 
         private void timerHideStatus_Tick(object sender, EventArgs e)
         {

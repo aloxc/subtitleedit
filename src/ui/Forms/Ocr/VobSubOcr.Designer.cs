@@ -22,14 +22,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemSaveSubtitleAs = new System.Windows.Forms.ToolStripMenuItem();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.EditLastAdditionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelSubtitleText = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
-            this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripUnknownWords = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxSubtitleImage = new System.Windows.Forms.GroupBox();
             this.labelMinAlpha = new System.Windows.Forms.Label();
@@ -128,27 +125,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOcrAutoFix.TabStop = false;
             this.groupBoxOcrAutoFix.Text = "OCR Start/stop";
             // 
-            // toolStripMenuItemClearFixes
-            // 
-            this.toolStripMenuItemClearFixes.Name = "toolStripMenuItemClearFixes";
-            this.toolStripMenuItemClearFixes.Size = new System.Drawing.Size(106, 22);
-            this.toolStripMenuItemClearFixes.Text = "Clear";
-            this.toolStripMenuItemClearFixes.Click += new System.EventHandler(this.toolStripMenuItemClearFixes_Click);
-            // 
             // contextMenuStripUnknownWords
             // 
             this.contextMenuStripUnknownWords.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearToolStripMenuItem});
+            });
             this.contextMenuStripUnknownWords.Name = "contextMenuStripUnknownWords";
             this.contextMenuStripUnknownWords.Size = new System.Drawing.Size(107, 26);
             this.contextMenuStripUnknownWords.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripUnknownWords_Opening);
-            // 
-            // clearToolStripMenuItem
-            // 
-            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
-            this.clearToolStripMenuItem.Text = "Clear";
-            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // groupBoxSubtitleImage
             // 
@@ -355,11 +338,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ToolStripMenuItem saveAllImagesWithHtmlIndexViewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem EditLastAdditionsToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainerBottom;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUnknownWords;
-        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearFixes;
         private System.Windows.Forms.Timer timerHideStatus;
         private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownAutoTransparentAlphaMax;
         private System.Windows.Forms.Label labelMinAlpha;
