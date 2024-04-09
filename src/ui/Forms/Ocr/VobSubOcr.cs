@@ -294,8 +294,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             FillSpellCheckDictionaries();
 
-            toolStripMenuItemCaptureTopAlign.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
-
             if (Configuration.Settings.VobSubOcr.ItalicFactor >= 0.1 && Configuration.Settings.VobSubOcr.ItalicFactor < 1)
             {
                 _unItalicFactor = Configuration.Settings.VobSubOcr.ItalicFactor;
@@ -2135,7 +2133,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void InitializeTopAlign()
         {
-            _captureTopAlign = toolStripMenuItemCaptureTopAlign.Checked;
             if (_captureTopAlign && _captureTopAlignHeight == -1 && _subtitle.Paragraphs.Count > 2)
             {
                 int maxHeight = -1;
@@ -2887,7 +2884,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             Configuration.Settings.VobSubOcr.ItalicFactor = _unItalicFactor;
-            Configuration.Settings.VobSubOcr.CaptureTopAlign = toolStripMenuItemCaptureTopAlign.Checked;
 
             if (!e.Cancel)
             {
@@ -3115,39 +3111,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 g.FillRectangle(br, rect);
             }
         }
-
-
-        private void toolStripMenuItemCaptureTopAlign_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void setItalicAngleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStripMenuItemSetUnItalicFactor_Click(null, null);
-        }
-
-        
-
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
 
  
 
