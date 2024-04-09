@@ -31,7 +31,7 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace Nikse.SubtitleEdit.Forms.Ocr
 {
-    public sealed partial class VobSubOcr : PositionAndSizeForm, IBinaryParagraphList, IFindAndReplace
+    public sealed partial class VobSubOcr : PositionAndSizeForm, IBinaryParagraphList
     {
         private static readonly Color _listViewGreen = Configuration.Settings.General.UseDarkTheme ? Color.Green : Color.LightGreen;
         private static readonly Color _listViewYellow = Configuration.Settings.General.UseDarkTheme ? Color.FromArgb(218, 135, 32) : Color.Yellow;
@@ -206,8 +206,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         // optimization vars
 
-        private FindReplaceDialogHelper _findHelper;
-        private FindDialog _findDialog;
 
         public static void SetDoubleBuffered(Control c)
         {
@@ -721,12 +719,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private static readonly HashSet<string> UppercaseLikeLowercase = new HashSet<string> { "V", "W", "U", "S", "Z", "O", "X", "Ø", "C" };
-        private static readonly HashSet<string> LowercaseLikeUppercase = new HashSet<string> { "v", "w", "u", "s", "z", "o", "x", "ø", "c" };
-        private static readonly HashSet<string> UppercaseWithAccent = new HashSet<string> { "Č", "Š", "Ž", "Ś", "Ż", "Ś", "Ö", "Ü", "Ú", "Ï", "Í", "Ç", "Ì", "Ò", "Ù", "Ó", "Í" };
-        private static readonly HashSet<string> LowercaseWithAccent = new HashSet<string> { "č", "š", "ž", "ś", "ż", "ś", "ö", "ü", "ú", "ï", "í", "ç", "ì", "ò", "ù", "ó", "í" };
-
-
         public static int _italicFixes = 0;
 
 
@@ -831,7 +823,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.MultiSelect = true;
         }
 
-        private bool _isLatinDb;
         private void ButtonStartOcrClick(object sender, EventArgs e)
         {
             if (_subtitle.Paragraphs.Count == 0)
@@ -1153,14 +1144,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        public string LanguageString
-        {
-            get
-            {
-                return null;
-            }
-        }
-
         internal void Initialize(Subtitle bdnSubtitle, VobSubOcrSettings vobSubOcrSettings, bool isSon)
         {
             if (!string.IsNullOrEmpty(bdnSubtitle.FileName) && bdnSubtitle.FileName != new Subtitle().FileName)
@@ -1320,15 +1303,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 });
             }
         }
-        private void toolStripMenuItemSetUnItalicFactor_Click(object sender, EventArgs e)
-        {
-            using (var form = new VobSubOcrSetItalicFactor(GetSubtitleBitmap(_selectedIndex), _unItalicFactor))
-            {
-                form.ShowDialog(this);
-                _unItalicFactor = form.GetUnItalicFactor();
-            }
-        }
-
+ 
         private PreprocessingSettings _preprocessingSettings;
 
 
@@ -1404,61 +1379,5 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private int GetLastBinOcrLowercaseHeight()
-        {
-            var lowercaseHeight = 25;
-            if (_ocrLowercaseHeightsTotalCount > 5)
-            {
-                lowercaseHeight = (int)Math.Round((double)_ocrLowercaseHeightsTotal / _ocrLowercaseHeightsTotalCount);
-            }
-
-            return lowercaseHeight;
-        }
-
-
-        public void FindDialogFind(string findText, ReplaceType findReplaceType, Regex regex)
-        {
-           
-        }
-
-        public void FindDialogFindPrevious(string findText)
-        {
-            
-        }
-
-        public void FindDialogClose()
-        {
-            if (_findHelper == null)
-            {
-                return;
-            }
-
-            _findHelper.InProgress = false;
-        }
-
-        public void ReplaceDialogFind(FindReplaceDialogHelper findReplaceDialogHelper)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReplaceDialogReplace(FindReplaceDialogHelper findReplaceDialogHelper)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReplaceDialogReplaceAll(FindReplaceDialogHelper findReplaceDialogHelper)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReplaceDialogClose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool GetAllowReplaceInOriginal()
-        {
-            return false;
-        }
     }
 }
