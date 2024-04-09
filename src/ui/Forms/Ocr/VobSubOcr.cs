@@ -420,8 +420,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.HideColumn(SubtitleListView.SubtitleColumn.Region);
             subtitleListView1.AutoSizeColumns();
 
-            groupBoxImagePalette.Text = language.ImagePalette;
-            checkBoxBackgroundTransparent.Text = language.Transparent;
             labelMinAlpha.Text = language.TransparentMinAlpha;
             toolStripMenuItemCaptureTopAlign.Text = language.CaptureTopAlign;
             captureTopAlignmentToolStripMenuItem.Text = language.CaptureTopAlign;
@@ -507,8 +505,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             splitContainerBottom.Panel1MinSize = 400;
             splitContainerBottom.Panel2MinSize = 250;
-
-            checkBoxBackgroundTransparent.Left = pictureBoxBackground.Left + pictureBoxBackground.Width + 3;
 
             var ocrLanguages = new GoogleOcrService(new GoogleCloudVisionApi(string.Empty)).GetLanguages().OrderBy(p => p.ToString());
             var selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == Configuration.Settings.VobSubOcr.CloudVisionLanguage);
@@ -652,7 +648,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
 
             SetOcrMethod();
-            groupBoxImagePalette.Visible = false;
             _dvbPesSubtitles = subtitleImages;
             _subtitle = subtitle;
             _subtitle.Renumber();
@@ -875,10 +870,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _bdnXmlOriginal = imageListSubtitle;
             _bdnFileName = imageListSubtitle.FileName;
             _isSon = isSon;
-            if (_isSon)
-            {
-                pictureBoxBackground.BackColor = Color.Transparent;
-            }
+
 
             InitializeOcrEngineBatch(language, ocrEngine);
             DoBatch();
@@ -899,7 +891,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             _bluRaySubtitlesOriginal = subtitles;
 
-            groupBoxImagePalette.Visible = false;
 
             Text = LanguageSettings.Current.VobSubOcr.TitleBluRay;
             if (!string.IsNullOrEmpty(fileName))
@@ -1618,20 +1609,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             n.MakeTwoColor(_preprocessingSettings?.BinaryImageCompareThreshold ?? Configuration.Settings.Tools.OcrBinaryImageCompareRgbThreshold);
             returnBmp.Dispose();
             return n.GetBitmap();
-        }
-
-        private void GetCustomColors(out Color background, out Color pattern, out Color emphasis1, out Color emphasis2)
-        {
-            background = pictureBoxBackground.BackColor;
-
-            if (checkBoxBackgroundTransparent.Checked)
-            {
-                background = Color.Transparent;
-            }
-
-                pattern = Color.Transparent;
-                emphasis1 = Color.Transparent;
-                emphasis2 = Color.Transparent;
         }
 
         private void GetSubtitleTime(int index, out TimeCode start, out TimeCode end)
@@ -6271,10 +6248,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _bdnXmlOriginal = bdnSubtitle;
             _bdnFileName = bdnSubtitle.FileName;
             _isSon = isSon;
-            if (_isSon)
-            {
-                pictureBoxBackground.BackColor = Color.Transparent;
-            }
+
 
             SetButtonsStartOcr();
             progressBar1.Visible = false;
@@ -6287,7 +6261,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             SetOcrMethod();
 
-            groupBoxImagePalette.Visible = isSon;
 
             Text = LanguageSettings.Current.VobSubOcr.TitleBluRay;
             Text += " - " + Path.GetFileName(_bdnFileName);
@@ -7402,7 +7375,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _subtitle.FileName = fileName;
             Text += " - " + Path.GetFileName(fileName);
 
-            groupBoxImagePalette.Visible = false;
             _fromMenuItem = skipMakeBinary;
         }
 
@@ -8024,7 +7996,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
-            groupBoxImagePalette.Visible = false;
 
             InitializeTesseract();
             LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);

@@ -74,9 +74,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripGuessesUsed = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearGuesses = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.groupBoxImagePalette = new System.Windows.Forms.GroupBox();
-            this.checkBoxBackgroundTransparent = new System.Windows.Forms.CheckBox();
-            this.pictureBoxBackground = new System.Windows.Forms.PictureBox();
             this.groupBoxSubtitleImage = new System.Windows.Forms.GroupBox();
             this.labelMinAlpha = new System.Windows.Forms.Label();
             this.numericUpDownAutoTransparentAlphaMax = new Nikse.SubtitleEdit.Controls.NikseUpDown();
@@ -119,8 +116,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageAllFixes.SuspendLayout();
             this.tabPageSuggestions.SuspendLayout();
             this.contextMenuStripGuessesUsed.SuspendLayout();
-            this.groupBoxImagePalette.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackground)).BeginInit();
             this.groupBoxSubtitleImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).BeginInit();
             this.contextMenuStripImage.SuspendLayout();
@@ -649,49 +644,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemClearGuesses.Text = "Clear";
             this.toolStripMenuItemClearGuesses.Click += new System.EventHandler(this.toolStripMenuItemClearGuesses_Click);
             // 
-            // groupBoxImagePalette
-            // 
-            this.groupBoxImagePalette.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxImagePalette.Controls.Add(this.checkBoxBackgroundTransparent);
-            this.groupBoxImagePalette.Controls.Add(this.pictureBoxBackground);
-            this.groupBoxImagePalette.Location = new System.Drawing.Point(13, 16);
-            this.groupBoxImagePalette.Name = "groupBoxImagePalette";
-            this.groupBoxImagePalette.Size = new System.Drawing.Size(644, 38);
-            this.groupBoxImagePalette.TabIndex = 35;
-            this.groupBoxImagePalette.TabStop = false;
-            this.groupBoxImagePalette.Text = "Image palette";
-            // 
-            // checkBoxBackgroundTransparent
-            // 
-            this.checkBoxBackgroundTransparent.AutoSize = true;
-            this.checkBoxBackgroundTransparent.Checked = true;
-            this.checkBoxBackgroundTransparent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBackgroundTransparent.Location = new System.Drawing.Point(144, 19);
-            this.checkBoxBackgroundTransparent.Name = "checkBoxBackgroundTransparent";
-            this.checkBoxBackgroundTransparent.Size = new System.Drawing.Size(85, 17);
-            this.checkBoxBackgroundTransparent.TabIndex = 8;
-            this.checkBoxBackgroundTransparent.Text = "Transparent";
-            this.checkBoxBackgroundTransparent.UseVisualStyleBackColor = true;
-            this.checkBoxBackgroundTransparent.CheckedChanged += new System.EventHandler(this.CheckBoxPatternTransparentCheckedChanged);
-            // 
-            // pictureBoxBackground
-            // 
-            this.pictureBoxBackground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxBackground.Location = new System.Drawing.Point(120, 12);
-            this.pictureBoxBackground.Name = "pictureBoxBackground";
-            this.pictureBoxBackground.Size = new System.Drawing.Size(21, 21);
-            this.pictureBoxBackground.TabIndex = 7;
-            this.pictureBoxBackground.TabStop = false;
-            this.pictureBoxBackground.Click += new System.EventHandler(this.PictureBoxColorChooserClick);
-            // 
             // groupBoxSubtitleImage
             // 
             this.groupBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxSubtitleImage.Controls.Add(this.labelMinAlpha);
             this.groupBoxSubtitleImage.Controls.Add(this.numericUpDownAutoTransparentAlphaMax);
-            this.groupBoxSubtitleImage.Controls.Add(this.groupBoxImagePalette);
             this.groupBoxSubtitleImage.Controls.Add(this.pictureBoxSubtitleImage);
             this.groupBoxSubtitleImage.Location = new System.Drawing.Point(412, 6);
             this.groupBoxSubtitleImage.Name = "groupBoxSubtitleImage";
@@ -1081,9 +1039,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageAllFixes.ResumeLayout(false);
             this.tabPageSuggestions.ResumeLayout(false);
             this.contextMenuStripGuessesUsed.ResumeLayout(false);
-            this.groupBoxImagePalette.ResumeLayout(false);
-            this.groupBoxImagePalette.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackground)).EndInit();
             this.groupBoxSubtitleImage.ResumeLayout(false);
             this.groupBoxSubtitleImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).EndInit();
@@ -1128,13 +1083,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ListBox listBoxLogSuggestions;
         private System.Windows.Forms.TabPage tabPageUnknownWords;
         private System.Windows.Forms.ListBox listBoxUnknownWords;
-        private System.Windows.Forms.GroupBox groupBoxImagePalette;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.CheckBox checkBoxShowOnlyForced;
         private System.Windows.Forms.CheckBox checkBoxUseTimeCodesFromIdx;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.CheckBox checkBoxBackgroundTransparent;
-        private System.Windows.Forms.PictureBox pictureBoxBackground;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem importTextWithMatchingTimeCodesToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
