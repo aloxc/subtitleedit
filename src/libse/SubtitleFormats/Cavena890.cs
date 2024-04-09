@@ -734,7 +734,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 }
                 else if (index >= 51)
                 {
-                    SeLogger.Error($"Cavena890: Text will be truncated as line is longer than 51 ({text.Length}): {text}" );
+                    SeLogger.Error($"Cavena890: Text will be truncated as line is longer than 51 ({text.Length}): {text}");
                     skipCount = text.Length;
                 }
                 else if (languageId == LanguageIdHebrew)

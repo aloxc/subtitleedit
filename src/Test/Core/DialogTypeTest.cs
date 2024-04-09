@@ -174,24 +174,24 @@ namespace Test.Core
         public void FixHyphensThreeLinesOneTwo()
         {
             var splitMerge = new DialogSplitMerge { DialogStyle = DialogType.DashBothLinesWithSpace };
-            var result = splitMerge.FixDashesAndSpaces($"-What are you?{Environment.NewLine}-I'm a{ Environment.NewLine}one-in-a-generation artist.");
-            Assert.AreEqual($"- What are you?{Environment.NewLine}- I'm a{ Environment.NewLine}one-in-a-generation artist.", result);
+            var result = splitMerge.FixDashesAndSpaces($"-What are you?{Environment.NewLine}-I'm a{Environment.NewLine}one-in-a-generation artist.");
+            Assert.AreEqual($"- What are you?{Environment.NewLine}- I'm a{Environment.NewLine}one-in-a-generation artist.", result);
         }
 
         [TestMethod]
         public void FixHyphensThreeLinesOneTwoNoSpace()
         {
             var splitMerge = new DialogSplitMerge { DialogStyle = DialogType.DashBothLinesWithoutSpace };
-            var result = splitMerge.FixDashesAndSpaces($"- What are you?{Environment.NewLine}- I'm a{ Environment.NewLine}one-in-a-generation artist.");
-            Assert.AreEqual($"-What are you?{Environment.NewLine}-I'm a{ Environment.NewLine}one-in-a-generation artist.", result);
+            var result = splitMerge.FixDashesAndSpaces($"- What are you?{Environment.NewLine}- I'm a{Environment.NewLine}one-in-a-generation artist.");
+            Assert.AreEqual($"-What are you?{Environment.NewLine}-I'm a{Environment.NewLine}one-in-a-generation artist.", result);
         }
 
         [TestMethod]
         public void FixHyphensThreeLinesOneTwoDashSecondLineWithSpace()
         {
             var splitMerge = new DialogSplitMerge { DialogStyle = DialogType.DashSecondLineWithSpace };
-            var result = splitMerge.FixDashesAndSpaces($"-What are you?{Environment.NewLine}-I'm a{ Environment.NewLine}one-in-a-generation artist.");
-            Assert.AreEqual($"What are you?{Environment.NewLine}- I'm a{ Environment.NewLine}one-in-a-generation artist.", result);
+            var result = splitMerge.FixDashesAndSpaces($"-What are you?{Environment.NewLine}-I'm a{Environment.NewLine}one-in-a-generation artist.");
+            Assert.AreEqual($"What are you?{Environment.NewLine}- I'm a{Environment.NewLine}one-in-a-generation artist.", result);
         }
 
         [TestMethod]

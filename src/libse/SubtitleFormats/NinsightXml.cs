@@ -27,7 +27,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
             foreach (var p in subtitle.Paragraphs)
             {
-                XmlNode section = xml.CreateElement( "TEXT_CLIP", "http://www.ninsight.com/Subtitle");
+                XmlNode section = xml.CreateElement("TEXT_CLIP", "http://www.ninsight.com/Subtitle");
                 section.InnerXml = xmlTrack;
 
                 XmlAttribute st = xml.CreateAttribute("TIMECODEIN");

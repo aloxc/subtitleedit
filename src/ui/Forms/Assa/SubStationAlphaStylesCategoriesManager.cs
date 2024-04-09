@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Logic;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Nikse.SubtitleEdit.Core.Common;
-using Nikse.SubtitleEdit.Logic;
 using MessageBox = Nikse.SubtitleEdit.Forms.SeMsgBox.MessageBox;
 
 namespace Nikse.SubtitleEdit.Forms.Assa
 {
     public sealed partial class SubStationAlphaStylesCategoriesManager : Form
     {
-        internal static readonly Color DefaultCategoryColor = Configuration.Settings.General.UseDarkTheme? Color.LimeGreen : Color.Green;
+        internal static readonly Color DefaultCategoryColor = Configuration.Settings.General.UseDarkTheme ? Color.LimeGreen : Color.Green;
 
         internal const string Category = "Category";
         internal const string CategoryName = "Name";
@@ -127,7 +127,7 @@ namespace Nikse.SubtitleEdit.Forms.Assa
         }
 
         private AssaStorageCategory GetCategoryByName(string categoryName) =>
-            categoryName != null ?_assaCategories.SingleOrDefault(category => category.Name == categoryName) : null;
+            categoryName != null ? _assaCategories.SingleOrDefault(category => category.Name == categoryName) : null;
 
         private ListViewItem GetCategoryListViewItem(AssaStorageCategory category)
         {

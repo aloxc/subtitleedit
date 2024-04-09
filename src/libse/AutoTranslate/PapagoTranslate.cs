@@ -25,7 +25,7 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
         public void Initialize()
         {
             _httpClient?.Dispose();
-            _httpClient = new HttpClient(); 
+            _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-NCP-APIGW-API-KEY-ID", Configuration.Settings.Tools.AutoTranslatePapagoApiKeyId);
@@ -101,7 +101,7 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
                     continue;
                 }
 
-                var culture = cultures.FirstOrDefault(p=>p.TwoLetterISOLanguageName == code);
+                var culture = cultures.FirstOrDefault(p => p.TwoLetterISOLanguageName == code);
                 if (culture != null)
                 {
                     result.Add(new TranslationPair(culture.EnglishName, code, code));

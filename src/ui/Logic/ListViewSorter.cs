@@ -32,7 +32,7 @@ namespace Nikse.SubtitleEdit.Logic
                 var s1 = lvi1.SubItems[ColumnNumber].Text;
                 var s2 = lvi2.SubItems[ColumnNumber].Text;
 
-                if (_invariantNumber.IsMatch(s1) && _invariantNumber.IsMatch(s2) && 
+                if (_invariantNumber.IsMatch(s1) && _invariantNumber.IsMatch(s2) &&
                     int.TryParse(s1, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var i1) &&
                     int.TryParse(s2, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var i2))
                 {

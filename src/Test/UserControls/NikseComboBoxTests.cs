@@ -10,7 +10,7 @@ namespace Test.UserControls
         [TestMethod]
         public void NikseComboBox()
         {
-            var cbNormal = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList};
+            var cbNormal = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
             var normalSelectedIndexChangedCount = 0;
             cbNormal.SelectedIndexChanged += (sender, args) => { normalSelectedIndexChangedCount++; };
             var normalSelectedValueChangedCount = 0;

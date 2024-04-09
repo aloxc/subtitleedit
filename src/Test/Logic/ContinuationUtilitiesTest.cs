@@ -611,7 +611,7 @@ namespace Test.Logic
             string line1Expected = "...test...";
             Assert.AreEqual(line1Expected, line1Actual);
         }
-        
+
         [TestMethod]
         public void AddSuffixIfNeeded18()
         {
@@ -891,7 +891,7 @@ namespace Test.Logic
             string line1Expected = "...test...";
             Assert.AreEqual(line1Expected, line1Actual);
         }
-        
+
         [TestMethod]
         public void AddPrefixIfNeeded15()
         {

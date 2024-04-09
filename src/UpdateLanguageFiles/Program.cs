@@ -113,7 +113,7 @@ namespace UpdateLanguageFiles
                 }
             }
         }
-        
+
         private static string FindVersionNumber()
         {
             var templateFileName = Path.Combine("src", "ui", "Properties", "AssemblyInfo.cs.template");

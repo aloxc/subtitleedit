@@ -17,7 +17,7 @@ namespace Nikse.SubtitleEdit.Logic
                 {
                     count += ReplaceAllRegEx(findHelper, subtitle, stopAtIndex);
                 }
-                
+
                 if (allowEditOfOriginalSubtitle && findHelper.FindReplaceType.SearchOriginal && subtitleOriginal?.Paragraphs.Count > 0)
                 {
                     count += ReplaceAllRegEx(findHelper, subtitleOriginal, stopAtIndex);
@@ -31,7 +31,7 @@ namespace Nikse.SubtitleEdit.Logic
             {
                 replaceCount += ReplaceAllNonRegEx(findHelper, subtitle, stopAtIndex);
             }
-            
+
             if (allowEditOfOriginalSubtitle && findHelper.FindReplaceType.SearchOriginal && subtitleOriginal?.Paragraphs.Count > 0)
             {
                 replaceCount += ReplaceAllNonRegEx(findHelper, subtitleOriginal, stopAtIndex);
@@ -55,7 +55,7 @@ namespace Nikse.SubtitleEdit.Logic
                 while (findHelper.FindNext(p.Text, start))
                 {
                     p.Text = p.Text.Remove(findHelper.SelectedLineIndex, findHelper.FindTextLength).Insert(findHelper.SelectedLineIndex, findHelper.ReplaceText);
-                    start = findHelper.SelectedLineIndex + findHelper.ReplaceText.Length -1;
+                    start = findHelper.SelectedLineIndex + findHelper.ReplaceText.Length - 1;
                     replaceCount++;
                 }
             }

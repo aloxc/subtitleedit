@@ -460,7 +460,7 @@ namespace UpdateAssemblyInfo
             yaml = SetVariable(yaml, "ReleaseDate", DateTime.Now.ToString("yyyy-MM-dd")); //ReleaseDate: 2022-08-13
             yaml = SetVariable(yaml, "InstallerUrl", $"https://github.com/SubtitleEdit/subtitleedit/releases/download/{version.ShortVersion}/SubtitleEdit-{version.ShortVersion}-Setup.exe"); //InstallerUrl: https://github.com/SubtitleEdit/subtitleedit/releases/download/3.6.7/SubtitleEdit-3.6.7-Setup.exe
             yaml = SetVariable(yaml, "InstallerSha256", sha256Hash); //InstallerSha256: 66F2BEFD07E2295EE606BC02A4EAACB1E0D2DEBE42B4D167AE45C5CC76F5E9A3
-            File.WriteAllText(installer, yaml.TrimEnd()+ Environment.NewLine + Environment.NewLine);
+            File.WriteAllText(installer, yaml.TrimEnd() + Environment.NewLine + Environment.NewLine);
 
             var locale = Path.Combine(dir, "Nikse.SubtitleEdit.locale.en-US.yaml");
             yaml = File.ReadAllText(locale);

@@ -5,7 +5,7 @@ namespace Nikse.SubtitleEdit.Core.VobSub.Ocr.Service
 {
     public class OcrException : Exception
     {
-        public OcrException(WebException webException) : base("",webException)
+        public OcrException(WebException webException) : base("", webException)
         {
         }
 

@@ -4,7 +4,7 @@
     /// http://wiki.languagetool.org/development-overview
     /// https://raw.githubusercontent.com/languagetool-org/languagetool/master/languagetool-language-modules/en/src/main/resources/org/languagetool/rules/en/grammar.xml
     /// </summary>
-    public class LanguageToolsRule 
+    public class LanguageToolsRule
     {
         public string Id { get; set; }
         public string Name { get; set; }

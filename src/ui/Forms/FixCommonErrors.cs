@@ -768,9 +768,9 @@ namespace Nikse.SubtitleEdit.Forms
                     prePreviousLine = prePrevParagraph.Text;
                 }
 
-                var text = _ocrFixEngine.FixOcrErrors(p.Text, Subtitle, i, previousLine, prePreviousLine, false, 
+                var text = _ocrFixEngine.FixOcrErrors(p.Text, Subtitle, i, previousLine, prePreviousLine, false,
                     OcrFixEngine.AutoGuessLevel.Cautious);
-                
+
                 previousLine = text;
                 if (AllowFix(p, fixAction) && p.Text != text)
                 {

@@ -1,4 +1,5 @@
 ﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.ContainerFormats.Matroska;
 using Nikse.SubtitleEdit.Forms;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Nikse.SubtitleEdit.Core.ContainerFormats.Matroska;
 
 namespace Nikse.SubtitleEdit.Logic
 {

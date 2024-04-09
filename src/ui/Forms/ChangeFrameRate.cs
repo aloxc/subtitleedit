@@ -1,8 +1,8 @@
-﻿using Nikse.SubtitleEdit.Logic;
+﻿using Nikse.SubtitleEdit.Controls;
+using Nikse.SubtitleEdit.Logic;
 using System;
 using System.Globalization;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Controls;
 using MessageBox = Nikse.SubtitleEdit.Forms.SeMsgBox.MessageBox;
 
 namespace Nikse.SubtitleEdit.Forms

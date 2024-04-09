@@ -380,10 +380,10 @@ https://github.com/SubtitleEdit/subtitleedit
         private string GetIndicesWithGap(double cps)
         {
             var indices = new List<string>();
-            for (var i = 0; i < _subtitle.Paragraphs.Count-1; i++)
+            for (var i = 0; i < _subtitle.Paragraphs.Count - 1; i++)
             {
                 var p = _subtitle.Paragraphs[i];
-                var next = _subtitle.Paragraphs[i+1];
+                var next = _subtitle.Paragraphs[i + 1];
                 var gap = next.StartTime.TotalMilliseconds - p.EndTime.TotalMilliseconds;
                 if (Math.Abs(gap - cps) < 0.01)
                 {

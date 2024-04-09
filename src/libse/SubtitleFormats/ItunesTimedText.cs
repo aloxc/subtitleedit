@@ -245,7 +245,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 var paragraph = xml.CreateElement("p", "http://www.w3.org/ns/ttml");
                 var text = p.Text;
 
-                if (hasAlignmentTags || !isDefaultAlignmentBottom) 
+                if (hasAlignmentTags || !isDefaultAlignmentBottom)
                 {
                     var regionP = xml.CreateAttribute("region");
                     if (text.StartsWith("{\\an7}", StringComparison.Ordinal) || text.StartsWith("{\\an8}", StringComparison.Ordinal) || text.StartsWith("{\\an9}", StringComparison.Ordinal))

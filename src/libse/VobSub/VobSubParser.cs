@@ -231,7 +231,7 @@ namespace Nikse.SubtitleEdit.Core.VobSub
                             pack.EndTime = TimeSpan.FromMilliseconds(pack.StartTime.TotalMilliseconds + Configuration.Settings.General.SubtitleMaximumDisplayMilliseconds);
                         }
                     }
-                     else
+                    else
                     {
                         pack.EndTime = TimeSpan.FromMilliseconds(pack.StartTime.TotalMilliseconds + 3000);
                     }

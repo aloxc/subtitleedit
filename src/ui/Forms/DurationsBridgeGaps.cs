@@ -104,7 +104,7 @@ namespace Nikse.SubtitleEdit.Forms
             {
                 Configuration.Settings.Tools.BridgeGapMilliseconds = SubtitleFormat.FramesToMilliseconds((double)numericUpDownMaxMs.Value);
             }
-                
+
             DialogResult = DialogResult.OK;
         }
 
@@ -160,10 +160,10 @@ namespace Nikse.SubtitleEdit.Forms
                     if (next != null)
                     {
                         var gap = next.StartTime.TotalMilliseconds - cur.EndTime.TotalMilliseconds;
-                        info = $"{ gap / TimeCode.BaseUnit:0.000}";
+                        info = $"{gap / TimeCode.BaseUnit:0.000}";
                         if (Configuration.Settings.General.UseTimeFormatHHMMSSFF)
                         {
-                            info = $"{ SubtitleFormat.MillisecondsToFrames(gap)}";
+                            info = $"{SubtitleFormat.MillisecondsToFrames(gap)}";
                         }
                     }
                     SubtitleListview1.SetExtraText(i, info, SubtitleListview1.ForeColor);

@@ -1,13 +1,13 @@
 ﻿using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.Interfaces;
+using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using Nikse.SubtitleEdit.Forms;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Nikse.SubtitleEdit.Core.SubtitleFormats;
-using System;
 using System.Windows.Forms;
 using static Nikse.SubtitleEdit.Forms.ExportPngXml;
 

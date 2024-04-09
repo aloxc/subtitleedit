@@ -144,7 +144,7 @@ namespace Nikse.SubtitleEdit.Forms.Assa
                 var style = _currentFileStyles[idx];
                 foreach (var paragraph in NewSubtitle.Paragraphs)
                 {
-                    if (_styles.Any(p=>p.Name == paragraph.Extra))
+                    if (_styles.Any(p => p.Name == paragraph.Extra))
                     {
                         paragraph.Extra = style.Name;
                     }

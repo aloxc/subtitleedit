@@ -168,7 +168,7 @@ namespace Nikse.SubtitleEdit.Forms
                     var next = _working.GetParagraphOrDefault(i + 1);
                     var wantedEndMs = p.StartTime.TotalMilliseconds + minDisplayTime;
                     var bestEndMs = double.MaxValue;
-                    
+
                     // First check for next subtitle
                     if (next != null)
                     {
@@ -180,7 +180,7 @@ namespace Nikse.SubtitleEdit.Forms
                     {
                         bestEndMs = Math.Min(bestEndMs, ShotChangeHelper.GetNextShotChangeMinusGapInMs(_shotChanges, p.EndTime) ?? double.MaxValue);
                     }
-                    
+
                     if (wantedEndMs <= bestEndMs)
                     {
                         AddFix(p, wantedEndMs, DefaultBackColor);

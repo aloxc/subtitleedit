@@ -1,8 +1,8 @@
 ﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.Common.TextLengthCalculator;
 using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using System;
 using System.Globalization;
-using Nikse.SubtitleEdit.Core.Common.TextLengthCalculator;
 
 namespace Nikse.SubtitleEdit.Core.NetflixQualityCheck
 {
@@ -27,7 +27,7 @@ namespace Nikse.SubtitleEdit.Core.NetflixQualityCheck
                             if (CalculateJapaneseLength(text) > 11)
                             {
                                 var comment = "Single vertical line length > 11";
-                                controller.AddRecord(p, p.StartTime.ToHHMMSSFF(),  line.Length.ToString(CultureInfo.InvariantCulture), comment);
+                                controller.AddRecord(p, p.StartTime.ToHHMMSSFF(), line.Length.ToString(CultureInfo.InvariantCulture), comment);
                             }
                         }
                         else // Horizontal subtitles - Maximum 13 full-width characters per line

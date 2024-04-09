@@ -19,7 +19,7 @@ namespace Nikse.SubtitleEdit.Forms.BinaryEdit
             numericUpDownMarginLeft.Value = Configuration.Settings.Tools.BinEditLeftMargin;
             numericUpDownMarginRight.Value = Configuration.Settings.Tools.BinEditRightMargin;
             numericUpDownMarginTop.Value = Configuration.Settings.Tools.BinEditTopMargin;
-            numericUpDownMarginBottom.Value = Configuration.Settings.Tools.BinEditBottomMargin; 
+            numericUpDownMarginBottom.Value = Configuration.Settings.Tools.BinEditBottomMargin;
             UiUtil.FixLargeFonts(this, buttonOK);
 
             Text = LanguageSettings.Current.Settings.Title;

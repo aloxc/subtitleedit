@@ -72,7 +72,7 @@ namespace Nikse.SubtitleEdit.Forms
 
             toolStripMenuItemSelAll.Text = LanguageSettings.Current.Main.Menu.ContextMenu.SelectAll;
             toolStripMenuItemInvertSel.Text = LanguageSettings.Current.Main.Menu.Edit.InverseSelection;
-            
+
             _language = LanguageSettings.Current.RemoveTextFromHearImpaired;
             Text = _language.Title;
             groupBoxRemoveTextConditions.Text = _language.RemoveTextConditions;
@@ -120,7 +120,7 @@ namespace Nikse.SubtitleEdit.Forms
 
             comboBoxLanguage.BeginUpdate();
             comboBoxLanguage.Items.Clear();
-            foreach (var ci in Utilities.GetSubtitleLanguageCultures(true).OrderBy(p=>p.EnglishName))
+            foreach (var ci in Utilities.GetSubtitleLanguageCultures(true).OrderBy(p => p.EnglishName))
             {
                 comboBoxLanguage.Items.Add(new LanguageItem(ci, ci.EnglishName));
                 if (ci.TwoLetterISOLanguageName == _interjectionsLanguage)

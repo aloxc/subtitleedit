@@ -33,7 +33,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
         public override string Name => "Final Cut Pro Xml Name";
 
-        
+
         public override string ToText(Subtitle subtitle, string title)
         {
             string xmlStructure =

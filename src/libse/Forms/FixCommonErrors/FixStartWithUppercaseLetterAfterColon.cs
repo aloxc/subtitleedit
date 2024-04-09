@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Nikse.SubtitleEdit.Core.Common;
+﻿using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.Interfaces;
+using System;
+using System.Globalization;
 
 namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
 {
@@ -27,10 +27,10 @@ namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
                 {
                     continue;
                 }
-                
+
                 var text = p.Text;
                 var len = text.Length;
-                
+
                 // text
                 for (var j = 0; j < len; j++)
                 {
@@ -38,7 +38,7 @@ namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
                     if (ch == ':' || ch == ';')
                     {
                         var k = j + 1;
-                        
+
                         // skip white space before formatting
                         while (k < len && text[k] == ' ') k++;
                         // skip formatting e.g: <i>, <b>,<font..>...
@@ -60,7 +60,7 @@ namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
                         {
                             // slice from k index
                             var textFromK = text.Substring(k);
-                            
+
                             if (CanCapitalize(textFromK, callbacks) && !isTurkish)
                             {
                                 text = text.Substring(0, k) + textFromK.CapitalizeFirstLetter();

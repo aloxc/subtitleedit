@@ -119,7 +119,7 @@ namespace Nikse.SubtitleEdit.Core.AudioToText
         private string[] MakeUrls(string baseUrl)
         {
             var result = new List<string>();
-            foreach (var fileName in _fileNames) 
+            foreach (var fileName in _fileNames)
             {
                 result.Add(baseUrl.TrimEnd('/') + "/" + fileName);
             }

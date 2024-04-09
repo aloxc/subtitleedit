@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Nikse.SubtitleEdit.Core.Cea708.Commands;
+﻿using Nikse.SubtitleEdit.Core.Cea708.Commands;
+using System.Collections.Generic;
 
 namespace Nikse.SubtitleEdit.Core.Cea708
 {

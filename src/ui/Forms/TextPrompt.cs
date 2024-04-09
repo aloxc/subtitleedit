@@ -13,7 +13,7 @@ namespace Nikse.SubtitleEdit.Forms
             UiUtil.PreInitialize(this);
             InitializeComponent();
             UiUtil.FixFonts(this);
-            Width = width; 
+            Width = width;
             Text = title;
             labelDescription.Text = label;
             buttonOK.Text = LanguageSettings.Current.General.Ok;

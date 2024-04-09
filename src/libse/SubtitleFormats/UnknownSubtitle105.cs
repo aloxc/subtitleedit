@@ -54,7 +54,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             for (var i = 0; i < lines.Count; i++)
             {
                 var line = lines[i].Trim();
-                if (line.StartsWith("[WAIT&nbsp;",StringComparison.Ordinal))
+                if (line.StartsWith("[WAIT&nbsp;", StringComparison.Ordinal))
                 {
                     var ms = GetMs(line);
                     text = text.Replace("<br>", Environment.NewLine).Trim();

@@ -106,7 +106,7 @@ namespace Nikse.SubtitleEdit.Forms.Assa
                     {
                         comboBoxScaleBorderAndShadow.SelectedIndex = 1;
                     }
-                    else 
+                    else
                     {
                         comboBoxScaleBorderAndShadow.SelectedIndex = 2;
                     }
@@ -144,7 +144,7 @@ namespace Nikse.SubtitleEdit.Forms.Assa
 
             comboBoxWrapStyle.Left = labelWrapStyle.Right + 10;
             comboBoxWrapStyle.Width = groupBoxOptions.Right - comboBoxWrapStyle.Left - 25;
-            
+
             buttonOK.Text = LanguageSettings.Current.General.Ok;
             buttonCancel.Text = LanguageSettings.Current.General.Cancel;
 

@@ -104,7 +104,7 @@ namespace Nikse.SubtitleEdit.Controls
             }
         }
 
-        public  ListBox.ObjectCollection Items
+        public ListBox.ObjectCollection Items
         {
             get
             {
@@ -215,7 +215,7 @@ namespace Nikse.SubtitleEdit.Controls
             {
                 if (_listBox != null)
                 {
-                    _listBox.Text= value;
+                    _listBox.Text = value;
                 }
             }
         }

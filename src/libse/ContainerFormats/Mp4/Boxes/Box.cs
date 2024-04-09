@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using System;
 using System.Text;
-using Nikse.SubtitleEdit.Core.Common;
 
 namespace Nikse.SubtitleEdit.Core.ContainerFormats.Mp4.Boxes
 {
@@ -68,7 +68,7 @@ namespace Nikse.SubtitleEdit.Core.ContainerFormats.Mp4.Boxes
         {
             if (StartPosition == 0)
             {
-                StartPosition = (ulong)fs.Position -8;
+                StartPosition = (ulong)fs.Position - 8;
             }
 
             Buffer = new byte[8];

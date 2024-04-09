@@ -1,5 +1,5 @@
-﻿using System.IO;
-using Nikse.SubtitleEdit.Core.Common;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using System.IO;
 
 namespace Nikse.SubtitleEdit.Core.Interfaces
 {

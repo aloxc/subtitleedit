@@ -53,7 +53,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                         var text = s.Remove(0, match.Length).Trim();
                         text = Utilities.AutoBreakLine(text);
                         var arr = match.Value.Split('\t');
-                        if (arr.Length== 5 && text.Length > 0)
+                        if (arr.Length == 5 && text.Length > 0)
                         {
                             if (string.IsNullOrWhiteSpace(text
                                 .RemoveChar('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ':', ',')))

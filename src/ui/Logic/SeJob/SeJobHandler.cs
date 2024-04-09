@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 using System.IO.Compression;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace Nikse.SubtitleEdit.Logic.SeJob
 {

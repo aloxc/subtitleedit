@@ -287,7 +287,7 @@ namespace Nikse.SubtitleEdit.Forms
                 var next = subtitle.GetParagraphOrDefault(i + 1);
                 if (next != null)
                 {
-                    gap = ExportCustomTextFormat.GetTimeCode(new TimeCode(next.StartTime.TotalMilliseconds - p.EndTime.TotalMilliseconds), arr[3]); 
+                    gap = ExportCustomTextFormat.GetTimeCode(new TimeCode(next.StartTime.TotalMilliseconds - p.EndTime.TotalMilliseconds), arr[3]);
                 }
 
                 var text = p.Text;

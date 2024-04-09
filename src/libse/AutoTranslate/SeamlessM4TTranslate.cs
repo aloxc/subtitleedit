@@ -25,7 +25,7 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
         public void Initialize()
         {
             _httpClient?.Dispose();
-            _httpClient = new HttpClient(); 
+            _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json");
             _httpClient.BaseAddress = new Uri(Configuration.Settings.Tools.AutoTranslateSeamlessM4TUrl.TrimEnd('/') + "/");
@@ -120,7 +120,7 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
             var cultures = Utilities.GetSubtitleLanguageCultures(false).ToList();
             foreach (var code in languageCodes)
             {
-                var culture = cultures.FirstOrDefault(p=>p.TwoLetterISOLanguageName == code);
+                var culture = cultures.FirstOrDefault(p => p.TwoLetterISOLanguageName == code);
                 if (culture != null)
                 {
                     result.Add(new TranslationPair(culture.EnglishName, code));

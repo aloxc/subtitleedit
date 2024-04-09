@@ -132,7 +132,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             var color = bmp.GetPixel(p.X, p.Y);
-            labelOriginalImage.Text = LanguageSettings.Current.OcrPreprocessing.OriginalImage + 
+            labelOriginalImage.Text = LanguageSettings.Current.OcrPreprocessing.OriginalImage +
                                       $"  {p.X},{p.Y} ARGB({color.A}, {color.R},{color.G},{color.B})";
         }
 

@@ -21,8 +21,8 @@ namespace Nikse.SubtitleEdit.Forms
             ResetTotalAdjustment();
             timeUpDownAdjust.MaskedTextBox.Text = "000000000";
             Text = LanguageSettings.Current.ShowEarlierLater.Title.RemoveChar('&');
-            labelHourMinSecMilliSecond.Text = Configuration.Settings.General.UseTimeFormatHHMMSSFF ? 
-                LanguageSettings.Current.General.HourMinutesSecondsFrames : 
+            labelHourMinSecMilliSecond.Text = Configuration.Settings.General.UseTimeFormatHHMMSSFF ?
+                LanguageSettings.Current.General.HourMinutesSecondsFrames :
                 string.Format(LanguageSettings.Current.General.HourMinutesSecondsDecimalSeparatorMilliseconds, UiUtil.DecimalSeparator);
             buttonShowEarlier.Text = LanguageSettings.Current.ShowEarlierLater.ShowEarlier;
             buttonShowLater.Text = LanguageSettings.Current.ShowEarlierLater.ShowLater;

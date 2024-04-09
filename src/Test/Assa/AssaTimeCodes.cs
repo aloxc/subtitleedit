@@ -17,7 +17,7 @@ namespace Test.Assa
 
             var s = new Subtitle();
             new SubRip().LoadSubtitle(s, text.SplitToLines(), null);
-            var res = new AdvancedSubStationAlpha().ToText(s,string.Empty);
+            var res = new AdvancedSubStationAlpha().ToText(s, string.Empty);
             Assert.IsTrue(res.Contains("0,0:03:44.04,0:03:46.00"));
         }
     }

@@ -36,7 +36,7 @@ namespace Nikse.SubtitleEdit.Core
                 var st = new StrippableText(text);
 
                 st.FixCasing(_germanNouns, true, false, false, string.Empty);
-                
+
                 foreach (var regex in _regularExpressionList.Keys)
                 {
                     st.StrippedText = regex.Replace(st.StrippedText, _regularExpressionList[regex]);

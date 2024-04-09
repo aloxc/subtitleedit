@@ -19,7 +19,7 @@ namespace Nikse.SubtitleEdit.Logic.Plugins
             {
                 var onlinePlugin = onlinePlugins.FirstOrDefault(p => p.Name == installedPlugin.Name);
                 if (onlinePlugin != null &&
-                    MakeComparableVersionNumber(installedPlugin.Version) < 
+                    MakeComparableVersionNumber(installedPlugin.Version) <
                     MakeComparableVersionNumber(onlinePlugin.Version))
                 {
                     list.Add(new PluginUpdate { InstalledPlugin = installedPlugin, OnlinePlugin = onlinePlugin });

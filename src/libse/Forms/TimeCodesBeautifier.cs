@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.SubtitleFormats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nikse.SubtitleEdit.Core.Common;
-using Nikse.SubtitleEdit.Core.SubtitleFormats;
 
 namespace Nikse.SubtitleEdit.Core.Forms
 {
@@ -126,7 +126,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
                 if (Configuration.Settings.BeautifyTimeCodes.OverlapThreshold > 0 && Math.Abs(distance) >= Configuration.Settings.BeautifyTimeCodes.OverlapThreshold)
                 {
                     return false;
-                } 
+                }
                 else
                 {
                     // We are continuing, but there is still an overlap, so fix that first
@@ -285,7 +285,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
                             // Otherwise, normal behavior: we'll align the connected subtitles around the shot change
                             newLeftOutCueFrame = fixInfo.newLeftOutCueFrame;
                             newRightInCueFrame = fixInfo.newRightInCueFrame;
-                        }                        
+                        }
                     }
                     else if (bestRightInCueFrameInfo.result == FindBestCueResult.SnappedToRedZone)
                     {
@@ -553,7 +553,8 @@ namespace Nikse.SubtitleEdit.Core.Forms
                     {
                         // Check if there are any other shot changes *before* the shot change we want to chain towards
                         var firstShotChangeInBetween = GetFirstShotChangeFrameInBetween(bestLeftOutCueFrame, bestRightInCueFrame);
-                        if (firstShotChangeInBetween != null && !IsCueOnShotChange(bestRightInCueFrame, true, firstShotChangeInBetween.Value)) {
+                        if (firstShotChangeInBetween != null && !IsCueOnShotChange(bestRightInCueFrame, true, firstShotChangeInBetween.Value))
+                        {
                             // There is another shot change in between. Check behaviors
                             switch (Configuration.Settings.BeautifyTimeCodes.Profile.ChainingInCueOnShotShotChangeBehavior)
                             {
@@ -592,7 +593,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
                         if (Configuration.Settings.BeautifyTimeCodes.Profile.ChainingInCueOnShotCheckGeneral)
                         {
                             performGeneralChaining = true;
-                        } 
+                        }
                         else
                         {
                             // Chaining wasn't needed
@@ -921,7 +922,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
                         {
                             // Else, limit to adjacent subtitle
                             var previousOutCueFrame = MillisecondsToFrames(previousParagraph.EndTime.TotalMilliseconds);
-                            newCueFrame = Math.Max(bestCueFrame, previousOutCueFrame + Configuration.Settings.BeautifyTimeCodes.Profile.Gap);                            
+                            newCueFrame = Math.Max(bestCueFrame, previousOutCueFrame + Configuration.Settings.BeautifyTimeCodes.Profile.Gap);
                         }
                     }
                     else
@@ -1064,7 +1065,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
         private void AlignAndSetCue(Paragraph paragraph, bool isInCue, int newFrame)
         {
             double newTime = FramesToMilliseconds(newFrame);
-                        
+
             // Finally, update time
             if (isInCue)
             {

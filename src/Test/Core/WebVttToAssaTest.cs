@@ -64,7 +64,7 @@ namespace Test.Core
         {
             var subtitle = new Subtitle();
             subtitle.Header = "STYLE\r\n::cue(.styledotEAC118) { color:#EAC118 }";
-            subtitle.Paragraphs.Add(new Paragraph("<c.styledotEAC118>Hi</c>", 0,0));
+            subtitle.Paragraphs.Add(new Paragraph("<c.styledotEAC118>Hi</c>", 0, 0));
             var converted = WebVttToAssa.Convert(subtitle, new SsaStyle(), 1920, 1080);
 
             Assert.AreEqual("Hi", converted.Paragraphs[0].Text);

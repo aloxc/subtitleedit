@@ -1,10 +1,10 @@
-﻿using Nikse.SubtitleEdit.Core.Common;
+﻿using Nikse.SubtitleEdit.Controls.Interfaces;
+using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.Enums;
 using Nikse.SubtitleEdit.Logic;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Controls.Interfaces;
 
 namespace Nikse.SubtitleEdit.Controls
 {

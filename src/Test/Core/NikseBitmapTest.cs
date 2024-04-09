@@ -17,7 +17,7 @@ namespace Test.Core
             {
                 for (int x = 0; x < nbmp.Width; x++)
                 {
-                    if (x %2 == 0)
+                    if (x % 2 == 0)
                         nbmp.SetPixel(x, y, c1);
                     else
                         nbmp.SetPixel(x, y, c2);

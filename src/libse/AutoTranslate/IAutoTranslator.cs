@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Nikse.SubtitleEdit.Core.Translate;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Nikse.SubtitleEdit.Core.Translate;
 
 namespace Nikse.SubtitleEdit.Core.AutoTranslate
 {

@@ -21,7 +21,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             foreach (Paragraph p in subtitle.Paragraphs)
             {
                 var text = HtmlUtil.RemoveHtmlTags(p.Text.Trim()).Replace(Environment.NewLine, "//");
-                sb.AppendLine(EncodeTimeCode(p.StartTime) + text +  EncodeTimeCode(p.EndTime));
+                sb.AppendLine(EncodeTimeCode(p.StartTime) + text + EncodeTimeCode(p.EndTime));
             }
             return sb.ToString();
         }

@@ -1,9 +1,9 @@
-﻿using Nikse.SubtitleEdit.Core.Common;
+﻿using Nikse.SubtitleEdit.Core.AudioToText;
+using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Logic;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Core.AudioToText;
 
 namespace Nikse.SubtitleEdit.Forms.AudioToText
 {

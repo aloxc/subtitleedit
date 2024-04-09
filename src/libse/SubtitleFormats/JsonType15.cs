@@ -74,7 +74,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             for (int i = 0; i < subtitle.Paragraphs.Count - 1; i++)
             {
                 var paragraph = subtitle.Paragraphs[i];
-                var next = subtitle.GetParagraphOrDefault(i+1);
+                var next = subtitle.GetParagraphOrDefault(i + 1);
                 if (next.StartTime.TotalMilliseconds < paragraph.EndTime.TotalMilliseconds)
                 {
                     paragraph.EndTime.TotalMilliseconds = next.StartTime.TotalMilliseconds - Configuration.Settings.General.MinimumMillisecondsBetweenLines;

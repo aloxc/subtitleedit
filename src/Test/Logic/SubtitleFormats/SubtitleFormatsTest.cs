@@ -783,7 +783,7 @@ Dialogue: Marked=0,0:00:01.00,0:00:03.00,Default,NTP,0000,0000,0000,!Effect," + 
 
         [TestMethod]
         public void SsaSimpleFontColorAndItalic()
-        { 
+        {
             var target = new SubStationAlpha();
             var subtitle = new Subtitle();
             target.LoadSubtitle(subtitle, GetSsaLines(@"{\c&HFFFF00&\i1}CYAN{\i0}"), null);

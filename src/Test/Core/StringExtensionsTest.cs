@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nikse.SubtitleEdit.Core.Common;
-using System;
 using Nikse.SubtitleEdit.Core.Common.TextLengthCalculator;
 using Nikse.SubtitleEdit.Core.SubtitleFormats;
+using System;
 
 namespace Test.Core
 {
@@ -185,7 +185,7 @@ namespace Test.Core
             var res = input.FixExtraSpaces();
             Assert.AreEqual("a" + Environment.NewLine + "b", res);
         }
-        
+
         [TestMethod]
         public void RemoveRecursiveLineBreakTest()
         {
@@ -407,7 +407,7 @@ namespace Test.Core
         {
             // language two letter language set to null
             Assert.IsTrue("foobar.".HasSentenceEnding(null)); // this is supposed to use the culture neutral chars
-            
+
             Assert.IsTrue("foobar.".HasSentenceEnding());
             Assert.IsTrue("foobar?</font>".HasSentenceEnding());
             Assert.IsTrue("foobar!</font>".HasSentenceEnding());
@@ -420,7 +420,7 @@ namespace Test.Core
             Assert.IsTrue("foobar--</i>".HasSentenceEnding());
             Assert.IsTrue("foobar—".HasSentenceEnding()); // em dash
             Assert.IsTrue("foobar—</i>".HasSentenceEnding()); // em dash
-            
+
             Assert.IsFalse("\"".HasSentenceEnding());
             Assert.IsFalse("foobar>".HasSentenceEnding());
             Assert.IsFalse("How are you{\\i0}".HasSentenceEnding());
@@ -436,6 +436,6 @@ namespace Test.Core
             Assert.IsTrue("foobar؟\"".HasSentenceEnding(greekCultureTwoLetter));
             Assert.IsTrue("foobar;".HasSentenceEnding(greekCultureTwoLetter));
         }
-        
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Nikse.SubtitleEdit.Controls;
+using Nikse.SubtitleEdit.Controls.Adapters;
 using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using Nikse.SubtitleEdit.Logic;
@@ -7,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Controls.Adapters;
 
 namespace Nikse.SubtitleEdit.Forms
 {
@@ -509,16 +509,16 @@ namespace Nikse.SubtitleEdit.Forms
             {
                 // creat new context menu only if textBoxText doesn't already has one, this will prevent unnecessary
                 // allocation regex option is already selected and user re-select it
-                textBoxText.ContextMenuStrip = textBoxText.ContextMenuStrip ?? 
+                textBoxText.ContextMenuStrip = textBoxText.ContextMenuStrip ??
                                                FindReplaceDialogHelper.GetRegExContextMenu(new NativeTextBoxAdapter(textBoxText));
                 checkBoxCaseSensitive.Enabled = false;
             }
-            else if (comboBoxRule.SelectedIndex == FunctionOdd || 
-                     comboBoxRule.SelectedIndex == FunctionEven || 
-                     comboBoxRule.SelectedIndex == FunctionExactlyOneLine || 
-                     comboBoxRule.SelectedIndex == FunctionExactlyTwoLines || 
-                     comboBoxRule.SelectedIndex == FunctionMoreThanTwoLines || 
-                     comboBoxRule.SelectedIndex == FunctionBookmarked || 
+            else if (comboBoxRule.SelectedIndex == FunctionOdd ||
+                     comboBoxRule.SelectedIndex == FunctionEven ||
+                     comboBoxRule.SelectedIndex == FunctionExactlyOneLine ||
+                     comboBoxRule.SelectedIndex == FunctionExactlyTwoLines ||
+                     comboBoxRule.SelectedIndex == FunctionMoreThanTwoLines ||
+                     comboBoxRule.SelectedIndex == FunctionBookmarked ||
                      comboBoxRule.SelectedIndex == FunctionBlankLines)
             {
                 checkBoxCaseSensitive.Enabled = false;

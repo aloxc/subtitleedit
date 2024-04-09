@@ -1,10 +1,10 @@
 ﻿using Nikse.SubtitleEdit.Core.BluRaySup;
 using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using Nikse.SubtitleEdit.Core.Interfaces;
 
 namespace Nikse.SubtitleEdit.Logic.CommandLineConvert
 {
@@ -29,7 +29,7 @@ namespace Nikse.SubtitleEdit.Logic.CommandLineConvert
                     var p = sub[index];
                     var brSub = new BluRaySupPicture
                     {
-                        StartTime = (long)Math.Round(paragraph.StartTime.TotalMilliseconds, MidpointRounding.AwayFromZero) ,
+                        StartTime = (long)Math.Round(paragraph.StartTime.TotalMilliseconds, MidpointRounding.AwayFromZero),
                         EndTime = (long)Math.Round(paragraph.EndTime.TotalMilliseconds, MidpointRounding.AwayFromZero),
                         Width = screenWidth,
                         Height = screenHeight,

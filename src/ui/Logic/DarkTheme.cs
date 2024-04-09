@@ -604,10 +604,10 @@ namespace Nikse.SubtitleEdit.Logic
                 var flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
                 var textRectangleValue = new Rectangle
                 {
-                    X = e.ClipRectangle.X+2 ,
-                    Y = e.ClipRectangle.Y+2,
+                    X = e.ClipRectangle.X + 2,
+                    Y = e.ClipRectangle.Y + 2,
                     Width = e.ClipRectangle.Width - 4,
-                    Height = e.ClipRectangle.Height -4
+                    Height = e.ClipRectangle.Height - 4
                 };
 
                 using (var b = new SolidBrush(BackColor))
@@ -622,7 +622,7 @@ namespace Nikse.SubtitleEdit.Logic
                     flags |= TextFormatFlags.RightToLeft;
                 }
 
-                var r = new Rectangle(textRectangleValue.Left, textRectangleValue.Y+1, textRectangleValue.Width, textRectangleValue.Height-1);
+                var r = new Rectangle(textRectangleValue.Left, textRectangleValue.Y + 1, textRectangleValue.Width, textRectangleValue.Height - 1);
                 TextRenderer.DrawText(e.Graphics, button.Text, button.Font, r, Color.DimGray, flags);
             }
         }
@@ -647,7 +647,7 @@ namespace Nikse.SubtitleEdit.Logic
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                var flags = TextFormatFlags.Left | TextFormatFlags.TextBoxControl | TextFormatFlags.VerticalCenter; 
+                var flags = TextFormatFlags.Left | TextFormatFlags.TextBoxControl | TextFormatFlags.VerticalCenter;
                 if (checkBox.RightToLeft == RightToLeft.Yes)
                 {
                     flags |= TextFormatFlags.RightToLeft;

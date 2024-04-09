@@ -14,7 +14,7 @@ namespace Nikse.SubtitleEdit.Core.Common
         {
             _configuration = configuration;
         }
-        
+
         public string Generate(IEnumerable<DiffGeneratorItem> diffGeneratorItems)
         {
             var htmlFileName = FileUtil.GetTempFileName(".html");
@@ -36,7 +36,7 @@ namespace Nikse.SubtitleEdit.Core.Common
 
             return htmlFileName;
         }
-        
+
         private static string[] MakeDiffHtml(string before, string after)
         {
             before = before.Replace("<br />", "↲");

@@ -45,7 +45,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             {
                 var line = list[index];
                 DecodeJsonText(line, sb);
-                if (index <  list.Count - 1)
+                if (index < list.Count - 1)
                 {
                     sb.AppendLine();
                 }

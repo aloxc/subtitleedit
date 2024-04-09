@@ -43,7 +43,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Service
 
         public int GetMaximumRequestArraySize()
         {
-            return 100; 
+            return 100;
         }
 
         public string GetUrl()

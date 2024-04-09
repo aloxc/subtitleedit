@@ -13,7 +13,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
     public abstract class AbstractStringSplitsChunkAssigner
     {
         protected StringSplitEngine StringSplitEngine;
-        
+
         public class RateResult
         {
             public double Fitness;
@@ -83,13 +83,13 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
 
             int currentSentenceParagraph = 0;
             int currentSourceChunkEndPosition = sourceChunksTextLength[0];
-            int[] splitPositions = new int[sourceChunksTextLength.Count-1];
+            int[] splitPositions = new int[sourceChunksTextLength.Count - 1];
             int splitPositionCount = 0;
             for (int i = 0; i < targetText.Length; i++)
             {
                 var c = targetText[i];
 
-                if (StringSplitEngine.IsSplittable(targetText,i))
+                if (StringSplitEngine.IsSplittable(targetText, i))
                 {
                     double currentTargetPositionPercentage = (double)i / targetText.Length;
                     double currentSourceChunkEndPositionPercentage = (double)currentSourceChunkEndPosition / overallSourceLength;
@@ -108,7 +108,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
             //ensure that there is always to correct amount of resulting splitPositions
             while (splitPositionCount < sourceChunksTextLength.Count - 1)
             {
-                splitPositions[splitPositionCount] = splitPositionCount > 0 ? splitPositions[splitPositionCount-1] : 0;
+                splitPositions[splitPositionCount] = splitPositionCount > 0 ? splitPositions[splitPositionCount - 1] : 0;
                 splitPositionCount++;
             }
             return splitPositions;
@@ -144,7 +144,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
             {
                 int[] breakPositions = GetRandomBreakPositions(targetText, _sourceChunksTextLength);
 
-                var rateResult  = CalculateRateResult(_sourceChunksTextLength, targetText.Length, breakPositions);
+                var rateResult = CalculateRateResult(_sourceChunksTextLength, targetText.Length, breakPositions);
                 rateResults.Add(rateResult);
             }
             rateResults = rateResults.OrderBy(x => x.Fitness).ToList();
@@ -153,14 +153,14 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
 
         private int[] GetRandomBreakPositions(string targetText, List<int> sourceChunksTextLength)
         {
-            int [] splitPositions = new int[sourceChunksTextLength.Count-1];
-            
+            int[] splitPositions = new int[sourceChunksTextLength.Count - 1];
+
 
             for (int i = 0; i < sourceChunksTextLength.Count - 1; i++)
             {
                 int targetBreakSplitIndex = _randomizer.Next(0, _targetSplitsLength.Count);
                 int splitPosition = _targetSplitsLength.GetRange(0, targetBreakSplitIndex).Sum();
-                splitPositions[i]=splitPosition;
+                splitPositions[i] = splitPosition;
             }
             Array.Sort(splitPositions);
             return splitPositions;

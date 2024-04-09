@@ -340,7 +340,7 @@ namespace Nikse.SubtitleEdit.Forms
             template = template.Replace("{media-file-name}", string.IsNullOrEmpty(videoFileName) ? videoFileName : Path.GetFileNameWithoutExtension(videoFileName));
             template = template.Replace("{media-file-name-with-ext}", string.IsNullOrEmpty(videoFileName) ? videoFileName : Path.GetFileName(videoFileName));
             template = template.Replace("{#lines}", subtitle.Paragraphs.Count.ToString(CultureInfo.InvariantCulture));
-            
+
             template = template.Replace("{tab}", "\t");
             return template;
         }

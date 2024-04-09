@@ -12,7 +12,7 @@ namespace Nikse.SubtitleEdit.Logic
         {
             if (width <= 0 || height <= 0)
             {
-                return new Bitmap(1,1);
+                return new Bitmap(1, 1);
             }
 
             // outline width should be about double for SSA/ASSA

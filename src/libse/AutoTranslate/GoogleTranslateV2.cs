@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.Http;
+using Nikse.SubtitleEdit.Core.Translate;
+using Nikse.SubtitleEdit.Core.Translate.Service;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -7,10 +11,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Nikse.SubtitleEdit.Core.Common;
-using Nikse.SubtitleEdit.Core.Http;
-using Nikse.SubtitleEdit.Core.Translate;
-using Nikse.SubtitleEdit.Core.Translate.Service;
 
 namespace Nikse.SubtitleEdit.Core.AutoTranslate
 {
@@ -72,7 +72,7 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
                 }
 
                 if ((int)result.StatusCode == 400)
-                {                   
+                {
                     throw new TranslationException("API key invalid (or perhaps billing is not enabled)?");
                 }
                 if ((int)result.StatusCode == 403)

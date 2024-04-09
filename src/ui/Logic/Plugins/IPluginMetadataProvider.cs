@@ -4,6 +4,6 @@ namespace Nikse.SubtitleEdit.Logic.Plugins
 {
     public interface IPluginMetadataProvider
     {
-       IReadOnlyCollection<PluginInfoItem> GetPlugins();
+        IReadOnlyCollection<PluginInfoItem> GetPlugins();
     }
 }

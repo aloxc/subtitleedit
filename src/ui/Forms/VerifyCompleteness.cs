@@ -107,7 +107,7 @@ namespace Nikse.SubtitleEdit.Forms
             if (toolStripMenuItemSortByTime.Checked)
             {
                 sortedControlParagraphsWithCoverage = sortedControlParagraphsWithCoverage.OrderBy(t => t.Item1.StartTime.TotalMilliseconds).ToList();
-            } 
+            }
             else
             {
                 sortedControlParagraphsWithCoverage = sortedControlParagraphsWithCoverage.OrderBy(t => t.Item2).ToList();

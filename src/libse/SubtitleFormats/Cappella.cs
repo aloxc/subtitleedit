@@ -27,7 +27,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             </detx>".Replace('\'', '\"');
             if (subtitle.Paragraphs.Count > 0)
             {
-                xmlStructure = xmlStructure.Replace("00:00:00:00", ToTimeCode(subtitle.Paragraphs[subtitle.Paragraphs.Count -1].EndTime));
+                xmlStructure = xmlStructure.Replace("00:00:00:00", ToTimeCode(subtitle.Paragraphs[subtitle.Paragraphs.Count - 1].EndTime));
             }
 
             var xml = new XmlDocument();

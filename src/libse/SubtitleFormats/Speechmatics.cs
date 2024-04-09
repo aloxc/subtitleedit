@@ -56,7 +56,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     break;
                 }
 
-                var text = allText.Substring(endTimeIndex + 1, startTimeIdx - endTimeIndex -1).Trim();
+                var text = allText.Substring(endTimeIndex + 1, startTimeIdx - endTimeIndex - 1).Trim();
 
                 endTimeIndex = allText.IndexOf('>', startTimeIdx);
                 if (endTimeIndex < 0)

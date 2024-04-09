@@ -1,6 +1,6 @@
 ﻿using Nikse.SubtitleEdit.Controls;
-using System.Linq;
 using Nikse.SubtitleEdit.Core.Common;
+using System.Linq;
 
 namespace Nikse.SubtitleEdit.Logic
 {
@@ -96,63 +96,63 @@ namespace Nikse.SubtitleEdit.Logic
 
             var columnCount = subtitleListView.Columns.Count;
 
-            if (subtitleListView.ColumnIndexNumber >= 0 && 
+            if (subtitleListView.ColumnIndexNumber >= 0 &&
                 Configuration.Settings.General.ListViewNumberDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewNumberDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexNumber].DisplayIndex = Configuration.Settings.General.ListViewNumberDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexStart >= 0 && 
+            if (subtitleListView.ColumnIndexStart >= 0 &&
                 Configuration.Settings.General.ListViewStartDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewStartDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexStart].DisplayIndex = Configuration.Settings.General.ListViewStartDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexEnd >= 0 && 
+            if (subtitleListView.ColumnIndexEnd >= 0 &&
                 Configuration.Settings.General.ListViewEndDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewEndDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexEnd].DisplayIndex = Configuration.Settings.General.ListViewEndDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexDuration >= 0 && 
+            if (subtitleListView.ColumnIndexDuration >= 0 &&
                 Configuration.Settings.General.ListViewDurationDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewDurationDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexDuration].DisplayIndex = Configuration.Settings.General.ListViewDurationDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexCps >= 0 && 
+            if (subtitleListView.ColumnIndexCps >= 0 &&
                 Configuration.Settings.General.ListViewCpsDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewCpsDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexCps].DisplayIndex = Configuration.Settings.General.ListViewCpsDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexWpm >= 0 && 
+            if (subtitleListView.ColumnIndexWpm >= 0 &&
                 Configuration.Settings.General.ListViewWpmDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewWpmDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexWpm].DisplayIndex = Configuration.Settings.General.ListViewWpmDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexGap >= 0 && 
+            if (subtitleListView.ColumnIndexGap >= 0 &&
                 Configuration.Settings.General.ListViewGapDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewGapDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexGap].DisplayIndex = Configuration.Settings.General.ListViewGapDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexActor >= 0 && 
+            if (subtitleListView.ColumnIndexActor >= 0 &&
                 Configuration.Settings.General.ListViewActorDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewActorDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexActor].DisplayIndex = Configuration.Settings.General.ListViewActorDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexRegion >= 0 && 
+            if (subtitleListView.ColumnIndexRegion >= 0 &&
                 Configuration.Settings.General.ListViewRegionDisplayIndex >= 0 &&
                 Configuration.Settings.General.ListViewRegionDisplayIndex < columnCount)
             {

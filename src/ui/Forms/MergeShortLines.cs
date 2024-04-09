@@ -138,7 +138,7 @@ namespace Nikse.SubtitleEdit.Forms
             var language = LanguageAutoDetect.AutoDetectGoogleLanguage(subtitle);
             var dialogHelper = new DialogSplitMerge
             {
-                DialogStyle = Configuration.Settings.General.DialogStyle, 
+                DialogStyle = Configuration.Settings.General.DialogStyle,
                 TwoLetterLanguageCode = language,
             };
             numberOfMerges = 0;
@@ -164,7 +164,7 @@ namespace Nikse.SubtitleEdit.Forms
                             MergeShortLinesUtils.GetEndTag(p.Text) == MergeShortLinesUtils.GetEndTag(next.Text))
                         {
                             var nextArr = next.Text.SplitToLines();
-                            if (!p.Text.HasSentenceEnding(language) && p.Text.SplitToLines().Count == 1 && 
+                            if (!p.Text.HasSentenceEnding(language) && p.Text.SplitToLines().Count == 1 &&
                                 nextArr.Count == 2 && dialogHelper.IsDialog(nextArr))
                             {
                                 if (nextArr[0].Contains('-'))

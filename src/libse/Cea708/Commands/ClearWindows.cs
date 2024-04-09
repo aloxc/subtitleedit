@@ -27,7 +27,7 @@
 
         public byte[] GetBytes()
         {
-            return new[] 
+            return new[]
             {
                 (byte)Id,
                 (byte)((Flags[0] ? 0b00000001 : 0) |

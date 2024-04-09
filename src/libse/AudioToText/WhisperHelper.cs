@@ -38,7 +38,7 @@ namespace Nikse.SubtitleEdit.Core.AudioToText
 
         public static string ModelExtension()
         {
-            if (Configuration.Settings.Tools.WhisperChoice == WhisperChoice.Cpp || 
+            if (Configuration.Settings.Tools.WhisperChoice == WhisperChoice.Cpp ||
                 Configuration.Settings.Tools.WhisperChoice == WhisperChoice.CppCuBlas ||
                 Configuration.Settings.Tools.WhisperChoice == WhisperChoice.ConstMe)
             {

@@ -216,7 +216,7 @@ namespace Nikse.SubtitleEdit.Forms
             // remove any existing context menu
             textBoxFind.ContextMenuStrip = null;
             comboBoxFind.ContextMenuStrip = null;
-            
+
             // only hook context menu if regex radio button is checked
             if (sender == radioButtonRegEx && radioButtonRegEx.Checked)
             {

@@ -293,10 +293,10 @@ namespace Nikse.SubtitleEdit.Core.Cea708
                 {
                     //The EndOfText command is a Null Command which can be used to flush any buffered text to the current window. All commands force a flush of any buffered text to the current window, so this command is only needed when no other command is pending.
 
-                   if (DebugMode)
-                   {
-                       debugBuilder.Append("{EndOfText}");
-                   }
+                    if (DebugMode)
+                    {
+                        debugBuilder.Append("{EndOfText}");
+                    }
                 }
                 else if (b >= SetCurrentWindow.IdStart && b <= SetCurrentWindow.IdEnd)
                 {

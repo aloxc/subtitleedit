@@ -1,4 +1,5 @@
-﻿using Nikse.SubtitleEdit.Core.Common;
+﻿using Nikse.SubtitleEdit.Controls.Interfaces;
+using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Logic;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Controls.Interfaces;
 
 namespace Nikse.SubtitleEdit.Controls
 {
@@ -420,7 +420,7 @@ namespace Nikse.SubtitleEdit.Controls
         private void NavigateUp() => Navigate(_selectedIndex - 1);
 
         private void NavigateDown() => Navigate(_selectedIndex + 1);
-        
+
         private void Navigate(int index)
         {
             if (index < 0 || index >= _items.Count)
@@ -430,7 +430,7 @@ namespace Nikse.SubtitleEdit.Controls
 
             _selectedIndex = index;
             _textBox.Text = Items[_selectedIndex].ToString();
-            
+
             if (!_skipPaint)
             {
                 Invalidate();
@@ -440,7 +440,7 @@ namespace Nikse.SubtitleEdit.Controls
             _textBox.SelectionLength = _textBox.Text.Length;
             NotifyTextChanged();
         }
-        
+
         public NikseComboBox()
         {
             _loading = true;

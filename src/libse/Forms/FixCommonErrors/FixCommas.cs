@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.Interfaces;
+using System;
 using System.Text.RegularExpressions;
-using Nikse.SubtitleEdit.Core.Common;
 
 namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
 {
@@ -38,7 +38,7 @@ namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
                         s = commaWhiteSpaceBetween.Replace(s, "$1,$2");
 
                         var match = commaFollowedByLetter.Match(s);
-                        if (match.Success && (!(match.Index > 0 && s[match.Index-1] == 'ό' && s.Substring(match.Index).StartsWith(",τι", StringComparison.OrdinalIgnoreCase)) || callbacks.Language != "el"))
+                        if (match.Success && (!(match.Index > 0 && s[match.Index - 1] == 'ό' && s.Substring(match.Index).StartsWith(",τι", StringComparison.OrdinalIgnoreCase)) || callbacks.Language != "el"))
                         {
                             s = commaFollowedByLetter.Replace(s, ", $1");
                         }

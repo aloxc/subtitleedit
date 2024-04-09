@@ -60,7 +60,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             }
 
             var text = sb.ToString().TrimStart();
-            if (!text.Contains("\"alternatives\"", StringComparison.Ordinal) || 
+            if (!text.Contains("\"alternatives\"", StringComparison.Ordinal) ||
                 !text.Contains("\"words\"", StringComparison.Ordinal))
             {
                 return;

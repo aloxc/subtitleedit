@@ -1530,7 +1530,7 @@ namespace Nikse.SubtitleEdit.Forms.Assa
             var styles = new List<SsaStyle>();
             foreach (int idx in listViewStyles.SelectedIndices)
             {
-                 styles.Add(_currentFileStyles[idx]);   
+                styles.Add(_currentFileStyles[idx]);
             }
 
             using (var form = new ReplaceStyleWith(styles, _currentFileStyles, _storageCategories, _subtitle))

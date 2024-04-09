@@ -177,7 +177,7 @@ namespace Nikse.SubtitleEdit.Core.Common
                     return false;
                 }
 
-                return buffer[0] == 0x52 && 
+                return buffer[0] == 0x52 &&
                        buffer[1] == 0x49 &&
                        buffer[2] == 0x46 &&
                        buffer[2] == 0x46 &&

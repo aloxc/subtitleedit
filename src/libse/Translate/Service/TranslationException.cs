@@ -5,7 +5,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Service
 {
     public class TranslationException : Exception
     {
-        public TranslationException(WebException webException) : base("",webException)
+        public TranslationException(WebException webException) : base("", webException)
         {
         }
 

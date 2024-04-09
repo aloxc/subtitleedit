@@ -32,7 +32,7 @@ namespace Nikse.SubtitleEdit.Forms.SeMsgBox
         {
             using (var msgBox = new MessageBoxForm(text, caption, buttons))
             {
-               return msgBox.ShowDialog(Form.ActiveForm);
+                return msgBox.ShowDialog(Form.ActiveForm);
             }
         }
 

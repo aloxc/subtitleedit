@@ -39,7 +39,7 @@ namespace Nikse.SubtitleEdit.Core.Common
             return new InterjectionsLists
             {
                 Interjections = interjections.OrderBy(p => p).ToList(),
-                SkipIfStartsWith = skipIfStartsWithList.OrderByDescending(p=>p.Length).ToList(),
+                SkipIfStartsWith = skipIfStartsWithList.OrderByDescending(p => p.Length).ToList(),
             };
         }
 
@@ -60,11 +60,11 @@ namespace Nikse.SubtitleEdit.Core.Common
 
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml("<interjections><ignore></ignore><skipIfStartsWith></skipIfStartsWith></interjections>");
-          
+
             var ignoreNode = xmlDocument.DocumentElement.SelectSingleNode("ignore");
             foreach (var w in ignoreList)
             {
-                var node = xmlDocument.CreateElement( "word");
+                var node = xmlDocument.CreateElement("word");
                 node.InnerText = w;
                 ignoreNode.AppendChild(node);
             }

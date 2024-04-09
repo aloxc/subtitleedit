@@ -1,11 +1,30 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Forms;
+
+/* 项目“LibSE (netstandard2.1)”的未合并的更改
+在此之前:
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
+在此之后:
+using System.SubtitleEdit.Core.SubtitleFormats;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+*/
+using Nikse.SubtitleEdit.Core.SubtitleFormats;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+/* 项目“LibSE (netstandard2.1)”的未合并的更改
+在此之前:
 using Nikse.SubtitleEdit.Core.Forms;
 using Nikse.SubtitleEdit.Core.SubtitleFormats;
+在此之后:
+using System.Linq;
+using System.Text;
+*/
+
 
 namespace Nikse.SubtitleEdit.Core.Common
 {
@@ -163,7 +182,7 @@ namespace Nikse.SubtitleEdit.Core.Common
 
             return null;
         }
-        
+
         public static double? GetClosestShotChange(List<double> shotChanges, TimeCode currentTime)
         {
             if (shotChanges == null || shotChanges.Count == 0)

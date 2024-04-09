@@ -29,7 +29,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             {
                 var buffer = FileUtil.ReadAllBytesShared(fileName);
                 int i = 0;
-                while (i  + 4 < buffer.Length)
+                while (i + 4 < buffer.Length)
                 {
                     var boxLength = GetUInt(buffer, i);
                     if (boxLength > 500 || i + 4 + boxLength > buffer.Length)

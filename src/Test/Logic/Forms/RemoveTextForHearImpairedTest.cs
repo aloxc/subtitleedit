@@ -4,9 +4,6 @@ using Nikse.SubtitleEdit.Core.Enums;
 using Nikse.SubtitleEdit.Core.Forms;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Nikse.SubtitleEdit.Forms;
 
 namespace Test.Logic.Forms
 {

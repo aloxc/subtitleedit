@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.Http;
+using Nikse.SubtitleEdit.Forms;
+using Nikse.SubtitleEdit.Logic.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Nikse.SubtitleEdit.Core.Common;
-using Nikse.SubtitleEdit.Core.Http;
-using Nikse.SubtitleEdit.Forms;
-using Nikse.SubtitleEdit.Logic.Plugins;
 
 namespace Nikse.SubtitleEdit.Logic
 {
@@ -41,11 +41,11 @@ namespace Nikse.SubtitleEdit.Logic
             {
                 var s = line.Trim();
                 if (!s.Contains("BETA", StringComparison.OrdinalIgnoreCase) &&
-                    !s.Contains('x') && 
-                    !s.Contains('*') && 
-                    s.Contains('(') && 
-                    s.Contains(')') && 
-                    _months.Any(month=>s.Contains(month)) &&
+                    !s.Contains('x') &&
+                    !s.Contains('*') &&
+                    s.Contains('(') &&
+                    s.Contains(')') &&
+                    _months.Any(month => s.Contains(month)) &&
                     VersionNumberRegex.IsMatch(s))
                 {
                     var indexOfSpace = s.IndexOf(' ');
@@ -73,9 +73,9 @@ namespace Nikse.SubtitleEdit.Logic
 
                 if (!releaseOn)
                 {
-                    if (!s.Contains('x') && 
-                        !s.Contains('*') && 
-                        s.Contains('(') && 
+                    if (!s.Contains('x') &&
+                        !s.Contains('*') &&
+                        s.Contains('(') &&
                         s.Contains(')') &&
                         _months.Any(month => s.Contains(month)) &&
                         VersionNumberRegex.IsMatch(s))

@@ -80,11 +80,11 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
             {
                 return false;
             }
-            if (potentialSplitPosition>0 && potentialSplitPosition < text.Length  && DelimitersToSplitAfter.Contains(text[potentialSplitPosition-1]))
+            if (potentialSplitPosition > 0 && potentialSplitPosition < text.Length && DelimitersToSplitAfter.Contains(text[potentialSplitPosition - 1]))
             {
                 return true;
             }
-            if (potentialSplitPosition < text.Length && DelimitersToSplitBefore.Contains(text[potentialSplitPosition ]))
+            if (potentialSplitPosition < text.Length && DelimitersToSplitBefore.Contains(text[potentialSplitPosition]))
             {
                 return true;
             }
@@ -137,7 +137,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
                 if (openingTag != null && IsCloseTag(xmlTag))
                 {
                     var closeTag = xmlTag;
-                    for (int i = openingTag.Index +1; i < closeTag.Index + closeTag.Length; i++)
+                    for (int i = openingTag.Index + 1; i < closeTag.Index + closeTag.Length; i++)
                     {
                         unsplittablePositions.Add(i);
                     }
@@ -157,7 +157,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Processor
             var matches = Regex.Matches(text, @"\b(?:https?://|www\.)\S+\b"); //regex to find URLs
             foreach (Match match in matches)
             {
-                for (int i = match.Index +1; i < match.Index + match.Length; i++)
+                for (int i = match.Index + 1; i < match.Index + match.Length; i++)
                 {
                     unsplittablePositions.Add(i);
                 }

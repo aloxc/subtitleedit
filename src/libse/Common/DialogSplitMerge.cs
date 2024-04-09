@@ -417,7 +417,7 @@ namespace Nikse.SubtitleEdit.Core.Common
 
             switch (dialogType)
             {
-                case DialogType.DashBothLinesWithoutSpace: 
+                case DialogType.DashBothLinesWithoutSpace:
                     return "-" + line1 + "\n" + "-" + line2;
                 case DialogType.DashSecondLineWithSpace:
                     return line1 + "\n" + "- " + line2;

@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Nikse.SubtitleEdit.Core.Common;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using System.Linq;
 
 namespace Nikse.SubtitleEdit.Core.VobSub.Ocr.Service
 {

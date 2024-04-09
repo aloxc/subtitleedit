@@ -18,7 +18,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
         public override bool IsMine(List<string> lines, string fileName)
         {
             var fine = 0;
-            var  failed = 0;
+            var failed = 0;
             for (var i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];

@@ -472,7 +472,7 @@ namespace Nikse.SubtitleEdit.Forms.Translate
 
 
                     // use best match of the three arrays considering line separator, adherence to chars/sec
-                    
+
                     // same result for char split + duration split
                     if (pctCharArr[0].Length > 0 && pctCharArr[0] == pctDurationArr[0])
                     {

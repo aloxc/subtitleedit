@@ -398,7 +398,7 @@ namespace Nikse.SubtitleEdit.Forms.Assa
                 Application.DoEvents();
                 _mpv.Pause();
 
-               _mpv.CurrentPosition = _currentPositionSeconds;
+                _mpv.CurrentPosition = _currentPositionSeconds;
 
                 Application.DoEvents();
                 _videoLoaded = true;

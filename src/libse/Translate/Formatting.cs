@@ -114,7 +114,7 @@ namespace Nikse.SubtitleEdit.Core.Translate
                 {
                     SquareBracketsStartWithLowercase = true;
                 }
-                else 
+                else
                 {
                     SquareBrackets = true;
                 }

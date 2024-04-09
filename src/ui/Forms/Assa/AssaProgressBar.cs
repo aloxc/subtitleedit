@@ -732,7 +732,7 @@ Dialogue: -255,0:00:00.00,0:43:00.00,SE-progress-bar-bg,,0,0,0,,[PB_DRAWING]";
             if (comboBoxProgressBarEdge.SelectedIndex == 1 && i == 0 && comboBoxTextHorizontalAlignment.SelectedIndex == 0) // Rounded corners + first paragraph + align text left
             {
                 return (int)Math.Round(position + numericUpDownHeight.Value + numericUpDownSplitterWidth.Value + numericUpDownXAdjust.Value);
-            }            
+            }
 
             return (int)Math.Round(position + 8 + numericUpDownSplitterWidth.Value + numericUpDownXAdjust.Value);
         }

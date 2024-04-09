@@ -23,7 +23,7 @@ namespace Nikse.SubtitleEdit.Core.Translate.Service
             return GetName();
         }
 
-       public int GetMaxTextSize()
+        public int GetMaxTextSize()
         {
             return _translationStrategy.GetMaxTextSize();
         }

@@ -588,7 +588,7 @@ namespace Nikse.SubtitleEdit.Logic.Ocr
                     var affixes = new[] { " I'", " L'", " l'", " I’", " L’", " l’" };
                     foreach (var affix in affixes)
                     {
-                        text = FixFrenchLApostrophe(text, affix, prevLine);    
+                        text = FixFrenchLApostrophe(text, affix, prevLine);
                     }
                 }
 
@@ -674,12 +674,12 @@ namespace Nikse.SubtitleEdit.Logic.Ocr
 
             return false;
         }
-        
+
         public static string FixFrenchLApostrophe(string input, string affix, string prevLine)
         {
             var text = input;
             var isPreviousLineClose = prevLine.HasSentenceEnding();
-            
+
             if (text.StartsWith(affix.TrimStart(), StringComparison.Ordinal) && text.Length > 3)
             {
                 if (isPreviousLineClose || char.IsUpper(text[2]))

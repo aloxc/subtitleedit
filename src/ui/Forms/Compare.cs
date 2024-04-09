@@ -515,7 +515,7 @@ namespace Nikse.SubtitleEdit.Forms
                 t1 = RemoveWhitespace(t1);
                 t2 = RemoveWhitespace(t2);
             }
-            
+
             if (checkBoxIgnoreLineBreaks.Checked)
             {
                 t1 = t1.Replace(Environment.NewLine, " ");

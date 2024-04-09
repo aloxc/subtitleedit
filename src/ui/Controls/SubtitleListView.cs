@@ -481,8 +481,8 @@ namespace Nikse.SubtitleEdit.Controls
 
                 if (e.ColumnIndex == 0 && e.Item.StateImageIndex >= 0 && StateImageList?.Images.Count > e.Item.StateImageIndex)
                 {
-                    var r = rtl 
-                        ? new Rectangle( rect.Width - 21, rect.Y + 3, 16, 16) 
+                    var r = rtl
+                        ? new Rectangle(rect.Width - 21, rect.Y + 3, 16, 16)
                         : new Rectangle(rect.X + 4, rect.Y + 3, 16, 16);
 
                     e.Graphics.DrawImage(StateImageList.Images[e.Item.StateImageIndex], r);

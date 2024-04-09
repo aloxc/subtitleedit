@@ -61,7 +61,7 @@ namespace Nikse.SubtitleEdit.Forms
             var tempAudioFile = MergeAudioParagraphs(fileNames);
             var resultAudioFileName = Path.Combine(Path.GetDirectoryName(tempAudioFile), Path.GetFileNameWithoutExtension(_videoFileName) + ".wav");
             File.Move(tempAudioFile, resultAudioFileName);
-            
+
             Cleanup(_waveFolder, resultAudioFileName);
 
             UiUtil.OpenFolder(_waveFolder);

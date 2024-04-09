@@ -1,6 +1,7 @@
 ﻿using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using Nikse.SubtitleEdit.Logic;
+using Nikse.SubtitleEdit.Logic.VideoPlayers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Logic.VideoPlayers;
 using MessageBox = Nikse.SubtitleEdit.Forms.SeMsgBox.MessageBox;
 
 namespace Nikse.SubtitleEdit.Forms
@@ -335,11 +335,11 @@ namespace Nikse.SubtitleEdit.Forms
             var oldFontSizeEnabled = numericUpDownFontSize.Enabled;
             numericUpDownFontSize.Enabled = false;
 
-            using (var saveDialog = new SaveFileDialog 
-            { 
-                FileName = SuggestNewVideoFileName(), 
-                Filter = "MP4|*.mp4|Matroska|*.mkv|WebM|*.webm", 
-                AddExtension = true ,
+            using (var saveDialog = new SaveFileDialog
+            {
+                FileName = SuggestNewVideoFileName(),
+                Filter = "MP4|*.mp4|Matroska|*.mkv|WebM|*.webm",
+                AddExtension = true,
                 InitialDirectory = Path.GetDirectoryName(_inputVideoFileName),
             })
             {

@@ -219,7 +219,7 @@ namespace Nikse.SubtitleEdit.Forms
                 for (var i = 0; i < _subtitle.Paragraphs.Count; i++)
                 {
                     var p = _subtitle.Paragraphs[i];
-                    var size = HtmlUtil.RemoveHtmlTags(p.Text, true).Replace("\r\n", "\n") .Length;
+                    var size = HtmlUtil.RemoveHtmlTags(p.Text, true).Replace("\r\n", "\n").Length;
                     if (p.StartTime.TotalMilliseconds > nextLimit - 10 && _parts.Count < numericUpDownParts.Value - 1)
                     {
                         _parts.Add(temp);

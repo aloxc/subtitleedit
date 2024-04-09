@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -615,8 +614,19 @@ namespace Nikse.SubtitleEdit.Core.Common
                 fromLenIdx--;
             }
 
+
+            /* 项目“LibSE (netstandard2.1)”的未合并的更改
+            在此之前:
+                        fromLenIdx = fromLenIdx > 0 ? fromLenIdx : len - 1;
+
+                        // no formattable text in between
+            在此之后:
+                        fromLenIdx = fromLenIdx > 0 ? fromLenIdx : len - 1;
+
+                        // no formattable text in between
+            */
             fromLenIdx = fromLenIdx > 0 ? fromLenIdx : len - 1;
-            
+
             // no formattable text in between
             if (fromLenIdx < index)
             {
@@ -632,8 +642,19 @@ namespace Nikse.SubtitleEdit.Core.Common
             }
 
             return false;
+
+            /* 项目“LibSE (netstandard2.1)”的未合并的更改
+            在此之前:
+                    }
+
+                    public static string FixInvalidItalicTags(string input)
+            在此之后:
+                    }
+
+                    public static string FixInvalidItalicTags(string input)
+            */
         }
-        
+
         public static string FixInvalidItalicTags(string input)
         {
             var text = input;
@@ -790,8 +811,19 @@ namespace Nikse.SubtitleEdit.Core.Common
                 for (int i = 0; i < lines.Count; i++)
                 {
                     var line = lines[i];
+
+                    /* 项目“LibSE (netstandard2.1)”的未合并的更改
+                    在此之前:
+                                        var italicIndex = line.LastIndexOf(beginTag, StringComparison.Ordinal);
+
+                                        // no italic in current 'i' line, try next
+                    在此之后:
+                                        var italicIndex = line.LastIndexOf(beginTag, StringComparison.Ordinal);
+
+                                        // no italic in current 'i' line, try next
+                    */
                     var italicIndex = line.LastIndexOf(beginTag, StringComparison.Ordinal);
-                    
+
                     // no italic in current 'i' line, try next
                     if (italicIndex < 0)
                     {
@@ -820,7 +852,7 @@ namespace Nikse.SubtitleEdit.Core.Common
                         return lastClosingTagIndex > italicIndex ? lastClosingTagIndex : len;
                     }
                 }
-                
+
                 // reconstruct the text from lines
                 text = string.Join(Environment.NewLine, lines);
             }
@@ -927,8 +959,19 @@ namespace Nikse.SubtitleEdit.Core.Common
                         if (idx > 1)
                         {
                             var pre = text.Substring(0, idx + 1).TrimStart();
-                            var tempText = text.Remove(0, idx + 1); 
-                            
+
+                            /* 项目“LibSE (netstandard2.1)”的未合并的更改
+                            在此之前:
+                                                        var tempText = text.Remove(0, idx + 1); 
+
+                                                        if (!tempText.StartsWith(']') && !tempText.StartsWith(')'))
+                            在此之后:
+                                                        var tempText = text.Remove(0, idx + 1);
+
+                                                        if (!tempText.StartsWith(']') && !tempText.StartsWith(')'))
+                            */
+                            var tempText = text.Remove(0, idx + 1);
+
                             if (!tempText.StartsWith(']') && !tempText.StartsWith(')'))
                             {
                                 text = tempText;
@@ -1401,18 +1444,18 @@ namespace Nikse.SubtitleEdit.Core.Common
             text = Regex.Replace(text, "\\\\1c&[abcdefghABCDEFGH\\d]*&", string.Empty);
             return text;
         }
-        
+
         public static string GetClosingPair(string tag)
         {
             switch (tag)
             {
-                case "<i>" : return "</i>";
-                case "<b>" : return "</b>";
-                case "<u>" : return "</u>";
+                case "<i>": return "</i>";
+                case "<b>": return "</b>";
+                case "<u>": return "</u>";
             }
             return tag.StartsWith("<font ", StringComparison.Ordinal) ? "</font>" : string.Empty;
         }
-        
+
         public static char GetClosingPair(char ch) => ch == '<' ? '>' : '}';
 
         public static bool IsOpenTag(string tag) => tag.Length > 1 && tag[1] != '/';

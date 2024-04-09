@@ -381,7 +381,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (ActiveForm == null)
             {
                 TaskbarList.StartBlink(
-                    _blinkForm, 
+                    _blinkForm,
                     Configuration.Settings.VobSubOcr.UnfocusedAttentionBlinkCount,
                     Configuration.Settings.VobSubOcr.UnfocusedAttentionPlaySoundCount,
                     2);

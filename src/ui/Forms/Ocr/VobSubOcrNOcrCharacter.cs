@@ -899,7 +899,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 if (e.Modifiers == Keys.Control)
                 {
                     buttonOnce_Click(null, null);
-                } 
+                }
                 else
                 {
                     buttonOK_Click(null, null);

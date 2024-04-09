@@ -59,7 +59,7 @@ namespace Nikse.SubtitleEdit.Core.ContainerFormats.Mp4
                     var mdat = new Mdat(fs, Position);
                     if (mdat.Vtts.Count > 0)
                     {
-                        payloads.AddRange(mdat.Vtts.Select(p=>p.Payload).ToList());
+                        payloads.AddRange(mdat.Vtts.Select(p => p.Payload).ToList());
                     }
                 }
                 else if (Name == "moof")

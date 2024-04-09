@@ -12,7 +12,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
         public override string Name => "Unknown 82";
 
-   public override string ToText(Subtitle subtitle, string title)
+        public override string ToText(Subtitle subtitle, string title)
         {
             const string xmpTemplate = @"<?xml version='1.0' encoding='utf-8'?>
 <timedtext format='3'>

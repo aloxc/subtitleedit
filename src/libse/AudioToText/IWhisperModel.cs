@@ -2,8 +2,8 @@
 {
     public interface IWhisperModel
     {
-        string ModelFolder { get;  }
+        string ModelFolder { get; }
         void CreateModelFolder();
-        WhisperModel[] Models { get;  }
+        WhisperModel[] Models { get; }
     }
 }

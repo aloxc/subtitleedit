@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nikse.SubtitleEdit.Controls;
 using Nikse.SubtitleEdit.Core.Common;
+using System;
 
 namespace Test.UserControls
 {

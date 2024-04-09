@@ -29,7 +29,7 @@ namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
                 }
 
                 // test the two different dashes
-                text = RemoveDash(text, noHtml, '-'); 
+                text = RemoveDash(text, noHtml, '-');
                 text = RemoveDash(text, noHtml, '‐');
 
                 if (oldText != text && callbacks.AllowFix(p, fixAction))

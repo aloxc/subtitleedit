@@ -672,7 +672,7 @@ namespace Nikse.SubtitleEdit.Logic.VideoPlayers
             {
                 _libvlc_video_set_spu?.Invoke(_mediaPlayer, -1); // turn of embedded subtitles
             }
-            catch 
+            catch
             {
                 // ignore
             }

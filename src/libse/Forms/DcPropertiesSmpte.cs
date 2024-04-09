@@ -45,7 +45,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
         private string SerializeExportImageSub()
         {
 
-        var sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("{");
             sb.AppendLine("  \"generateIdAuto\": \"" + Json.EncodeJsonText(GenerateIdAuto) + "\",");
             sb.AppendLine("  \"reelNumber\": \"" + Json.EncodeJsonText(ReelNumber) + "\",");

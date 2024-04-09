@@ -166,7 +166,7 @@ namespace Nikse.SubtitleEdit.Core.Common
 
                     float height = 0;
                     var list = (PointF[])path.PathPoints.Clone(); // avoid using very slow path.PathPoints indexer!!!
-                    for (var i = 0; i < list.Length; i ++)
+                    for (var i = 0; i < list.Length; i++)
                     {
                         if (list[i].Y > height)
                         {

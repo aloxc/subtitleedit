@@ -1,6 +1,6 @@
 ﻿namespace Nikse.SubtitleEdit.Core.CDG
 {
-    public enum Command 
+    public enum Command
     {
         Graphic = 9
     }

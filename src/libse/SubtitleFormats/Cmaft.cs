@@ -1,7 +1,7 @@
-﻿using Nikse.SubtitleEdit.Core.ContainerFormats.Mp4;
+﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.ContainerFormats.Mp4;
 using System;
 using System.Collections.Generic;
-using Nikse.SubtitleEdit.Core.Common;
 
 namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 {

@@ -8,7 +8,7 @@ namespace Nikse.SubtitleEdit.Core.Common
         public static Color Blend(this Color baseColor, Color targetColor, double percentage = 0.5)
         {
             percentage = Math.Abs(percentage);
-            
+
             if (percentage == 0)
                 return baseColor;
             if (percentage >= 1)
@@ -23,11 +23,11 @@ namespace Nikse.SubtitleEdit.Core.Common
 
         private static int Lerp(int baseColor, int targetColor, double percentage)
         {
-            return (byte)Math.Round(baseColor  + percentage * (targetColor - baseColor));
+            return (byte)Math.Round(baseColor + percentage * (targetColor - baseColor));
         }
-        
+
         public static double Luminance(this Color color) => (color.R * 0.299 + color.G * 0.587 + color.B * 0.114) / 255;
-        
+
         public static Color OpposingLuminanceColor(this Color baseColor)
         {
             var luminance = baseColor.Luminance();
@@ -40,6 +40,6 @@ namespace Nikse.SubtitleEdit.Core.Common
             return Color.FromArgb(opposingRed, opposingGreen, opposingBlue);
         }
     }
-    
-    
+
+
 }

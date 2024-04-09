@@ -1,4 +1,5 @@
 ﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using Nikse.SubtitleEdit.Logic;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Nikse.SubtitleEdit.Core.SubtitleFormats;
 using MessageBox = Nikse.SubtitleEdit.Forms.SeMsgBox.MessageBox;
-using System.Threading;
 
 namespace Nikse.SubtitleEdit.Forms
 {

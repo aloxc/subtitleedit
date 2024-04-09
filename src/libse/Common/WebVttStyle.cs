@@ -18,7 +18,7 @@ namespace Nikse.SubtitleEdit.Core.Common
 
         public WebVttStyle()
         {
-                
+
         }
 
         public WebVttStyle(WebVttStyle style)

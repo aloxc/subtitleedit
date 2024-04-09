@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using Nikse.SubtitleEdit.Core.Enums;
+﻿using Nikse.SubtitleEdit.Core.Enums;
+using System.Text.RegularExpressions;
 
 namespace Nikse.SubtitleEdit.Logic
 {

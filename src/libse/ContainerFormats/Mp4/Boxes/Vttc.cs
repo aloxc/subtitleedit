@@ -51,7 +51,7 @@ namespace Nikse.SubtitleEdit.Core.ContainerFormats.Mp4.Boxes
                 }
                 else if (Name == "sttg")
                 {
-                    var length = (int)Size-8;
+                    var length = (int)Size - 8;
                     if (length > 0 && length < 5000)
                     {
                         var buffer = new byte[length];

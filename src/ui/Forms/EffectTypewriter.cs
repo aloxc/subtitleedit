@@ -91,7 +91,7 @@ namespace Nikse.SubtitleEdit.Forms
                     i = endIndex + 1;
                     continue;
                 }
-                
+
                 if (text[i] == '<')
                 {
                     AddTextToRichTextBox(rtb, bold > 0, italic > 0, underline > 0, currentColor, sb.ToString());
