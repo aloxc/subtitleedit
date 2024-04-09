@@ -327,7 +327,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         // Other
         private IList<IBinaryParagraphWithPosition> _binaryParagraphWithPositions;
 
-        private string _lastLine;
         private string _languageId;
         private string _importLanguageString;
 
@@ -417,7 +416,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             labelMinAlpha.Text = language.TransparentMinAlpha;
             toolStripMenuItemCaptureTopAlign.Text = language.CaptureTopAlign;
-            captureTopAlignmentToolStripMenuItem.Text = language.CaptureTopAlign;
 
             groupBoxOcrAutoFix.Text = language.OcrAutoCorrectionSpellChecking;
 
@@ -425,7 +423,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             groupBoxSubtitleImage.Text = string.Empty;
 
             OcrTrainingToolStripMenuItem.Text = language.OcrTraining;
-            toolStripMenuItemSetUnItalicFactor.Text = language.SetItalicAngle;
 
             FillSpellCheckDictionaries();
 
@@ -439,26 +436,20 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
       
 
             toolStripMenuItemCaptureTopAlign.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
-            captureTopAlignmentToolStripMenuItem.Checked = Configuration.Settings.VobSubOcr.CaptureTopAlign;
 
             if (Configuration.Settings.VobSubOcr.ItalicFactor >= 0.1 && Configuration.Settings.VobSubOcr.ItalicFactor < 1)
             {
                 _unItalicFactor = Configuration.Settings.VobSubOcr.ItalicFactor;
             }
 
-
-
-            normalToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.RemoveFormattingAll;
             saveImageAsToolStripMenuItem.Text = language.SaveSubtitleImageAs;
             toolStripMenuItemImageSaveAs.Text = language.SaveSubtitleImageAs;
             previewToolStripMenuItem.Text = LanguageSettings.Current.General.Preview;
             saveAllImagesWithHtmlIndexViewToolStripMenuItem.Text = language.SaveAllSubtitleImagesWithHtml;
             inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Text = language.InspectCompareMatchesForCurrentImage;
             EditLastAdditionsToolStripMenuItem.Text = language.EditLastAdditions;
-            toolStripMenuItemSetUnItalicFactor.Text = language.SetItalicAngle;
             setItalicAngleToolStripMenuItem.Text = language.SetItalicAngle;
             imagePreprocessingToolStripMenuItem1.Text = language.ImagePreProcessing;
-            ImagePreProcessingToolStripMenuItem.Text = language.ImagePreProcessing;
             autoTransparentBackgroundToolStripMenuItem.Text = language.AutoTransparentBackground;
             toolStripMenuItemSaveSubtitleAs.Text = LanguageSettings.Current.Main.SaveSubtitleAs;
 
@@ -526,7 +517,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                 string text = OcrViaTesseract(GetSubtitleBitmap(i), i);
 
-                _lastLine = text;
 
                 text = text.Replace("<i>-</i>", "-");
                 text = text.Replace("<i>- </i>", "- ");
@@ -758,7 +748,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     text = OcrViaTesseract(GetSubtitleBitmap(i), i);
                 }
 
-                _lastLine = text;
 
                 text = text.Replace("<i>-</i>", "-");
                 text = text.Replace("<i>a</i>", "a");
@@ -1908,11 +1897,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 // can crash if user is clicking around...
             }
-        }
-
-        private static NOcrChar NOcrFindBestMatchNew(ImageSplitterItem targetItem, NOcrDb nOcrDb, bool deepSeek, int maxWrongPixels)
-        {
-            return nOcrDb?.GetMatch(targetItem.NikseBitmap, targetItem.Top, deepSeek, maxWrongPixels);
         }
 
         private static readonly HashSet<string> UppercaseLikeLowercase = new HashSet<string> { "V", "W", "U", "S", "Z", "O", "X", "Ø", "C" };
@@ -3546,11 +3530,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         }
 
-        public void DoHide()
-        {
-            SetVisibleCore(false);
-        }
-
         public Subtitle ReadyVobSubRip()
         {
             _vobSubMergedPackListOriginal = new List<VobSubMergedPack>();
@@ -3615,7 +3594,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             _mainOcrBitmap = null;
-            _lastLine = null;
 
             SetButtonsStartOcr();
             _fromMenuItem = false;
@@ -3663,7 +3641,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 var lastP = _subtitle.GetParagraphOrDefault(_mainOcrIndex - 1);
                 if (lastP != null && !string.IsNullOrEmpty(lastP.Text))
                 {
-                    _lastLine = lastP.Text;
                 }
             }
 
@@ -3759,7 +3736,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             lock (_lockObj)
             {
                 var text = OcrViaTesseract(job.Bitmap, index);
-                _lastLine = text;
 
                 text = text.Replace("<i>-</i>", "-");
                 text = text.Replace("<i>a</i>", "a");
@@ -3908,7 +3884,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 text = OcrViaCloudVision(bmp, i);
             }
 
-            _lastLine = text;
 
             text = text.Replace("<i>-</i>", "-");
             text = text.Replace("<i>a</i>", "a");
@@ -4621,7 +4596,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 paramter.Text = ocrResult.ToString().Trim();
             }
         }
-
         private void InitializeModi()
         {
             _modiEnabled = false;
@@ -4645,7 +4619,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _modiEnabled = false;
             }
         }
-
         private string OcrViaCloudVision(Bitmap bitmap, int listViewIndex)
         {
             if (_ocrFixEngine == null)
@@ -5095,21 +5068,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void Find()
-        {
-            _findDialog = new FindDialog(_subtitle, this);
-            var idx = _selectedIndex;
-            _findDialog.Initialize(string.Empty, _findHelper);
-            _findDialog.Show(this);
-        }
-
-        private int _findNextLastLineIndex = -1;
-        private int _findNextLastTextPosition = -1;
-        private void FindNext()
-        {
-        }
-
-
         private void LoadOcrFixEngine(string threeLetterIsoLanguageName, string hunspellName)
         {
             if (_ocrMethodIndex != _ocrMethodTesseract5 && _ocrMethodIndex != _ocrMethodTesseract302)
@@ -5231,17 +5189,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return null;
         }
 
-        private void ListBoxLogSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (sender is ListBox lb && lb.SelectedIndex >= 0)
-            {
-                if (lb.Items[lb.SelectedIndex] is LogItem item && item.Line > 0)
-                {
-                    subtitleListView1.SelectIndexAndEnsureVisible(item.Line - 1);
-                }
-            }
-        }
-
         private void ContextMenuStripListviewOpening(object sender, CancelEventArgs e)
         {
             if (subtitleListView1.SelectedItems.Count == 0)
@@ -5251,7 +5198,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             // Enable toolstrips if event was raised by Subtitle listview
             bool enableIfRaisedBySubListView = contextMenuStripListview.SourceControl == subtitleListView1;
-            normalToolStripMenuItem.Visible = enableIfRaisedBySubListView;
             toolStripSeparator1.Visible = enableIfRaisedBySubListView && subtitleListView1.SelectedItems.Count == 1;
             saveImageAsToolStripMenuItem.Visible = !enableIfRaisedBySubListView || subtitleListView1.SelectedItems.Count == 1;
 
@@ -5328,67 +5274,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void NormalToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            if (_subtitle.Paragraphs.Count > 0 && subtitleListView1.SelectedItems.Count > 0)
-            {
-                foreach (ListViewItem item in subtitleListView1.SelectedItems)
-                {
-                    Paragraph p = _subtitle.GetParagraphOrDefault(item.Index);
-                    if (p != null)
-                    {
-                        p.Text = HtmlUtil.RemoveHtmlTags(p.Text);
-                        subtitleListView1.SetText(item.Index, p.Text);
-                       
-                    }
-                }
-            }
-        }
-
-        private void ItalicToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            const string tag = "i";
-            var removeTag = true;
-            if (_subtitle.Paragraphs.Count > 0 && subtitleListView1.SelectedItems.Count > 0)
-            {
-                foreach (ListViewItem item in subtitleListView1.SelectedItems)
-                {
-                    var p = _subtitle.GetParagraphOrDefault(item.Index);
-                    if (p != null)
-                    {
-                        if (!Utilities.RemoveSsaTags(p.Text).StartsWith("<i>"))
-                        {
-                            removeTag = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (_subtitle.Paragraphs.Count > 0 && subtitleListView1.SelectedItems.Count > 0)
-            {
-                foreach (ListViewItem item in subtitleListView1.SelectedItems)
-                {
-                    var p = _subtitle.GetParagraphOrDefault(item.Index);
-                    if (p != null)
-                    {
-                        if (p.Text.Contains("<" + tag + ">"))
-                        {
-                            p.Text = p.Text.Replace("<" + tag + ">", string.Empty);
-                            p.Text = p.Text.Replace("</" + tag + ">", string.Empty);
-                        }
-
-                        if (!removeTag)
-                        {
-                            p.Text = $"<{tag}>{p.Text}</{tag}>";
-                        }
-
-                        subtitleListView1.SetText(item.Index, p.Text);
-              
-                    }
-                }
-            }
-        }
+ 
 
         private void ResetTesseractThread()
         {
@@ -5403,127 +5289,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             _tesseractAsyncIndex = 0;
-        }
-
-        private void PictureBoxColorChooserClick(object sender, EventArgs e)
-        {
-            using (var colorChooser = new ColorChooser { Color = (sender as PictureBox).BackColor, ShowAlpha = false })
-            {
-                if (colorChooser.ShowDialog() == DialogResult.OK)
-                {
-                    (sender as PictureBox).BackColor = colorChooser.Color;
-                }
-            }
-
-            SubtitleListView1SelectedIndexChanged(null, null);
-            ResetTesseractThread();
-        }
-
-        private void CheckBoxPatternTransparentCheckedChanged(object sender, EventArgs e)
-        {
-            SubtitleListView1SelectedIndexChanged(null, null);
-            ResetTesseractThread();
-        }
-
-        private void CheckBoxEmphasis1TransparentCheckedChanged(object sender, EventArgs e)
-        {
-            SubtitleListView1SelectedIndexChanged(null, null);
-            ResetTesseractThread();
-        }
-
-        private void CheckBoxEmphasis2TransparentCheckedChanged(object sender, EventArgs e)
-        {
-            SubtitleListView1SelectedIndexChanged(null, null);
-            ResetTesseractThread();
-        }
-
-
-        private Subtitle _beforeOnlyForced;
-
-        private void checkBoxShowOnlyForced_CheckedChanged(object sender, EventArgs e)
-        {
-            if (_tesseractThreadRunner != null)
-            {
-                _tesseractThreadRunner.Cancel();
-                for (int i = 0; i < 10; i++)
-                {
-                    System.Threading.Thread.Sleep(100);
-                }
-
-                _tesseractAsyncStrings = null;
-            }
-
-            var oldSubtitle = new Subtitle(_subtitle);
-            subtitleListView1.BeginUpdate();
-            if (_bdnXmlOriginal != null)
-            {
-                LoadBdnXml();
-            }
-            else if (_bluRaySubtitlesOriginal != null)
-            {
-                LoadBluRaySup();
-            }
-            else if (_dvbSubtitles != null)
-            {
-                LoadDvbSubtitles();
-            }
-            else
-            {
-                LoadVobRip();
-            }
-
-            for (int i = 0; i < _subtitle.Paragraphs.Count; i++)
-            {
-                var current = _subtitle.Paragraphs[i];
-                foreach (var old in oldSubtitle.Paragraphs)
-                {
-                    if (Math.Abs(current.StartTime.TotalMilliseconds - old.StartTime.TotalMilliseconds) < 0.01 &&
-                        Math.Abs(current.DurationTotalMilliseconds - old.DurationTotalMilliseconds) < 0.01)
-                    {
-                        current.Text = old.Text;
-                        break;
-                    }
-                }
-            }
-
-            if (_beforeOnlyForced != null)
-            {
-                for (int i = 0; i < _subtitle.Paragraphs.Count; i++)
-                {
-                    var current = _subtitle.Paragraphs[i];
-                    var old = _beforeOnlyForced.Paragraphs[i];
-                    if (string.IsNullOrEmpty(current.Text))
-                    {
-                        current.Text = old.Text;
-                    }
-                }
-            }
-
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.EndUpdate();
-        }
-
-        private void LoadDvbSubtitles()
-        {
-
-        }
-
-        private void checkBoxUseTimeCodesFromIdx_CheckedChanged(object sender, EventArgs e)
-        {
-            var oldSubtitle = new Subtitle(_subtitle);
-            subtitleListView1.BeginUpdate();
-            LoadVobRip();
-            for (int i = 0; i < _subtitle.Paragraphs.Count; i++)
-            {
-                var p = oldSubtitle.GetParagraphOrDefault(i);
-                if (p != null && p.Text.Length > 0)
-                {
-                    _subtitle.Paragraphs[i].Text = p.Text;
-                }
-            }
-
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.EndUpdate();
         }
 
         public string LanguageString
@@ -5658,57 +5423,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void VobSubOcr_ResizeEnd(object sender, EventArgs e)
         {
             VobSubOcr_Resize(null, null);
-        }
-
-        private void importTextWithMatchingTimeCodesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.Title = LanguageSettings.Current.General.OpenSubtitle;
-            openFileDialog1.FileName = string.Empty;
-            openFileDialog1.Filter = UiUtil.SubtitleExtensionFilter.Value;
-            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
-            {
-                string fileName = openFileDialog1.FileName;
-                if (!File.Exists(fileName))
-                {
-                    return;
-                }
-
-                var fi = new FileInfo(fileName);
-                if (fi.Length > 1024 * 1024 * 10) // max 10 mb
-                {
-                    if (MessageBox.Show(string.Format(LanguageSettings.Current.Main.FileXIsLargerThan10MB + Environment.NewLine +
-                                                      Environment.NewLine +
-                                                      LanguageSettings.Current.Main.ContinueAnyway,
-                            fileName), Text, MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                }
-
-                Subtitle sub = new Subtitle();
-                Encoding encoding;
-                SubtitleFormat format = sub.LoadSubtitle(fileName, out encoding, null);
-                if (format == null)
-                {
-                    return;
-                }
-
-                int index = 0;
-                foreach (Paragraph p in sub.Paragraphs)
-                {
-                    foreach (Paragraph currentP in _subtitle.Paragraphs)
-                    {
-                        if (string.IsNullOrEmpty(currentP.Text) && Math.Abs(p.StartTime.TotalMilliseconds - currentP.StartTime.TotalMilliseconds) <= 40)
-                        {
-                            currentP.Text = p.Text;
-                            subtitleListView1.SetText(index, p.Text);
-                            break;
-                        }
-                    }
-
-                    index++;
-                }
-            }
         }
 
         internal void SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -5893,8 +5607,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             labelMinAlpha.Visible = numericUpDownAutoTransparentAlphaMax.Visible;
         }
-
-
 
         internal void Initialize(List<SubPicturesWithSeparateTimeCodes> subPicturesWithTimeCodes, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {
@@ -6226,9 +5938,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
- 
-
-
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
         }
@@ -6336,37 +6045,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 _dvbSubColor.Add(Color.Transparent);
             }
-        }
-        private void MergeDvbForEachSubImage()
-        {
-            int i = 0;
-            while (i < _dvbSubtitles.Count)
-            {
-                var dvbSub = _dvbSubtitles[i];
-                dvbSub.TransportStreamPosition = null;
-                dvbSub.ActiveImageIndex = null;
-                if (i < _dvbSubtitles.Count - 1 && dvbSub.Pes == _dvbSubtitles[i + 1].Pes)
-                {
-                    var next = _subtitle.GetParagraphOrDefault(i + 1);
-                    if (!string.IsNullOrEmpty(next.Text))
-                    {
-                        var p = _subtitle.Paragraphs[i];
-                        p.Text = (p.Text + Environment.NewLine + next.Text).Trim();
-                    }
-
-                    _subtitle.Paragraphs.RemoveAt(i + 1);
-                    _dvbSubtitles.RemoveAt(i + 1);
-                }
-                else
-                {
-                    i++;
-                }
-            }
-
-            _tesseractAsyncStrings = null;
-            _subtitle.Renumber();
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
         }
 
         private void ShowDvbSubs()
@@ -6617,14 +6295,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void captureTopAlignmentToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStripMenuItemCaptureTopAlign.Checked = captureTopAlignmentToolStripMenuItem.Checked;
-        }
 
         private void toolStripMenuItemCaptureTopAlign_Click(object sender, EventArgs e)
         {
-            captureTopAlignmentToolStripMenuItem.Checked = toolStripMenuItemCaptureTopAlign.Checked;
         }
 
         private void imagePreprocessingToolStripMenuItem1_Click(object sender, EventArgs e)
