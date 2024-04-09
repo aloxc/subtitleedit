@@ -77,7 +77,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemImageSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkBoxShowOnlyForced = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
@@ -399,7 +398,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOCRControls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOCRControls.Controls.Add(this.buttonPause);
             this.groupBoxOCRControls.Controls.Add(this.buttonStartOcr);
-            this.groupBoxOCRControls.Location = new System.Drawing.Point(368, 207);
+            this.groupBoxOCRControls.Location = new System.Drawing.Point(624, 207);
             this.groupBoxOCRControls.Name = "groupBoxOCRControls";
             this.groupBoxOCRControls.Size = new System.Drawing.Size(287, 84);
             this.groupBoxOCRControls.TabIndex = 2;
@@ -434,7 +433,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOcrAutoFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxOcrAutoFix.Location = new System.Drawing.Point(0, 0);
             this.groupBoxOcrAutoFix.Name = "groupBoxOcrAutoFix";
-            this.groupBoxOcrAutoFix.Size = new System.Drawing.Size(400, 333);
+            this.groupBoxOcrAutoFix.Size = new System.Drawing.Size(144, 333);
             this.groupBoxOcrAutoFix.TabIndex = 0;
             this.groupBoxOcrAutoFix.TabStop = false;
             this.groupBoxOcrAutoFix.Text = "OCR auto correction / spell checking";
@@ -497,9 +496,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxSubtitleImage.Controls.Add(this.labelMinAlpha);
             this.groupBoxSubtitleImage.Controls.Add(this.numericUpDownAutoTransparentAlphaMax);
             this.groupBoxSubtitleImage.Controls.Add(this.pictureBoxSubtitleImage);
-            this.groupBoxSubtitleImage.Location = new System.Drawing.Point(412, 6);
+            this.groupBoxSubtitleImage.Location = new System.Drawing.Point(12, 6);
             this.groupBoxSubtitleImage.Name = "groupBoxSubtitleImage";
-            this.groupBoxSubtitleImage.Size = new System.Drawing.Size(665, 191);
+            this.groupBoxSubtitleImage.Size = new System.Drawing.Size(1065, 191);
             this.groupBoxSubtitleImage.TabIndex = 36;
             this.groupBoxSubtitleImage.TabStop = false;
             this.groupBoxSubtitleImage.Text = "Subtitle image";
@@ -508,7 +507,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.labelMinAlpha.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMinAlpha.AutoSize = true;
-            this.labelMinAlpha.Location = new System.Drawing.Point(351, 171);
+            this.labelMinAlpha.Location = new System.Drawing.Point(751, 171);
             this.labelMinAlpha.Name = "labelMinAlpha";
             this.labelMinAlpha.Size = new System.Drawing.Size(252, 13);
             this.labelMinAlpha.TabIndex = 40;
@@ -532,7 +531,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             0,
             0,
             0});
-            this.numericUpDownAutoTransparentAlphaMax.Location = new System.Drawing.Point(607, 169);
+            this.numericUpDownAutoTransparentAlphaMax.Location = new System.Drawing.Point(1007, 169);
             this.numericUpDownAutoTransparentAlphaMax.Maximum = new decimal(new int[] {
             255,
             0,
@@ -561,11 +560,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.pictureBoxSubtitleImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxSubtitleImage.BackColor = System.Drawing.Color.DimGray;
+            this.pictureBoxSubtitleImage.BackColor = System.Drawing.Color.RosyBrown;
             this.pictureBoxSubtitleImage.ContextMenuStrip = this.contextMenuStripImage;
             this.pictureBoxSubtitleImage.Location = new System.Drawing.Point(13, 60);
             this.pictureBoxSubtitleImage.Name = "pictureBoxSubtitleImage";
-            this.pictureBoxSubtitleImage.Size = new System.Drawing.Size(644, 127);
+            this.pictureBoxSubtitleImage.Size = new System.Drawing.Size(1044, 127);
             this.pictureBoxSubtitleImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxSubtitleImage.TabIndex = 3;
             this.pictureBoxSubtitleImage.TabStop = false;
@@ -635,18 +634,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.previewToolStripMenuItem.Text = "Preview...";
             this.previewToolStripMenuItem.Click += new System.EventHandler(this.previewToolStripMenuItem_Click);
             // 
-            // checkBoxShowOnlyForced
-            // 
-            this.checkBoxShowOnlyForced.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxShowOnlyForced.AutoSize = true;
-            this.checkBoxShowOnlyForced.Location = new System.Drawing.Point(369, 313);
-            this.checkBoxShowOnlyForced.Name = "checkBoxShowOnlyForced";
-            this.checkBoxShowOnlyForced.Size = new System.Drawing.Size(152, 17);
-            this.checkBoxShowOnlyForced.TabIndex = 4;
-            this.checkBoxShowOnlyForced.Text = "Show only forced subtitles";
-            this.checkBoxShowOnlyForced.UseVisualStyleBackColor = true;
-            this.checkBoxShowOnlyForced.CheckedChanged += new System.EventHandler(this.checkBoxShowOnlyForced_CheckedChanged);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -661,7 +648,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // splitContainerBottom.Panel1
             // 
-            this.splitContainerBottom.Panel1.Controls.Add(this.checkBoxShowOnlyForced);
             this.splitContainerBottom.Panel1.Controls.Add(this.textBoxCurrentText);
             this.splitContainerBottom.Panel1.Controls.Add(this.groupBoxOCRControls);
             this.splitContainerBottom.Panel1.Controls.Add(this.subtitleListView1);
@@ -673,7 +659,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.splitContainerBottom.Panel2.Controls.Add(this.groupBoxOcrAutoFix);
             this.splitContainerBottom.Panel2MinSize = 100;
             this.splitContainerBottom.Size = new System.Drawing.Size(1062, 333);
-            this.splitContainerBottom.SplitterDistance = 658;
+            this.splitContainerBottom.SplitterDistance = 914;
             this.splitContainerBottom.TabIndex = 39;
             // 
             // textBoxCurrentText
@@ -702,7 +688,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.textBoxCurrentText.SelectedText = "";
             this.textBoxCurrentText.SelectionLength = 0;
             this.textBoxCurrentText.SelectionStart = 0;
-            this.textBoxCurrentText.Size = new System.Drawing.Size(354, 77);
+            this.textBoxCurrentText.Size = new System.Drawing.Size(610, 77);
             this.textBoxCurrentText.TabIndex = 1;
             this.textBoxCurrentText.TextBoxFont = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
             this.textBoxCurrentText.UseSystemPasswordChar = false;
@@ -820,7 +806,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.subtitleListView1.Location = new System.Drawing.Point(8, 21);
             this.subtitleListView1.Name = "subtitleListView1";
             this.subtitleListView1.OwnerDraw = true;
-            this.subtitleListView1.Size = new System.Drawing.Size(631, 183);
+            this.subtitleListView1.Size = new System.Drawing.Size(887, 183);
             this.subtitleListView1.SubtitleFontBold = false;
             this.subtitleListView1.SubtitleFontName = "Tahoma";
             this.subtitleListView1.SubtitleFontSize = 8;
@@ -902,7 +888,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem saveImageAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
-        private System.Windows.Forms.CheckBox checkBoxShowOnlyForced;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem importTextWithMatchingTimeCodesToolStripMenuItem;

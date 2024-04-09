@@ -457,7 +457,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
 
-            checkBoxShowOnlyForced.Text = language.ShowOnlyForcedSubtitles;
 
             oCRSelectedLinesToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.OcrSelectedLines;
             normalToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.RemoveFormattingAll;
@@ -518,7 +517,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _cancellationToken = cancellationToken;
             Initialize(vobSubFileName, vobSubOcrSettings, null, true);
             FormVobSubOcr_Shown(null, null);
-            checkBoxShowOnlyForced.Checked = forcedOnly;
             _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
             if (language == null)
             {
@@ -714,7 +712,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 SetTesseractLanguageFromLanguageString(language);
             }
 
-            checkBoxShowOnlyForced.Checked = forcedOnly;
             DoBatch();
         }
 
@@ -726,7 +723,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             InitializeOcrEngineBatch(language, ocrEngine);
             _cancellationToken = cancellationToken;
 
-            checkBoxShowOnlyForced.Checked = forcedOnly;
             DoBatch();
         }
 
@@ -756,7 +752,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void InitializeBatch(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
         {
             Initialize(vobSubMergedPackList, palette, vobSubOcrSettings, language);
-            checkBoxShowOnlyForced.Checked = forcedOnly;
             InitializeOcrEngineBatch(language, ocrEngine);
             _cancellationToken = cancellationToken;
             DoBatch();
@@ -1024,12 +1019,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             for (int i = 0; i < max; i++)
             {
                 var x = _bdnXmlOriginal.Paragraphs[i];
-                if (checkBoxShowOnlyForced.Checked && x.Forced ||
-                    checkBoxShowOnlyForced.Checked == false)
-                {
-                    _bdnXmlSubtitle.Paragraphs.Add(new Paragraph(x));
-                    _subtitle.Paragraphs.Add(new Paragraph(x) { Text = string.Empty });
-                }
+                _bdnXmlSubtitle.Paragraphs.Add(new Paragraph(x));
+                _subtitle.Paragraphs.Add(new Paragraph(x) { Text = string.Empty });
             }
 
             _subtitle.Renumber();
@@ -1053,15 +1044,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             for (int i = 0; i < max; i++)
             {
                 var x = _bluRaySubtitlesOriginal[i];
-                if (checkBoxShowOnlyForced.Checked && x.IsForced || checkBoxShowOnlyForced.Checked == false)
+                _bluRaySubtitles.Add(x);
+                _subtitle.Paragraphs.Add(new Paragraph
                 {
-                    _bluRaySubtitles.Add(x);
-                    _subtitle.Paragraphs.Add(new Paragraph
-                    {
-                        StartTime = new TimeCode(x.StartTime / 90.0),
-                        EndTime = new TimeCode(x.EndTime / 90.0)
-                    });
-                }
+                    StartTime = new TimeCode(x.StartTime / 90.0),
+                    EndTime = new TimeCode(x.EndTime / 90.0)
+                });
             }
 
             _subtitle.Renumber();
@@ -1083,14 +1071,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             for (int i = 0; i < max; i++)
             {
                 var x = _vobSubMergedPackListOriginal[i];
-                if (checkBoxShowOnlyForced.Checked && x.SubPicture.Forced ||
-                    checkBoxShowOnlyForced.Checked == false)
-                {
-                    _vobSubMergedPackList.Add(x);
-                    Paragraph p = new Paragraph(string.Empty, x.StartTime.TotalMilliseconds, x.EndTime.TotalMilliseconds);
-
-                    _subtitle.Paragraphs.Add(p);
-                }
+                _vobSubMergedPackList.Add(x);
+                Paragraph p = new Paragraph(string.Empty, x.StartTime.TotalMilliseconds, x.EndTime.TotalMilliseconds);
+                _subtitle.Paragraphs.Add(p);
             }
 
             _subtitle.Renumber();
@@ -3786,35 +3769,28 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             if (_mp4List != null)
             {
-                checkBoxShowOnlyForced.Visible = false;
-
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
             else if (_spList != null)
             {
-                checkBoxShowOnlyForced.Visible = false;
-
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
             else if (_dvbSubtitles != null)
             {
-                checkBoxShowOnlyForced.Visible = false;
 
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
             else if (_dvbPesSubtitles != null)
             {
-                checkBoxShowOnlyForced.Visible = false;
 
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
             else if (_binaryParagraphWithPositions != null)
             {
-                checkBoxShowOnlyForced.Visible = false;
                 LoadBinarySubtitlesWithPosition();
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
@@ -3831,8 +3807,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         break;
                     }
                 }
-
-                checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
             }
             else if (_bluRaySubtitlesOriginal != null)
             {
@@ -3849,11 +3823,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                 }
 
-                checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
             }
             else if (_xSubList != null)
             {
-                checkBoxShowOnlyForced.Visible = false;
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
@@ -3901,7 +3873,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
             }
 
-            checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
             LoadVobRip();
             return _subtitle;
         }
@@ -3926,7 +3897,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _mainOcrRunning = true;
             progressBar1.Visible = true;
             subtitleListView1.MultiSelect = false;
-            checkBoxShowOnlyForced.Enabled = false;
             labelStatus.Text = string.Empty;
         }
 
@@ -3940,7 +3910,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             labelStatus.Text = string.Empty;
             progressBar1.Visible = false;
             subtitleListView1.MultiSelect = true;
-            checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
             _mainOcrSelectedIndices = null;
         }
 
@@ -5725,6 +5694,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void SaveImageAsToolStripMenuItemClick(object sender, EventArgs e)
         {
+
             saveFileDialog1.Title = LanguageSettings.Current.VobSubOcr.SaveSubtitleImageAs;
             saveFileDialog1.AddExtension = true;
             saveFileDialog1.FileName = "Image" + (_selectedIndex + 1);
@@ -5903,11 +5873,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             var oldSubtitle = new Subtitle(_subtitle);
-            if (checkBoxShowOnlyForced.Checked)
-            {
-                _beforeOnlyForced = oldSubtitle;
-            }
-
             subtitleListView1.BeginUpdate();
             if (_bdnXmlOriginal != null)
             {
@@ -5940,7 +5905,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
             }
 
-            if (!checkBoxShowOnlyForced.Checked && _beforeOnlyForced != null)
+            if (_beforeOnlyForced != null)
             {
                 for (int i = 0; i < _subtitle.Paragraphs.Count; i++)
                 {
@@ -6171,6 +6136,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         internal void SaveAllImagesWithHtmlIndexViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             if (folderBrowserDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 progressBar1.Maximum = _subtitle.Paragraphs.Count - 1;
