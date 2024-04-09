@@ -163,10 +163,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private BinaryOcrDb _binaryOcrDb;
 
-        private long _ocrLowercaseHeightsTotal;
-        private int _ocrLowercaseHeightsTotalCount;
-        private long _ocrUppercaseHeightsTotal;
-        private int _ocrUppercaseHeightsTotalCount;
 
         private bool _captureTopAlign;
         private int _captureTopAlignHeight = -1;
@@ -182,12 +178,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private List<BluRaySupParser.PcsData> _bluRaySubtitlesOriginal;
         private List<BluRaySupParser.PcsData> _bluRaySubtitles;
 
-        // SP list
-        private List<SpHeader> _spList;
 
-
-        // Other
-        private IList<IBinaryParagraphWithPosition> _binaryParagraphWithPositions;
 
         private string _importLanguageString;
 
@@ -375,30 +366,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             buttonStartOcr.Focus();
         }
 
-        private void LoadBinarySubtitlesWithPosition()
-        {
-            _subtitle = new Subtitle();
-
-            int max = _binaryParagraphWithPositions.Count;
-            for (int i = 0; i < max; i++)
-            {
-                var x = _binaryParagraphWithPositions[i];
-                _subtitle.Paragraphs.Add(new Paragraph
-                {
-                    StartTime = new TimeCode(x.StartTimeCode.TotalMilliseconds),
-                    EndTime = new TimeCode(x.EndTimeCode.TotalMilliseconds)
-                });
-            }
-
-            _subtitle.Renumber();
-
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
-
-
-            SetButtonsEnabledAfterOcrDone();
-            buttonStartOcr.Focus();
-        }
 
         public void FixShortDisplayTimes(Subtitle subtitle)
         {
@@ -423,15 +390,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         public bool GetIsForced(int index)
         {
-            if (_spList != null)
-            {
-                return _spList[index].Picture.Forced;
-            }
-
-            if (_binaryParagraphWithPositions != null)
-            {
-                return _binaryParagraphWithPositions[index].IsForced;
-            }
+         
 
             if (_bluRaySubtitlesOriginal != null)
             {
@@ -450,36 +409,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Color emphasis2;
 
             var makeTransparent = true;
-
-            if (_spList != null)
-            {
-                if (index >= 0 && index < _spList.Count)
-                {
-                    
-                        returnBmp = _spList[index].Picture.GetBitmap(null, Color.Transparent, Color.Black, Color.White, Color.Black, false);
-                        if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                        {
-                            returnBmp.MakeTransparent();
-                        }
-                    
-                }
-            }
-            else if (_binaryParagraphWithPositions != null)
-            {
-                var bmp = _binaryParagraphWithPositions[index].GetBitmap();
-                var nDvbBmp = new NikseBitmap(bmp);
-                nDvbBmp.CropTopTransparent(2);
-                nDvbBmp.CropTransparentSidesAndBottom(2, true);
-
-
-                if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                {
-                    nDvbBmp.MakeBackgroundTransparent((int)numericUpDownAutoTransparentAlphaMax.Value);
-                }
-                bmp.Dispose();
-                returnBmp = nDvbBmp.GetBitmap();
-            }
-            else if (_bluRaySubtitlesOriginal != null)
+if (_bluRaySubtitlesOriginal != null)
             {
                 if (_bluRaySubtitles != null)
                 {
@@ -594,17 +524,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void GetSubtitleTopAndHeight(int index, out int left, out int top, out int width, out int height)
         {
 
-            if (_spList != null)
-            {
-                var item = _spList[index];
-                left = item.Picture.ImageDisplayArea.Left;
-                top = item.Picture.ImageDisplayArea.Top;
-                width = item.Picture.ImageDisplayArea.Width;
-                height = item.Picture.ImageDisplayArea.Bottom;
-                return;
-            }
-
-
+         
             if (_bluRaySubtitlesOriginal != null)
             {
                 var item = _bluRaySubtitles[index];
@@ -617,18 +537,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return;
             }
 
-            if (_binaryParagraphWithPositions != null)
-            {
-                var item = _binaryParagraphWithPositions[index];
-                var pos = item.GetPosition();
-                left = pos.Left;
-                top = pos.Top;
-                var bmp = item.GetBitmap();
-                width = bmp.Width;
-                height = bmp.Height;
-                bmp.Dispose();
-                return;
-            }
 
 
             left = 0;
@@ -637,35 +545,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             height = 0;
         }
 
-        private void GetSubtitleScreenSize(int index, out int width, out int height)
-        {
-            width = 0;
-            height = 0;
-
-            if (_spList != null)
-            {
-                var item = _spList[index];
-                width = item.Picture.ImageDisplayArea.Width;
-                height = item.Picture.ImageDisplayArea.Bottom;
-                return;
-            }
-
-
-            if (_bluRaySubtitlesOriginal != null)
-            {
-                var item = _bluRaySubtitles[index];
-                height = item.Size.Height;
-                width = item.Size.Width;
-            }
-
-            if (_binaryParagraphWithPositions != null)
-            {
-                var size = _binaryParagraphWithPositions[index].GetScreenSize();
-                width = size.Width;
-                height = size.Height;
-            }
-
-        }
 
         private Bitmap ShowSubtitleImage(int index)
         {
@@ -774,19 +653,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void FormVobSubOcr_Shown(object sender, EventArgs e)
         {
-            if (_spList != null)
-            {
-                SetButtonsEnabledAfterOcrDone();
-                buttonStartOcr.Focus();
-            }
-            else if (_binaryParagraphWithPositions != null)
-            {
-                LoadBinarySubtitlesWithPosition();
-                SetButtonsEnabledAfterOcrDone();
-                buttonStartOcr.Focus();
-            }
-          
-            else if (_bluRaySubtitlesOriginal != null)
+            if (_bluRaySubtitlesOriginal != null)
             {
                 var v = (decimal)Configuration.Settings.VobSubOcr.BlurayAllowDifferenceInPercent;
 
@@ -908,14 +775,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                             maxHeight = height;
                         }
                     }
-                    else if (_binaryParagraphWithPositions != null && idx < _binaryParagraphWithPositions.Count)
-                    {
-                        height = _binaryParagraphWithPositions[idx].GetScreenSize().Height;
-                        if (height > maxHeight)
-                        {
-                            maxHeight = height;
-                        }
-                    }
+                    
                 }
 
 
