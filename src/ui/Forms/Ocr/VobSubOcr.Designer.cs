@@ -32,7 +32,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
-            this.contextMenuStripAllFixes = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripUnknownWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +53,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
-            this.contextMenuStripAllFixes.SuspendLayout();
             this.contextMenuStripUnknownWords.SuspendLayout();
             this.contextMenuStripGuessesUsed.SuspendLayout();
             this.groupBoxSubtitleImage.SuspendLayout();
@@ -174,13 +172,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOcrAutoFix.TabIndex = 0;
             this.groupBoxOcrAutoFix.TabStop = false;
             this.groupBoxOcrAutoFix.Text = "OCR Start/stop";
-            // 
-            // contextMenuStripAllFixes
-            // 
-            this.contextMenuStripAllFixes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemClearFixes});
-            this.contextMenuStripAllFixes.Name = "contextMenuStripUnknownWords";
-            this.contextMenuStripAllFixes.Size = new System.Drawing.Size(107, 26);
             // 
             // toolStripMenuItemClearFixes
             // 
@@ -410,7 +401,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOcrAutoFix.ResumeLayout(false);
-            this.contextMenuStripAllFixes.ResumeLayout(false);
             this.contextMenuStripUnknownWords.ResumeLayout(false);
             this.contextMenuStripGuessesUsed.ResumeLayout(false);
             this.groupBoxSubtitleImage.ResumeLayout(false);
@@ -449,7 +439,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUnknownWords;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripAllFixes;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearFixes;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripGuessesUsed;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearGuesses;
