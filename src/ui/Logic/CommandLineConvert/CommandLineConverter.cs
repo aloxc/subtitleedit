@@ -614,7 +614,6 @@ namespace Nikse.SubtitleEdit.Logic.CommandLineConvert
                                                                     _stdOutWriter?.Write($"\r{LanguageSettings.Current.BatchConvert.Ocr} : {progress}");
                                                                 };
                                                                 vobSubOcr.FileName = Path.GetFileName(fileName);
-                                                                vobSubOcr.InitializeBatch(bluRaySubtitles, Configuration.Settings.VobSubOcr, fileName, false, lang, ocrEngine, CancellationToken.None);
                                                                 _stdOutWriter?.WriteLine();
                                                                 sub = vobSubOcr.SubtitleFromOcr;
                                                             }
@@ -993,7 +992,6 @@ namespace Nikse.SubtitleEdit.Logic.CommandLineConvert
                     _stdOutWriter?.Write($"\r{LanguageSettings.Current.BatchConvert.Ocr} : {progress}");
                 };
                 vobSubOcr.FileName = Path.GetFileName(fileName);
-                vobSubOcr.InitializeBatch(bluRaySubtitles, Configuration.Settings.VobSubOcr, fileName, forcedOnly, ocrDb, ocrEngine, CancellationToken.None);
                 _stdOutWriter?.WriteLine();
                 sub = vobSubOcr.SubtitleFromOcr;
                 _stdOutWriter?.WriteLine($"Extracted subtitles from file \"{fileName}\"");
@@ -1019,7 +1017,6 @@ namespace Nikse.SubtitleEdit.Logic.CommandLineConvert
                 {
                     _stdOutWriter?.Write($"\r{LanguageSettings.Current.BatchConvert.Ocr} : {progress}");
                 };
-                vobSubOcr.InitializeBatch(fileName, Configuration.Settings.VobSubOcr, forcedOnly, ocrEngine, ocrDb, CancellationToken.None);
                 _stdOutWriter?.WriteLine();
                 sub = vobSubOcr.SubtitleFromOcr;
                 _stdOutWriter?.WriteLine($"Extracted subtitles from file \"{fileName}\"");

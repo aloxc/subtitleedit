@@ -106,18 +106,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        internal class NOcrThreadResult
-        {
-            public string ResultText { get; set; }
-            public List<CompareMatch> ResultMatches { get; set; }
-
-            public NOcrThreadResult(NOcrThreadParameter p)
-            {
-                ResultMatches = new List<CompareMatch>();
-                ResultMatches.AddRange(p.ResultMatches);
-                ResultText = p.ResultText;
-            }
-        }
 
         internal class ImageCompareThreadParameter
         {
@@ -230,17 +218,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private class TesseractLanguage
-        {
-            public string Id { get; set; }
-            public string Text { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
-            }
-        }
-
         private class ModiParameter
         {
             public Bitmap Bitmap { get; set; }
@@ -347,15 +324,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private NOcrDb _nOcrDb;
         private readonly VobSubOcrNOcrCharacter _vobSubOcrNOcrCharacter = new VobSubOcrNOcrCharacter();
         public const int NOcrMinColor = 300;
-        private NOcrDb _nOcrDbThread;
-        private NOcrThreadResult[] _nOcrThreadResults;
         private bool _ocrThreadStop;
 
         private IOcrStrategy _ocrService;
-
-        private readonly Keys _italicShortcut = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewItalic);
-        private readonly Keys _mainGeneralGoToNextSubtitle = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralGoToNextSubtitle);
-        private readonly Keys _mainGeneralGoToPrevSubtitle = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralGoToPrevSubtitle);
 
         private string[] _tesseractAsyncStrings;
         private int _tesseractAsyncIndex;
@@ -423,7 +394,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             groupBoxSubtitleImage.Text = string.Empty;
 
-            OcrTrainingToolStripMenuItem.Text = language.OcrTraining;
 
             FillSpellCheckDictionaries();
 
@@ -478,111 +448,15 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
         }
 
-        internal void InitializeBatch(string vobSubFileName, VobSubOcrSettings vobSubOcrSettings, bool forcedOnly, string ocrEngine, string language, CancellationToken cancellationToken)
-        {
-            _cancellationToken = cancellationToken;
-            Initialize(vobSubFileName, vobSubOcrSettings, null, true);
-            FormVobSubOcr_Shown(null, null);
-            _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
-            if (language == null)
-            {
-                language = Configuration.Settings.VobSubOcr.TesseractLastLanguage;
-            }
-            if (string.IsNullOrEmpty(language))
-            {
-                language = "en";
-            }
-            InitializeTesseract(language);
-            SetTesseractLanguageFromLanguageString(language);
-
-            int max = GetSubtitleCount();
-            if (_tesseractAsyncStrings == null)
-            {
-                _tesseractAsyncStrings = new string[max];
-            }
-
-            System.Threading.Thread.Sleep(1000);
-            subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
-
-            _abort = false;
-            for (int i = 0; i < max; i++)
-            {
-                if (ProgressCallback != null)
-                {
-                    var percent = (int)Math.Round((i + 1) * 100.0 / max);
-                    ProgressCallback?.Invoke($"{percent}%");
-                }
-
-                _selectedIndex = i;
-                subtitleListView1.SelectIndexAndEnsureVisible(i);
-
-                string text = OcrViaTesseract(GetSubtitleBitmap(i), i);
-
-
-                text = text.Replace("<i>-</i>", "-");
-                text = text.Replace("<i>- </i>", "- ");
-                text = text.Replace("<i> - </i>", "- ");
-                text = text.Replace("<i> -</i>", "- ");
-                text = text.Replace("<i>a</i>", "a");
-                text = text.Replace("<i>.</i>", ".");
-                text = text.Replace("  ", " ");
-                text = text.Trim();
-
-                text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-
-                // max allow 2 lines
-
-                text = text.Trim();
-                text = text.Replace("  ", " ");
-                text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-                text = text.Replace("  ", " ");
-                text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-
-                _subtitle.Paragraphs[i].Text = text;
-
-                Application.DoEvents();
-                if (_abort || _cancellationToken.IsCancellationRequested)
-                {
-                    SetButtonsEnabledAfterOcrDone();
-                    return;
-                }
-            }
-
-            SetButtonsEnabledAfterOcrDone();
-        }
-
-        internal bool Initialize(string vobSubFileName, VobSubOcrSettings vobSubOcrSettings, Main main, bool batchMode = false)
-        {
-            _main = main;
-            SetButtonsStartOcr();
-            _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
-
-            FileName = vobSubFileName;
-            Text += " - " + Path.GetFileName(FileName);
-
-            return InitializeSubIdx(vobSubFileName, batchMode);
-        }
 
         internal void Initialize(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
             _vobSubOcrSettings = vobSubOcrSettings;
 
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
-
             _vobSubMergedPackList = vobSubMergedPackList;
             _palette = palette;
 
-            SetTesseractLanguageFromLanguageString(languageString);
             _importLanguageString = languageString;
         }
 
@@ -618,171 +492,20 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     tssList.Add(binaryParagraph as TransportStreamSubtitle);
                 }
 
-                InitializeBatch(tssList, vobSubOcrSettings, fileName, forcedOnly, language, ocrEngine);
             }
         }
 
-        internal void InitializeBatch(List<TransportStreamSubtitle> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language = null, string ocrEngine = null)
-        {
-            Initialize(subtitles, vobSubOcrSettings, fileName, language);
-            _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
 
-            if (ocrEngine?.ToLowerInvariant() == "nocr")
-            {
-                InitializeNOcrForBatch(language);
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(language))
-                {
-                    language = Configuration.Settings.VobSubOcr.TesseractLastLanguage;
-                }
-
-                if (string.IsNullOrEmpty(language))
-                {
-                    language = "en";
-                }
-
-                InitializeTesseract(language);
-                SetTesseractLanguageFromLanguageString(language);
-            }
-
-            DoBatch();
-        }
-
-        internal void InitializeBatch(List<BluRaySupParser.PcsData> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
-        {
-            Initialize(subtitles, vobSubOcrSettings, fileName);
-            _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
-
-            InitializeOcrEngineBatch(language, ocrEngine);
-            _cancellationToken = cancellationToken;
-
-            DoBatch();
-        }
-
-        private void InitializeOcrEngineBatch(string language, string ocrEngine)
-        {
-            if (ocrEngine?.ToLowerInvariant() == "nocr")
-            {
-                InitializeNOcrForBatch(language);
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(language))
-                {
-                    language = Configuration.Settings.VobSubOcr.TesseractLastLanguage;
-                }
-
-                if (string.IsNullOrEmpty(language))
-                {
-                    language = "en";
-                }
-
-                InitializeTesseract(language);
-                SetTesseractLanguageFromLanguageString(language);
-            }
-        }
 
         internal void InitializeBatch(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
         {
             Initialize(vobSubMergedPackList, palette, vobSubOcrSettings, language);
-            InitializeOcrEngineBatch(language, ocrEngine);
             _cancellationToken = cancellationToken;
-            DoBatch();
         }
 
         internal void InitializeBatch(List<SubPicturesWithSeparateTimeCodes> list, string fileName, string language, string ocrEngine)
         {
             Initialize(list, Configuration.Settings.VobSubOcr, fileName);
-            InitializeOcrEngineBatch(language, ocrEngine);
-            DoBatch();
-        }
-
-        private void DoBatch()
-        {
-            _abort = false;
-            subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
-            FormVobSubOcr_Shown(null, null);
-            int max = GetSubtitleCount();
-            if (_ocrMethodIndex != _ocrMethodTesseract5 && _ocrMethodIndex != _ocrMethodTesseract302 && _ocrMethodIndex != _ocrMethodNocr)
-            {
-                _ocrMethodIndex = _ocrMethodTesseract302;
-            }
-
-            if (_ocrMethodIndex == _ocrMethodTesseract5 && _tesseractAsyncStrings == null)
-            {
-                _tesseractAsyncStrings = new string[max];
-            }
-
-            if (_ocrMethodIndex != _ocrMethodNocr)
-            {
-                System.Threading.Thread.Sleep(1000);
-            }
-
-            for (int i = 0; i < max; i++)
-            {
-                _selectedIndex = i;
-                Application.DoEvents();
-                if (_abort)
-                {
-                    SetButtonsEnabledAfterOcrDone();
-                    return;
-                }
-                if (ProgressCallback != null)
-                {
-                    var percent = (int)Math.Round((i + 1) * 100.0 / max);
-                    ProgressCallback?.Invoke($"{percent}%");
-                }
-
-                string text;
-                if (_ocrMethodIndex == _ocrMethodNocr)
-                {
-                    text = OcrViaNOCR(GetSubtitleBitmap(i), i);
-                }
-                else if (_ocrMethodIndex == _ocrMethodCloudVision)
-                {
-                    text = OcrViaCloudVision(GetSubtitleBitmap(i), i);
-                }
-                else
-                {
-                    text = OcrViaTesseract(GetSubtitleBitmap(i), i);
-                }
-
-
-                text = text.Replace("<i>-</i>", "-");
-                text = text.Replace("<i>a</i>", "a");
-                text = text.Replace("  ", " ");
-                text = text.Trim();
-
-                text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-
-                // max allow 2 lines
-
-                text = text.Trim();
-                text = text.Replace("  ", " ");
-                text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-                text = text.Replace("  ", " ");
-                text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-
-                _subtitle.Paragraphs[i].Text = text;
-
-                Application.DoEvents();
-                if (_abort || _cancellationToken.IsCancellationRequested)
-                {
-                    SetButtonsEnabledAfterOcrDone();
-                    return;
-                }
-            }
-            _ocrThreadStop = true;
-            _abort = true;
-
-            for (int i = 0; i < 20; i++)
-            {
-                System.Threading.Thread.Sleep(25);
-                Application.DoEvents();
-            }
         }
 
         internal void InitializeBatch(Subtitle imageListSubtitle, VobSubOcrSettings vobSubOcrSettings, bool isSon, string language, string ocrEngine)
@@ -792,20 +515,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _bdnFileName = imageListSubtitle.FileName;
             _isSon = isSon;
 
-
-            InitializeOcrEngineBatch(language, ocrEngine);
-            DoBatch();
         }
 
         internal void Initialize(List<BluRaySupParser.PcsData> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {
             SetButtonsStartOcr();
             _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
 
             _bluRaySubtitlesOriginal = subtitles;
 
@@ -822,44 +537,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             autoTransparentBackgroundToolStripMenuItem.Visible = false;
         }
 
-        private void LoadImageCompareCharacterDatabaseList(string db)
-        {
-            if (_ocrMethodIndex != _ocrMethodBinaryImageCompare)
-            {
-                return;
-            }
-
-            try
-            {
-                string characterDatabasePath = Configuration.OcrDirectory.TrimEnd(Path.DirectorySeparatorChar);
-                if (!Directory.Exists(characterDatabasePath))
-                {
-                    Directory.CreateDirectory(characterDatabasePath);
-                }
-
-                var binaryOcrDbs = BinaryOcrDb.GetDatabases();
-                var imageCompareDbName = string.Empty;
-                if (!string.IsNullOrEmpty(db))
-                {
-                    var parts = db.Split('+');
-                    if (parts.Length > 0 && binaryOcrDbs.Contains(parts[0]))
-                    {
-                        imageCompareDbName = parts[0];
-                        if (parts.Length > 1)
-                        {
-                            imageCompareDbName = db;
-                            var nOcrDbName = parts[1];
-                            _nOcrDb = new NOcrDb(Path.Combine(Configuration.OcrDirectory, nOcrDbName + ".nocr"));
-                            binaryOcrDbs.Insert(0, db);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format(LanguageSettings.Current.VobSubOcr.UnableToCreateCharacterDatabaseFolder, ex.Message));
-            }
-        }
 
         private void LoadImageCompareBitmaps()
         {
@@ -877,92 +554,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void DisposeImageCompareBitmaps()
         {
             _compareBitmaps = null;
-        }
-
-        private bool InitializeSubIdx(string vobSubFileName, bool batchMode = false)
-        {
-            var vobSubParser = new VobSubParser(true);
-            string idxFileName = Path.ChangeExtension(vobSubFileName, ".idx");
-            vobSubParser.OpenSubIdx(vobSubFileName, idxFileName);
-            _vobSubMergedPackList = vobSubParser.MergeVobSubPacks();
-            _palette = vobSubParser.IdxPalette;
-            vobSubParser.VobSubPacks.Clear();
-
-            var languageStreamIds = new List<int>();
-            foreach (var pack in _vobSubMergedPackList)
-            {
-                if (pack.SubPicture.Delay.TotalMilliseconds > 500 && !languageStreamIds.Contains(pack.StreamId))
-                {
-                    languageStreamIds.Add(pack.StreamId);
-                }
-            }
-
-            if (languageStreamIds.Count > 1)
-            {
-                using (var chooseLanguage = new DvdSubRipChooseLanguage())
-                {
-                    if (ShowInTaskbar)
-                    {
-                        chooseLanguage.Icon = (Icon)Icon.Clone();
-                        chooseLanguage.ShowInTaskbar = true;
-                        chooseLanguage.ShowIcon = true;
-                    }
-
-                    chooseLanguage.Initialize(_vobSubMergedPackList, _palette, vobSubParser.IdxLanguages, string.Empty);
-                    var form = _main ?? (Form)this;
-                    if (batchMode)
-                    {
-                        chooseLanguage.SelectActive();
-                        _vobSubMergedPackList = chooseLanguage.SelectedVobSubMergedPacks;
-                        SetTesseractLanguageFromLanguageString(chooseLanguage.SelectedLanguageString);
-                        _importLanguageString = chooseLanguage.SelectedLanguageString;
-                        return true;
-                    }
-
-                    chooseLanguage.Activate();
-                    if (chooseLanguage.ShowDialog(form) == DialogResult.OK)
-                    {
-                        _vobSubMergedPackList = chooseLanguage.SelectedVobSubMergedPacks;
-                        SetTesseractLanguageFromLanguageString(chooseLanguage.SelectedLanguageString);
-                        _importLanguageString = chooseLanguage.SelectedLanguageString;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private void SetTesseractLanguageFromLanguageString(string languageString)
-        {
-            // try to match language from vob to Tesseract language
-        }
-
-        private void LoadBdnXml()
-        {
-            _subtitle = new Subtitle();
-
-            _bdnXmlSubtitle = new Subtitle();
-            int max = _bdnXmlOriginal.Paragraphs.Count;
-            for (int i = 0; i < max; i++)
-            {
-                var x = _bdnXmlOriginal.Paragraphs[i];
-                _bdnXmlSubtitle.Paragraphs.Add(new Paragraph(x));
-                _subtitle.Paragraphs.Add(new Paragraph(x) { Text = string.Empty });
-            }
-
-            _subtitle.Renumber();
-
-            FixShortDisplayTimes(_subtitle);
-
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
-
-
-            SetButtonsEnabledAfterOcrDone();
-            buttonStartOcr.Focus();
         }
 
         private void LoadBluRaySup()
@@ -3068,273 +2659,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void SaveNOcr()
-        {
-            try
-            {
-                _nOcrDb.Save();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-        }
-
-        private string OcrViaNOCR(Bitmap bitmap, int listViewIndex)
-        {
-            if (_ocrFixEngine == null)
-            {
-                comboBoxDictionaries_SelectedIndexChanged(null, null);
-            }
-
-            string line = string.Empty;
-            var matches = new List<CompareMatch>();
-            var nbmpInput = new NikseBitmap(bitmap);
-
-            if (_nOcrThreadResults != null && _nOcrThreadResults.Length > listViewIndex && _nOcrThreadResults[listViewIndex] != null)
-            {
-                line = _nOcrThreadResults[listViewIndex].ResultText;
-                matches.AddRange(_nOcrThreadResults[listViewIndex].ResultMatches);
-                _nOcrThreadResults[listViewIndex] = null;
-            }
-
-            if (string.IsNullOrEmpty(line))
-            {
-                matches = new List<CompareMatch>();
-                List<ImageSplitterItem> listTemp = NikseBitmapImageSplitter.SplitBitmapToLettersNew(nbmpInput, _numericUpDownPixelsIsSpace, false, Configuration.Settings.VobSubOcr.TopToBottom, GetMinLineHeight(), _autoLineHeight);
-                var list = new List<ImageSplitterItem>();
-                foreach (var imageSplitterItem in listTemp)
-                {
-                    if (imageSplitterItem.NikseBitmap != null && imageSplitterItem.NikseBitmap.Width == 1 && imageSplitterItem.NikseBitmap.Height == 1)
-                    {
-                        continue;
-                    }
-
-                    list.Add(imageSplitterItem);
-                }
-                UpdateLineHeights(list);
-
-                int index = 0;
-                bool expandSelection = false;
-                bool shrinkSelection = false;
-                var expandSelectionList = new List<ImageSplitterItem>();
-                while (index < list.Count)
-                {
-                    var item = list[index];
-                    if (expandSelection || shrinkSelection)
-                    {
-                        expandSelection = false;
-                        if (shrinkSelection && index > 0)
-                        {
-                            shrinkSelection = false;
-                        }
-                        else if (index + 1 < list.Count && list[index + 1].NikseBitmap != null) // only allow expand to EndOfLine or space
-                        {
-                            index++;
-                            expandSelectionList.Add(list[index]);
-                        }
-
-                        item = GetExpandedSelectionNew(nbmpInput, expandSelectionList);
-                        _vobSubOcrNOcrCharacter.Initialize(bitmap, item, _manualOcrDialogPosition, _italicCheckedLast, true, expandSelectionList.Count > 1, string.Empty);
-                        var result = _vobSubOcrNOcrCharacter.ShowDialog(this);
-                        _manualOcrDialogPosition = _vobSubOcrNOcrCharacter.FormPosition;
-                        if (result == DialogResult.OK && _vobSubOcrNOcrCharacter.ShrinkSelection)
-                        {
-                            shrinkSelection = true;
-                            index--;
-                            if (expandSelectionList.Count > 0)
-                            {
-                                expandSelectionList.RemoveAt(expandSelectionList.Count - 1);
-                            }
-                        }
-                        else if (result == DialogResult.OK && _vobSubOcrNOcrCharacter.ExpandSelection)
-                        {
-                            expandSelection = true;
-                        }
-                        else if (result == DialogResult.OK)
-                        {
-                            var c = _vobSubOcrNOcrCharacter.NOcrChar;
-                            if (expandSelectionList.Count > 1)
-                            {
-                                c.ExpandCount = expandSelectionList.Count;
-                                c.MarginTop = expandSelectionList.First().Top - expandSelectionList.Min(p => p.Top);
-                            }
-
-                            if (!_vobSubOcrNOcrCharacter.UseOnce)
-                            {
-                                _nOcrDb.Add(c);
-                                SaveNOcrWithCurrentLanguage();
-                            }
-
-                            var text = _vobSubOcrNOcrCharacter.NOcrChar.Text;
-                            matches.Add(new CompareMatch(text, _vobSubOcrNOcrCharacter.IsItalic, expandSelectionList.Count, null));
-                            expandSelectionList = new List<ImageSplitterItem>();
-                        }
-                        else if (result == DialogResult.Abort)
-                        {
-                            _abort = true;
-                        }
-                        else
-                        {
-                            matches.Add(new CompareMatch("*", false, 0, null));
-                        }
-
-                        _italicCheckedLast = _vobSubOcrNOcrCharacter.IsItalic;
-                    }
-                    else if (item.NikseBitmap == null)
-                    {
-                        matches.Add(new CompareMatch(item.SpecialCharacter, false, 0, null));
-                    }
-                    else
-                    {
-                        CompareItem match = null;
-                        if (match == null)
-                        {
-                            _vobSubOcrNOcrCharacter.Initialize(bitmap, item, _manualOcrDialogPosition, _italicCheckedLast, true, false, string.Empty);
-                            var result = _vobSubOcrNOcrCharacter.ShowDialog(this);
-                            _manualOcrDialogPosition = _vobSubOcrNOcrCharacter.FormPosition;
-                            if (result == DialogResult.OK && _vobSubOcrNOcrCharacter.ExpandSelection)
-                            {
-                                expandSelectionList.Add(item);
-                                expandSelection = true;
-                            }
-                            else if (result == DialogResult.OK)
-                            {
-                                if (!_vobSubOcrNOcrCharacter.UseOnce)
-                                {
-                                    _nOcrDb.Add(_vobSubOcrNOcrCharacter.NOcrChar);
-                                    SaveNOcrWithCurrentLanguage();
-                                }
-
-                                string text = _vobSubOcrNOcrCharacter.NOcrChar.Text;
-                                matches.Add(new CompareMatch(text, _vobSubOcrNOcrCharacter.IsItalic, 0, null) { ImageSplitterItem = item });
-                            }
-                            else if (result == DialogResult.Abort)
-                            {
-                                _abort = true;
-                            }
-                            else
-                            {
-                                matches.Add(new CompareMatch("*", false, 0, null));
-                            }
-
-                            _italicCheckedLast = _vobSubOcrNOcrCharacter.IsItalic;
-                        }
-                        else // found image match
-                        {
-                            matches.Add(new CompareMatch(match.Text, match.Italic, 0, null) { ImageSplitterItem = item });
-                            if (match.ExpandCount > 0)
-                            {
-                                index += match.ExpandCount - 1;
-                            }
-                        }
-                    }
-
-                    if (_abort)
-                    {
-                        return MatchesToItalicStringConverter.GetStringWithItalicTags(matches);
-                    }
-
-                    if (!expandSelection && !shrinkSelection)
-                    {
-                        index++;
-                    }
-
-                    if (shrinkSelection && expandSelectionList.Count < 2)
-                    {
-                        shrinkSelection = false;
-                        expandSelectionList = new List<ImageSplitterItem>();
-                    }
-                }
-
-                line = MatchesToItalicStringConverter.GetStringWithItalicTags(matches);
-            }
-
-            //OCR fix engine
-            string textWithOutFixes = line;
-            var lastLastLine = GetLastLastText(listViewIndex);
-            if (_ocrFixEngine != null && _ocrFixEngine.IsDictionaryLoaded)
-            {
-                int wordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(line, out var correctWords);
-
-                // smaller space pixels for italic
-                if (wordsNotFound > 0 && !string.IsNullOrEmpty(line) && line.Contains("<i>", StringComparison.Ordinal))
-                {
-                    AddItalicCouldBeSpace(matches, nbmpInput, _unItalicFactor, _numericUpDownPixelsIsSpace);
-                }
-                if (wordsNotFound > 0 && !string.IsNullOrEmpty(line) && line.Contains("<i>", StringComparison.Ordinal) && matches.Any(p => p?.ImageSplitterItem?.CouldBeSpaceBefore == true))
-                {
-                    int j = 1;
-                    while (j < matches.Count)
-                    {
-                        var match = matches[j];
-                        var prevMatch = matches[j - 1];
-                        if (match.ImageSplitterItem?.CouldBeSpaceBefore == true)
-                        {
-                            match.ImageSplitterItem.CouldBeSpaceBefore = false;
-                            if (prevMatch.Italic)
-                            {
-                                matches.Insert(j, new CompareMatch(" ", false, 0, string.Empty, new ImageSplitterItem(" ")));
-                            }
-                        }
-
-                        j++;
-                    }
-                    var tempLine = MatchesToItalicStringConverter.GetStringWithItalicTags(matches);
-                    var oldAutoGuessesUsed = new List<LogItem>(_ocrFixEngine.AutoGuessesUsed);
-                    var oldUnknownWordsFound = new List<LogItem>(_ocrFixEngine.UnknownWordsFound);
-                    _ocrFixEngine.AutoGuessesUsed.Clear();
-                    _ocrFixEngine.UnknownWordsFound.Clear();
-
-                    int tempWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(tempLine, out var tempCorrectWords);
-                    if (tempWordsNotFound <= wordsNotFound && tempCorrectWords > correctWords)
-                    {
-                        wordsNotFound = tempWordsNotFound;
-                        correctWords = tempCorrectWords;
-                        line = tempLine;
-                        textWithOutFixes = tempLine;
-                    }
-                    else
-                    {
-                        _ocrFixEngine.AutoGuessesUsed = oldAutoGuessesUsed;
-                        _ocrFixEngine.UnknownWordsFound = oldUnknownWordsFound;
-                    }
-                }
-
-                // prompt for user input for unknown words
-                if (wordsNotFound > 0 || correctWords == 0 || textWithOutFixes != null && string.IsNullOrWhiteSpace(textWithOutFixes.Replace("~", string.Empty)))
-                {
-                    _ocrFixEngine.AutoGuessesUsed.Clear();
-                    _ocrFixEngine.UnknownWordsFound.Clear();
-                }
-
-                if (_ocrFixEngine.Abort)
-                {
-                    ButtonPauseClick(null, null);
-                    _ocrFixEngine.Abort = false;
-
-                    if (_ocrFixEngine.LastAction == OcrSpellCheck.Action.InspectCompareMatches)
-                    {
-                        toolStripMenuItemInspectNOcrMatches_Click(null, null);
-                    }
-
-                    return string.Empty;
-                }
-
-
-                _ocrFixEngine.AutoGuessesUsed.Clear();
-
-                // Log unknown words guess (found via spelling dictionaries)
-                LogUnknownWords();
-            }
-
-            if (textWithOutFixes != null && textWithOutFixes.Trim() != line.Trim())
-            {
-                LogOcrFix(listViewIndex, textWithOutFixes, line);
-            }
-
-            return line;
-        }
+      
 
         private void UpdateLineHeights(List<ImageSplitterItem> list)
         {
@@ -3448,19 +2773,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
-            else if (_bdnXmlOriginal != null)
-            {
-                LoadBdnXml();
-                _hasForcedSubtitles = false;
-                foreach (var x in _bdnXmlOriginal.Paragraphs)
-                {
-                    if (x.Forced)
-                    {
-                        _hasForcedSubtitles = true;
-                        break;
-                    }
-                }
-            }
+          
             else if (_bluRaySubtitlesOriginal != null)
             {
                 var v = (decimal)Configuration.Settings.VobSubOcr.BlurayAllowDifferenceInPercent;
@@ -3566,7 +2879,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 //识别结果对象
                 var ocrResult = new OCRResult();
                  PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
-                Bitmap bitmap = GetSubtitleBitmap(3);
+                Bitmap bitmap = GetSubtitleBitmap(_selectedIndex);
                 //_subtitle.Paragraphs[2].
                 if (bitmap == null)
                 {
@@ -3599,100 +2912,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }).Start();
 
             _mainOcrTimer = new Timer();
-            _mainOcrTimer.Tick += mainOcrTimer_Tick;
+            //_mainOcrTimer.Tick += mainOcrTimer_Tick;
             _mainOcrTimer.Interval = 5;
             _mainOcrRunning = true;
             subtitleListView1.MultiSelect = false;
-            mainOcrTimer_Tick(null, null);
-        }
-        private void ButtonStartOcrClickBak(object sender, EventArgs e)
-        {
-            if (_subtitle.Paragraphs.Count == 0)
-            {
-                return;
-            }
-            InitializeTopAlign();
-
-            if (_ocrMethodIndex == _ocrMethodTesseract302 || _ocrMethodIndex == _ocrMethodTesseract5)
-            {
-                _tesseractThreadRunner?.Cancel();
-                _tesseractThreadRunner = new TesseractThreadRunner(OcrDone);
-                _tesseractRunner = new TesseractRunner();
-            }
-
-
-            _mainOcrBitmap = null;
-
-            SetButtonsStartOcr();
-            _fromMenuItem = false;
-            _abort = false;
-
-
-            int max = GetSubtitleCount();
-
-            if ((_ocrMethodIndex == _ocrMethodTesseract5 || _ocrMethodIndex == _ocrMethodTesseract302) &&
-                _tesseractAsyncStrings == null)
-            {
-                _nOcrDb = null;
-                _tesseractAsyncStrings = new string[max];
-            }
-            else if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                if (_nOcrDb == null)
-                {
-                    LoadNOcrWithCurrentLanguage();
-                }
-
-                if (_nOcrDb == null)
-                {
-                    MessageBox.Show("Fatal - No NOCR dictionary loaded!");
-                    SetButtonsEnabledAfterOcrDone();
-                    return;
-                }
-
-
-
-                InitializeNOcrThreads(max);
-            }
-            else if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
-            {
-                if (_binaryOcrDb == null)
-                {
-                    _binaryOcrDb = new BinaryOcrDb(Configuration.OcrDirectory + "Latin.db", true);
-                }
-
-            }
-
-            _mainOcrTimerMax = max;
-            if (_mainOcrIndex > 0)
-            {
-                var lastP = _subtitle.GetParagraphOrDefault(_mainOcrIndex - 1);
-                if (lastP != null && !string.IsNullOrEmpty(lastP.Text))
-                {
-                }
-            }
-
-            _mainOcrTimer = new Timer();
-            _mainOcrTimer.Tick += mainOcrTimer_Tick;
-            _mainOcrTimer.Interval = 5;
-            _mainOcrRunning = true;
-            subtitleListView1.MultiSelect = false;
-            mainOcrTimer_Tick(null, null);
-        }
-
-        private void InitializeNOcrThreads(int max)
-        {
-            _nOcrDbThread = new NOcrDb(_nOcrDb, null);
-            _nOcrThreadResults = new NOcrThreadResult[max];
-
-            int noOfThreads = Environment.ProcessorCount - 1;
-            if (noOfThreads >= max)
-            {
-                noOfThreads = max - 1;
-            }
-
-            _ocrThreadStop = false;
-            
+            //mainOcrTimer_Tick(null, null);
         }
 
         private void InitializeTopAlign()
@@ -3749,327 +2973,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private TesseractThreadRunner _tesseractThreadRunner;
 
         private readonly object _lockObj = new object();
-        public void OcrDone(int index, TesseractThreadRunner.ImageJob job)
-        {
-            if (_abort)
-            {
-                return;
-            }
-
-            _tesseractAsyncStrings[index] = job.Result;
-            Application.DoEvents();
-            lock (_lockObj)
-            {
-                var text = OcrViaTesseract(job.Bitmap, index);
-
-                text = text.Replace("<i>-</i>", "-");
-                text = text.Replace("<i>a</i>", "a");
-                text = text.Replace("<i>.</i>", ".");
-                text = text.Replace("  ", " ");
-                text = text.Trim();
-
-                text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-
-                // max allow 2 lines
-                if (_autoBreakLines && Utilities.GetNumberOfLines(text) > 2)
-                {
-                    text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                    text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-
-                    text = text.RemoveRecursiveLineBreaks();
-
-                    if (Utilities.GetNumberOfLines(text) > 2)
-                    {
-                        text = Utilities.AutoBreakLine(text);
-                    }
-                }
-
-                if (_dvbSubtitles != null && _transportStreamUseColor)
-                {
-                    if (_dvbSubColor[index] != Color.Transparent)
-                    {
-                        text = "<font color=\"" + ColorTranslator.ToHtml(_dvbSubColor[index]) + "\">" + text + "</font>";
-                    }
-                }
-
-                if (_abort)
-                {
-                    _mainOcrRunning = false;
-                    SetButtonsEnabledAfterOcrDone();
-                }
-
-                text = text.Trim();
-                text = text.Replace("  ", " ");
-                text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-                text = text.Replace("  ", " ");
-                text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-                text = SetTopAlign(index, text);
-
-                if (index >= subtitleListView1.Items.Count)
-                {
-                    return;
-                }
-
-                var item = subtitleListView1.Items[index];
-                item.Selected = true;
-                item.EnsureVisible();
-
-                Paragraph p = _subtitle.GetParagraphOrDefault(index);
-                if (p != null)
-                {
-                    p.Text = text;
-                }
-
-                if (subtitleListView1.SelectedItems.Count == 1 && subtitleListView1.SelectedItems[0].Index == index)
-                {
-                }
-                else
-                {
-                    subtitleListView1.SetText(index, text);
-                }
-
-                var max = GetSubtitleCount();
-                GetSubtitleTime(index, out var startTime, out var endTime);
-                if (ProgressCallback != null)
-                {
-                    var percent = (int)Math.Round((index + 1) * 100.0 / max);
-                    ProgressCallback?.Invoke($"{percent}%");
-                }
-
-                job.Bitmap.Dispose();
-                if (index >= max - 1)
-                {
-                    SetButtonsEnabledAfterOcrDone();
-                    _mainOcrRunning = false;
-                }
-            }
-
-            Application.DoEvents();
-        }
-
-        private bool MainLoop(int max, int i)
-        {
-            if (i >= max)
-            {
-                SetButtonsEnabledAfterOcrDone();
-                _mainOcrRunning = false;
-                return true;
-            }
-
-            var bmp = ShowSubtitleImage(i);
-            GetSubtitleTime(i, out var startTime, out var endTime);
-            if (ProgressCallback != null)
-            {
-                var percent = (int)Math.Round((i + 1) * 100.0 / max);
-                ProgressCallback?.Invoke($"{percent}%");
-            }
-            if (_abort)
-            {
-                bmp.Dispose();
-                SetButtonsEnabledAfterOcrDone();
-                _mainOcrRunning = false;
-                return true;
-            }
-
-            _mainOcrBitmap = bmp;
-
-            int j = i;
-            subtitleListView1.Items[j].Selected = true;
-            subtitleListView1.Items[j].Focused = true;
-            if (j < max - 1)
-            {
-                j++;
-            }
-            if (j < max - 1)
-            {
-                j++;
-            }
-
-            if (i % 3 == 0)
-            {
-                subtitleListView1.Items[j].EnsureVisible();
-            }
-
-            string text = string.Empty;
-            if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
-            {
-                text = SplitAndOcrBinaryImageCompare(bmp, i);
-            }
-            else if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                text = OcrViaNOCR(bmp, i);
-            }
-            else if (_ocrMethodIndex == _ocrMethodModi)
-            {
-                text = CallModi(i);
-            }
-            else if (_ocrMethodIndex == _ocrMethodCloudVision)
-            {
-                text = OcrViaCloudVision(bmp, i);
-            }
-
-
-            text = text.Replace("<i>-</i>", "-");
-            text = text.Replace("<i>a</i>", "a");
-            text = text.Replace("<i>.</i>", ".");
-            text = text.Replace("<i>,</i>", ",");
-            text = text.Replace("  ", " ");
-            text = text.Trim();
-
-            text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-            text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-
-            // max allow 2 lines
-            if (_autoBreakLines && Utilities.GetNumberOfLines(text) > 2)
-            {
-                text = text.Replace(" " + Environment.NewLine, Environment.NewLine);
-                text = text.Replace(Environment.NewLine + " ", Environment.NewLine);
-                text = text.RemoveRecursiveLineBreaks();
-
-                if (Utilities.GetNumberOfLines(text) > 2)
-                {
-                    text = Utilities.AutoBreakLine(text);
-                }
-            }
-
-            if (_dvbSubtitles != null && _transportStreamUseColor)
-            {
-                if (_dvbSubColor[i] != Color.Transparent)
-                {
-                    text = "<font color=\"" + ColorTranslator.ToHtml(_dvbSubColor[i]) + "\">" + text + "</font>";
-                }
-            }
-
-            if (_abort)
-            {
-                // Only overwrite text when empty
-                _mainOcrRunning = false;
-                SetButtonsEnabledAfterOcrDone();
-                return true;
-            }
-
-            text = text.Trim();
-            text = text.Replace("  ", " ");
-            text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-            text = text.Replace("  ", " ");
-            text = text.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
-            text = SetTopAlign(i, text);
-
-            Paragraph p = _subtitle.GetParagraphOrDefault(i);
-            if (p != null)
-            {
-                p.Text = text;
-            }
-
-            if (subtitleListView1.SelectedItems.Count == 1 && subtitleListView1.SelectedItems[0].Index == i)
-            {
-            }
-            else
-            {
-                subtitleListView1.SetText(i, text);
-            }
-
-            return false;
-        }
-
-        private string SetTopAlign(int i, string text)
-        {
-            if (_captureTopAlign && _captureTopAlignHeight > 0)
-            {
-                GetSubtitleTopAndHeight(i, out _, out var top, out _, out var height);
-                if (top + height < _captureTopAlignHeight && top < _captureTopAlignHeightThird)
-                {
-                    text = "{\\an8}" + text;
-                }
-            }
-
-            return text;
-        }
-
-        private bool MainLoopTesseract(int max, int i)
-        {
-            if (i >= max)
-            {
-                _tesseractThreadRunner.CheckQueue();
-                return false;
-            }
-
-            if (_abort)
-            {
-                SetButtonsEnabledAfterOcrDone();
-                _mainOcrRunning = false;
-                return true;
-            }
-
-            var bmp = GetSubtitleBitmap(i);
-            bool is302 = _ocrMethodIndex == _ocrMethodTesseract302;
-            _tesseractThreadRunner.CheckQueue();
-            return false;
-        }
-
-        private void mainOcrTimer_Tick(object sender, EventArgs e)
-        {
-            _mainOcrTimer.Stop();
-            bool done = _ocrMethodIndex == _ocrMethodTesseract5 || _ocrMethodIndex == _ocrMethodTesseract302 ? MainLoopTesseract(_mainOcrTimerMax, _mainOcrIndex) : MainLoop(_mainOcrTimerMax, _mainOcrIndex);
-            if (done || _abort)
-            {
-                SetButtonsEnabledAfterOcrDone();
-            }
-            else
-            {
-                if (_mainOcrSelectedIndices != null)
-                {
-                    var idx = _mainOcrSelectedIndices.IndexOf(_mainOcrIndex);
-                    if (idx >= 0 && idx + 1 < _mainOcrSelectedIndices.Count)
-                    {
-                        _mainOcrIndex = _mainOcrSelectedIndices[idx + 1];
-                    }
-                    else
-                    {
-                        SetButtonsEnabledAfterOcrDone();
-                        _mainOcrSelectedIndices = null;
-                        if (_tesseractThreadRunner != null && (_ocrMethodIndex == _ocrMethodTesseract5 || _ocrMethodIndex == _ocrMethodTesseract302))
-                        {
-                            for (var i = 0; i < 100; i++)
-                            {
-                                System.Threading.Thread.Sleep(25);
-                                _tesseractThreadRunner.CheckQueue();
-                                if (_tesseractThreadRunner.Count == 0)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        return;
-                    }
-                }
-                else
-                {
-                    _mainOcrIndex++;
-                }
-
-                _mainOcrTimer.Start();
-            }
-        }
-
-        private void LoadNOcrWithCurrentLanguage()
-        {
-            string fileName = GetNOcrLanguageFileName();
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                _nOcrDb = new NOcrDb(fileName);
-            }
-        }
-
-        internal void SaveNOcrWithCurrentLanguage()
-        {
-            SaveNOcr();
-        }
 
         public static Bitmap ResizeBitmap(Bitmap b, int width, int height)
         {
@@ -4099,27 +3004,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return unItaliced;
         }
 
-        private TesseractRunner _tesseractRunner;
-
-        private string Tesseract3DoOcrViaExe(Bitmap bmp, string language, string psmMode, int tesseractEngineMode)
-        {
-            if (_tesseractRunner == null)
-            {
-                //_tesseractThreadRunner = new TesseractThreadRunner(OcrDone);
-                _tesseractRunner = new TesseractRunner();
-            }
-
-            string pngFileName = Path.GetTempPath() + Guid.NewGuid() + ".png";
-            bmp.Save(pngFileName, System.Drawing.Imaging.ImageFormat.Png);
-            var result = _tesseractRunner.Run(language, psmMode, tesseractEngineMode.ToString(CultureInfo.InvariantCulture), pngFileName, _ocrMethodIndex != _ocrMethodTesseract5);
-            if (_tesseractRunner.TesseractErrors.Count <= 2 && !string.IsNullOrEmpty(_tesseractRunner.LastError))
-            {
-                MessageBox.Show(_tesseractRunner.LastError);
-            }
-
-            return result;
-        }
-
         private bool HasSingleLetters(string line)
         {
             if (!_ocrFixEngine.IsDictionaryLoaded || !_ocrFixEngine.SpellCheckDictionaryName.StartsWith("en_", StringComparison.Ordinal))
@@ -4145,288 +3029,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return false;
         }
 
-        private string OcrViaTesseract(Bitmap bitmap, int index)
-        {
-            if (bitmap == null)
-            {
-                return string.Empty;
-            }
-
-            if (_ocrFixEngine == null)
-            {
-                comboBoxDictionaries_SelectedIndexChanged(null, null);
-                if (_ocrFixEngine == null)
-                {
-                    _ocrFixEngine = new OcrFixEngine(string.Empty, string.Empty, this, _ocrMethodIndex == _ocrMethodBinaryImageCompare || _ocrMethodIndex == _ocrMethodNocr);
-                }
-            }
-
-            const int badWords = 0;
-            string textWithOutFixes;
-            if (!string.IsNullOrEmpty(_tesseractAsyncStrings?[index]))
-            {
-                textWithOutFixes = _tesseractAsyncStrings[index];
-            }
-            else
-            {
-                if (_tesseractAsyncIndex <= index)
-                {
-                    _tesseractAsyncIndex = index + 10;
-                }
-
-                textWithOutFixes = Tesseract3DoOcrViaExe(bitmap, _languageId, "6", _tesseractEngineMode); // 6 = Assume a single uniform block of text.
-            }
-
-            if ((!textWithOutFixes.Contains(Environment.NewLine) || Utilities.CountTagInText(textWithOutFixes, '\n') > 2)
-                && (textWithOutFixes.Length < 17 || bitmap.Height < 50))
-            {
-                string psm = Tesseract3DoOcrViaExe(bitmap, _languageId, "7", _tesseractEngineMode); // 7 = Treat the image as a single text line.
-
-                // sometimes short texts are not recognized - this resize seems to help
-                if (psm == string.Empty && textWithOutFixes == string.Empty ||
-                    psm.Length < 5 && !psm.Contains('.') && psm == psm.ToUpperInvariant()) // e.g. "SEN" (could be more...) - see https://github.com/SubtitleEdit/subtitleedit/issues/3833
-                {
-                    using (var b = ResizeBitmap(bitmap, bitmap.Width * 2, (int)Math.Round(bitmap.Height * 2.5)))
-                    {
-                        psm = Tesseract3DoOcrViaExe(b, _languageId, string.Empty, _tesseractEngineMode);
-                    }
-                }
-
-                if (textWithOutFixes != psm)
-                {
-                    if (string.IsNullOrWhiteSpace(textWithOutFixes))
-                    {
-                        textWithOutFixes = psm;
-                    }
-                    else if (psm.Length > textWithOutFixes.Length)
-                    {
-                        if (!psm.Contains('9') && textWithOutFixes.Contains('9') ||
-                            !psm.Contains('6') && textWithOutFixes.Contains('6') ||
-                            !psm.Contains('5') && textWithOutFixes.Contains('5') ||
-                            !psm.Contains('3') && textWithOutFixes.Contains('3') ||
-                            !psm.Contains('1') && textWithOutFixes.Contains('1') ||
-                            !psm.Contains('$') && textWithOutFixes.Contains('$') ||
-                            !psm.Contains('•') && textWithOutFixes.Contains('•') ||
-                            !psm.Contains('Y') && textWithOutFixes.Contains('Y') ||
-                            !psm.Contains('\'') && textWithOutFixes.Contains('\'') ||
-                            !psm.Contains('€') && textWithOutFixes.Contains('€'))
-                        {
-                            textWithOutFixes = psm;
-                        }
-                        else if (_ocrFixEngine != null && !psm.Contains('$') && !psm.Contains('•') && !psm.Contains('€'))
-                        {
-                            int wordsNotFoundNoFixes = _ocrFixEngine.CountUnknownWordsViaDictionary(textWithOutFixes, out var correctWordsNoFixes);
-                            int wordsNotFoundPsm7 = _ocrFixEngine.CountUnknownWordsViaDictionary(psm, out var correctWordsPsm7);
-                            if (wordsNotFoundPsm7 <= wordsNotFoundNoFixes && correctWordsPsm7 > correctWordsNoFixes)
-                            {
-                                textWithOutFixes = psm;
-                            }
-                        }
-                    }
-                    else if (psm.Length == textWithOutFixes.Length &&
-                             (!psm.Contains('0') && textWithOutFixes.Contains('0') || // these chars are often mistaken
-                              !psm.Contains('9') && textWithOutFixes.Contains('9') ||
-                              !psm.Contains('8') && textWithOutFixes.Contains('8') ||
-                              !psm.Contains('5') && textWithOutFixes.Contains('5') ||
-                              !psm.Contains('3') && textWithOutFixes.Contains('3') ||
-                              !psm.Contains('1') && textWithOutFixes.Contains('1') ||
-                              !psm.Contains('$') && textWithOutFixes.Contains('$') ||
-                              !psm.Contains('€') && textWithOutFixes.Contains('€') ||
-                              !psm.Contains('•') && textWithOutFixes.Contains('•') ||
-                              !psm.Contains('Y') && textWithOutFixes.Contains('Y') ||
-                              !psm.Contains('\'') && textWithOutFixes.Contains('\'') ||
-                              !psm.Contains('/') && textWithOutFixes.Contains('/') ||
-                              !psm.Contains('(') && textWithOutFixes.Contains('(') ||
-                              !psm.Contains(')') && textWithOutFixes.Contains(')') ||
-                              !psm.Contains('_') && textWithOutFixes.Contains('_')))
-                    {
-                        textWithOutFixes = psm;
-                    }
-                    else if (psm.Length == textWithOutFixes.Length && psm.EndsWith('.') && !textWithOutFixes.EndsWith('.'))
-                    {
-                        textWithOutFixes = psm;
-                    }
-                }
-            }
-
-           
-            // Sometimes Tesseract has problems with small fonts - it helps to make the image larger
-            if (HtmlUtil.RemoveOpenCloseTags(textWithOutFixes, HtmlUtil.TagItalic).Replace("@", string.Empty).Replace("%", string.Empty).Replace("|", string.Empty).Trim().Length < 3
-                || Utilities.CountTagInText(textWithOutFixes, '\n') > 2)
-            {
-                string rs = TesseractResizeAndRetry(bitmap);
-                textWithOutFixes = rs;
-            }
-
-            // fix italics
-            textWithOutFixes = FixItalics(textWithOutFixes);
-
-            string line = textWithOutFixes.Trim();
-            if (_ocrFixEngine.IsDictionaryLoaded)
-            {
-                
-
-                int wordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(line, out int correctWords);
-                int oldCorrectWords = correctWords;
-
-                if (wordsNotFound > 0 || correctWords == 0)
-                {
-                    var oldUnknownWords = new List<LogItem>();
-                    oldUnknownWords.AddRange(_ocrFixEngine.UnknownWordsFound);
-                    _ocrFixEngine.UnknownWordsFound.Clear();
-
-                    var newUnfixedText = TesseractResizeAndRetry(bitmap);
-                    var lastLastLine = GetLastLastText(index);
-                    var newText = newUnfixedText;
-                   
-                    int newWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(newText, out correctWords);
-
-                   
-
-                    if (wordsNotFound == 1 && newWordsNotFound == 1 && newUnfixedText.EndsWith("!!", StringComparison.Ordinal) && textWithOutFixes.EndsWith('u') && newText.Length > 1)
-                    {
-                        _ocrFixEngine.UnknownWordsFound.Clear();
-                        newText = textWithOutFixes.Substring(0, textWithOutFixes.Length - 1) + "!!";
-                        newWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(newText, out correctWords);
-                    }
-                    else if (correctWords >= oldCorrectWords &&
-                             (!newText.Contains('9') || textWithOutFixes.Contains('9')) &&
-                             (!newText.Replace("</i>", string.Empty).Contains('/') || textWithOutFixes.Replace("</i>", string.Empty).Contains('/')) &&
-                             !string.IsNullOrWhiteSpace(newUnfixedText) &&
-                             newWordsNotFound < wordsNotFound || (newWordsNotFound == wordsNotFound && newText.EndsWith('!') && textWithOutFixes.EndsWith('l')))
-                    {
-                        wordsNotFound = newWordsNotFound;
-                        if (textWithOutFixes.Length > 3 && textWithOutFixes.EndsWith("...", StringComparison.Ordinal) && !newText.EndsWith('.') && !newText.EndsWith(',') && !newText.EndsWith('!') &&
-                            !newText.EndsWith('?') && !newText.EndsWith("</i>", StringComparison.Ordinal))
-                        {
-                            newText = newText.TrimEnd() + "...";
-                        }
-                        else if (textWithOutFixes.Length > 0 && textWithOutFixes.EndsWith('.') && !newText.EndsWith('.') && !newText.EndsWith(',') && !newText.EndsWith('!') &&
-                                 !newText.EndsWith('?') && !newText.EndsWith("</i>", StringComparison.Ordinal))
-                        {
-                            newText = newText.TrimEnd() + ".";
-                        }
-                        else if (textWithOutFixes.Length > 0 && textWithOutFixes.EndsWith('?') && !newText.EndsWith('.') && !newText.EndsWith(',') && !newText.EndsWith('!') &&
-                                 !newText.EndsWith('?') && !newText.EndsWith("</i>", StringComparison.Ordinal))
-                        {
-                            newText = newText.TrimEnd() + "?";
-                        }
-
-                        textWithOutFixes = newUnfixedText;
-                        line = FixItalics(newText);
-                    }
-                    else if (correctWords > oldCorrectWords + 1 || (correctWords > oldCorrectWords && !textWithOutFixes.Contains(' ')))
-                    {
-                        wordsNotFound = newWordsNotFound;
-                        textWithOutFixes = newUnfixedText;
-                        line = newText;
-                    }
-                    else
-                    {
-                        _ocrFixEngine.UnknownWordsFound.Clear();
-                        _ocrFixEngine.UnknownWordsFound.AddRange(oldUnknownWords);
-                    }
-                }
-
-                if (wordsNotFound > 0 || correctWords == 0 || textWithOutFixes != null && textWithOutFixes.Replace("~", string.Empty).Trim().Length < 2)
-                {
-                    if (_bluRaySubtitles != null && !line.Contains("<i>"))
-                    {
-                        _ocrFixEngine.AutoGuessesUsed.Clear();
-                        _ocrFixEngine.UnknownWordsFound.Clear();
-
-                        // which is best - normal image or one color image?
-                        var nbmp = new NikseBitmap(bitmap);
-                        nbmp.MakeOneColor(Color.White);
-                        Bitmap oneColorBitmap = nbmp.GetBitmap();
-                        string oneColorText = Tesseract3DoOcrViaExe(oneColorBitmap, _languageId, "6", _tesseractEngineMode); // 6 = Assume a single uniform block of text.
-                        oneColorBitmap.Dispose();
-
-                        if (oneColorText.Length > 1 &&
-                            !oneColorText.Contains("CD") &&
-                            (!oneColorText.Contains('0') || line.Contains('0')) &&
-                            (!oneColorText.Contains('2') || line.Contains('2')) &&
-                            (!oneColorText.Contains('3') || line.Contains('4')) &&
-                            (!oneColorText.Contains('5') || line.Contains('5')) &&
-                            (!oneColorText.Contains('9') || line.Contains('9')) &&
-                            (!oneColorText.Contains('•') || line.Contains('•')) &&
-                            (!oneColorText.Contains(')') || line.Contains(')')) &&
-                            Utilities.CountTagInText(oneColorText, '(') < 2 && Utilities.CountTagInText(oneColorText, ')') < 2 &&
-                            Utilities.GetNumberOfLines(oneColorText) < 4)
-                        {
-                            var lastLastLine = GetLastLastText(index);
-                            int modiWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(oneColorText, out var modiCorrectWords);
-                            string modiTextOcrFixed = oneColorText;
-
-                            int modiOcrCorrectedWordsNotFound = _ocrFixEngine.CountUnknownWordsViaDictionary(modiTextOcrFixed, out var modiOcrCorrectedCorrectWords);
-                            if (modiOcrCorrectedWordsNotFound <= modiWordsNotFound)
-                            {
-                                oneColorText = modiTextOcrFixed;
-                                modiWordsNotFound = modiOcrCorrectedWordsNotFound;
-                                modiCorrectWords = modiOcrCorrectedCorrectWords;
-                            }
-
-                            if (modiWordsNotFound < wordsNotFound || (textWithOutFixes.Length == 1 && modiWordsNotFound == 0))
-                            {
-                                line = FixItalics(oneColorText); // use one-color text
-                                wordsNotFound = modiWordsNotFound;
-                                correctWords = modiCorrectWords;
-                            }
-                            else if (wordsNotFound == modiWordsNotFound && oneColorText.EndsWith('!') && (line.EndsWith('l') || line.EndsWith('ﬂ')))
-                            {
-                                line = FixItalics(oneColorText);
-                                wordsNotFound = modiWordsNotFound;
-                                correctWords = modiCorrectWords;
-                            }
-                        }
-                    }
-                }
-
-
-                if (wordsNotFound > 0 || correctWords == 0 || textWithOutFixes != null && textWithOutFixes.Replace("~", string.Empty).Trim().Length < 2)
-                {
-                    _ocrFixEngine.AutoGuessesUsed.Clear();
-                    _ocrFixEngine.UnknownWordsFound.Clear();
-                    if (subtitleListView1.SelectedItems.Count != 1 || subtitleListView1.SelectedItems[0].Index != index)
-                    {
-                        subtitleListView1.SelectIndexAndEnsureVisible(index);
-                    }
-                }
-
-                if (_ocrFixEngine.Abort)
-                {
-                    ButtonPauseClick(null, null);
-                    _ocrFixEngine.Abort = false;
-                    return string.Empty;
-                }
-
-
-
-                _ocrFixEngine.AutoGuessesUsed.Clear();
-
-                // Log unknown words guess (found via spelling dictionaries)
-                LogUnknownWords();
-
-                ColorLineByNumberOfUnknownWords(index, wordsNotFound, line);
-            }
-            else
-            { // no dictionary :(
-
-                ColorLineByNumberOfUnknownWords(index, badWords, line);
-            }
-
-            if (textWithOutFixes.Trim() != line.Trim())
-            {
-                LogOcrFix(index, textWithOutFixes, line);
-            }
-
-            if (_vobSubMergedPackList != null)
-            {
-                bitmap.Dispose();
-            }
-
-            return line;
-        }
 
         private static string FixItalics(string input)
         {
@@ -4481,25 +3083,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             _ocrFixEngine.UnknownWordsFound.Clear();
-        }
-
-        private string TesseractResizeAndRetry(Bitmap bitmap)
-        {
-            string result;
-            using (var b = ResizeBitmap(bitmap, bitmap.Width * 3, bitmap.Height * 2))
-            {
-                result = Tesseract3DoOcrViaExe(b, _languageId, null, _tesseractEngineMode);
-            }
-
-            if (string.IsNullOrWhiteSpace(result))
-            {
-                using (var b = ResizeBitmap(bitmap, bitmap.Width * 4, bitmap.Height * 2))
-                {
-                    result = Tesseract3DoOcrViaExe(b, _languageId, "7", _tesseractEngineMode);
-                }
-            }
-
-            return result.TrimEnd();
         }
 
         private void LogOcrFix(int index, string oldLine, string newLine)
@@ -4697,109 +3280,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return line;
         }
 
-        private void InitializeNOcrForBatch(string db)
-        {
-            _ocrMethodIndex = _ocrMethodNocr;
-            var fileName = string.Empty;
-            if (!string.IsNullOrEmpty(db))
-            {
-                fileName = Path.Combine(Configuration.OcrDirectory, db);
-                if (!fileName.EndsWith(".nocr", StringComparison.OrdinalIgnoreCase))
-                {
-                    fileName += ".nocr";
-                }
-
-                if (!File.Exists(fileName))
-                {
-                    fileName = string.Empty;
-                }
-            }
-
-            if (string.IsNullOrEmpty(fileName))
-            {
-                fileName = Configuration.Settings.VobSubOcr.LineOcrLastLanguages;
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    fileName = "Latin";
-                }
-
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    fileName = Path.Combine(Configuration.OcrDirectory, fileName + ".nocr");
-                }
-            }
-
-            _nOcrDb = new NOcrDb(fileName);
-
-            _nOcrThreadResults = null;
-            _ocrThreadStop = true;
-        }
-
-        private void InitializeTesseract(string chosenLanguage = null)
-        {
-            if (Configuration.IsRunningOnWindows &&
-                !Directory.Exists(Configuration.Tesseract302Directory) &&
-                Directory.Exists(Configuration.TesseractOriginalDirectory))
-            {
-                foreach (string dirPath in Directory.GetDirectories(Configuration.TesseractOriginalDirectory, "*", SearchOption.AllDirectories))
-                {
-                    Directory.CreateDirectory(dirPath.Replace(Configuration.TesseractOriginalDirectory, Configuration.Tesseract302Directory));
-                }
-
-                foreach (string newPath in Directory.GetFiles(Configuration.TesseractOriginalDirectory, "*.*", SearchOption.AllDirectories))
-                {
-                    File.Copy(newPath, newPath.Replace(Configuration.TesseractOriginalDirectory, Configuration.Tesseract302Directory), true);
-                }
-            }
-
-            string dir = _ocrMethodIndex == _ocrMethodTesseract302 ? Configuration.Tesseract302DataDirectory : Configuration.TesseractDataDirectory;
-            if (Directory.Exists(dir))
-            {
-                var cultures = Iso639Dash2LanguageCode.List;
-                foreach (var fileName in Directory.GetFiles(dir, "*.traineddata"))
-                {
-                    string tesseractName = Path.GetFileNameWithoutExtension(fileName);
-                    if (tesseractName != "osd" && tesseractName != "music" && !tesseractName.EndsWith("-frak", StringComparison.Ordinal))
-                    {
-                        string cultureName = tesseractName;
-                        var match = cultures.FirstOrDefault(p => p.ThreeLetterCode == tesseractName);
-                        if (match != null)
-                        {
-                            cultureName = match.EnglishName;
-                        }
-                        else if (tesseractName == "chi_sim")
-                        {
-                            cultureName = "Chinese simplified";
-                        }
-                        else if (tesseractName == "chi_tra")
-                        {
-                            cultureName = "Chinese traditional";
-                        }
-                        else if (tesseractName == "per")
-                        {
-                            cultureName = "Farsi";
-                        }
-                        else if (tesseractName == "nor")
-                        {
-                            cultureName = "Norwegian";
-                        }
-                    }
-                }
-            }
-
-
-            if (string.IsNullOrEmpty(_languageId))
-            {
-                if (string.IsNullOrEmpty(chosenLanguage))
-                {
-                    _languageId = "eng";
-                }
-                else
-                {
-                    _languageId = chosenLanguage;
-                }
-            }
-        }
 
         private void InitializeModiLanguages()
         {
@@ -4816,7 +3296,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _mainOcrTimer?.Stop();
             _abort = true;
             _ocrThreadStop = true;
-            _tesseractThreadRunner?.Cancel();
             buttonPause.Enabled = false;
             SetButtonsEnabledAfterOcrDone();
         }
@@ -4925,177 +3404,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void VobSubOcr_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == UiUtil.HelpKeys)
-            {
-                UiUtil.ShowHelp("#importvobsub");
-                e.SuppressKeyPress = true;
-            }
-            else if (e.KeyData == UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralGoToNextSubtitlePlayTranslate))
-            {
-                int selectedIndex = 0;
-                if (subtitleListView1.SelectedItems.Count > 0)
-                {
-                    selectedIndex = subtitleListView1.SelectedItems[0].Index;
-                    selectedIndex++;
-                }
-
-                subtitleListView1.SelectIndexAndEnsureVisible(selectedIndex);
-            }
-            else if (e.KeyCode == Keys.Up && e.Modifiers == Keys.Alt)
-            {
-                int selectedIndex = 0;
-                if (subtitleListView1.SelectedItems.Count > 0)
-                {
-                    selectedIndex = subtitleListView1.SelectedItems[0].Index;
-                    selectedIndex--;
-                }
-
-                subtitleListView1.SelectIndexAndEnsureVisible(selectedIndex);
-            }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.G)
-            {
-                using (var goToLine = new GoToLine())
-                {
-                    goToLine.Initialize(1, subtitleListView1.Items.Count);
-                    if (goToLine.ShowDialog(this) == DialogResult.OK)
-                    {
-                        subtitleListView1.SelectNone();
-                        subtitleListView1.Items[goToLine.LineNumber - 1].Selected = true;
-                        subtitleListView1.Items[goToLine.LineNumber - 1].EnsureVisible();
-                        subtitleListView1.Items[goToLine.LineNumber - 1].Focused = true;
-                    }
-                }
-            }
-            else if (_mainGeneralGoToNextSubtitle == e.KeyData)
-            {
-                int selectedIndex = 0;
-                if (subtitleListView1.SelectedItems.Count > 0)
-                {
-                    selectedIndex = subtitleListView1.SelectedItems[0].Index;
-                    selectedIndex++;
-                }
-
-                subtitleListView1.SelectIndexAndEnsureVisible(selectedIndex);
-                e.SuppressKeyPress = true;
-            }
-            else if (_mainGeneralGoToPrevSubtitle == e.KeyData)
-            {
-                int selectedIndex = 0;
-                if (subtitleListView1.SelectedItems.Count > 0)
-                {
-                    selectedIndex = subtitleListView1.SelectedItems[0].Index;
-                    selectedIndex--;
-                }
-
-                subtitleListView1.SelectIndexAndEnsureVisible(selectedIndex);
-                e.SuppressKeyPress = true;
-            }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.R)
-            {
-                e.SuppressKeyPress = true;
-                SelectBestImageCompareDatabase();
-            }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.T)
-            {
-                e.SuppressKeyPress = true;
-                OcrTrainingToolStripMenuItem_Click(null, null);
-            }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.P)
-            {
-                e.SuppressKeyPress = true;
-                previewToolStripMenuItem_Click(null, null);
-            }
-            else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.P)
-            {
-                e.SuppressKeyPress = true;
-                ImagePreProcessingToolStripMenuItem_Click(null, null);
-            }
-            else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.I && (_ocrMethodIndex == _ocrMethodBinaryImageCompare || _ocrMethodIndex == _ocrMethodNocr))
-            {
-                e.SuppressKeyPress = true;
-                var bmp = (Bitmap)pictureBoxSubtitleImage.Image;
-                if (bmp != null)
-                {
-                    var nBmp = new NikseBitmap(bmp);
-                    bmp.Dispose();
-                    var italicFactor = _unItalicFactor;
-
-                    for (var startX = 20.0; startX < nBmp.Width; startX += 20.0)
-                    {
-                        var x = startX;
-                        for (int y = 0; y < nBmp.Height; y++)
-                        {
-                            x = startX - y * italicFactor;
-                            if (x >= 0)
-                            {
-                                nBmp.SetPixel((int)Math.Round(x), y, Color.Red);
-                            }
-                        }
-                    }
-
-                    pictureBoxSubtitleImage.Image = nBmp.GetBitmap();
-                }
-            }
-            else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.H && (_ocrMethodIndex == _ocrMethodBinaryImageCompare || _ocrMethodIndex == _ocrMethodNocr))
-            {
-                e.SuppressKeyPress = true;
-                var bmp = (Bitmap)pictureBoxSubtitleImage.Image;
-                if (bmp != null)
-                {
-                    var nBmp = new NikseBitmap(bmp);
-                    bmp.Dispose();
-                    for (var startY = 20; startY < nBmp.Height; startY += 20)
-                    {
-                        for (int x = 0; x < nBmp.Width; x++)
-                        {
-                            nBmp.SetPixel(x, startY, Color.Red);
-                        }
-                    }
-
-                    pictureBoxSubtitleImage.Image = nBmp.GetBitmap();
-                }
-            }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.H && (_ocrMethodIndex == _ocrMethodBinaryImageCompare || _ocrMethodIndex == _ocrMethodNocr))
-            {
-                e.SuppressKeyPress = true;
-
-              
-
-                int minLineHeight = GetMinLineHeight();
-                var bitmap = GetSubtitleBitmap(_selectedIndex);
-                var nikseBitmap = new NikseBitmap(bitmap);
-                nikseBitmap.MakeTwoColor(200);
-                var list = NikseBitmapImageSplitter.SplitBitmapToLines(nikseBitmap, _numericUpDownPixelsIsSpace, false, Configuration.Settings.VobSubOcr.TopToBottom, minLineHeight, _autoLineHeight);
-
-                var lineSplitImage = new NikseBitmap(nikseBitmap.Width + 10, nikseBitmap.Height + list.Count * 10 + 10);
-                lineSplitImage.Fill(Color.Red);
-                for (var index = 0; index < list.Count; index++)
-                {
-                    var imageSplitterItem = list[index];
-                    if (imageSplitterItem.NikseBitmap != null)
-                    {
-                        for (int y = 0; y < imageSplitterItem.NikseBitmap.Height; y++)
-                        {
-                            for (int x = 0; x < imageSplitterItem.NikseBitmap.Width; x++)
-                            {
-                                lineSplitImage.SetPixel(x, y + imageSplitterItem.Y + index * 5, imageSplitterItem.NikseBitmap.GetPixel(x, y));
-                            }
-                        }
-                    }
-                }
-
-                lineSplitImage.ReplaceTransparentWith(Color.Black);
-                var bmp = lineSplitImage.GetBitmap();
-                using (var form = new ExportPngXmlPreview(bmp))
-                {
-                    form.ShowDialog(this);
-                }
-                bmp.Dispose();
-            }
-        }
-
         private void LoadOcrFixEngine(string threeLetterIsoLanguageName, string hunspellName)
         {
             if (_ocrMethodIndex != _ocrMethodTesseract5 && _ocrMethodIndex != _ocrMethodTesseract302)
@@ -5134,124 +3442,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void ComboBoxOcrMethodSelectedIndexChanged(object sender, EventArgs e)
-        {
-            _abort = true;
-            _binaryOcrDb = null;
-            _nOcrDb = null;
-            if (_ocrMethodIndex == _ocrMethodTesseract5)
-            {
-                ResetTesseractThread();
-                InitializeTesseract();
-                Configuration.Settings.VobSubOcr.LastOcrMethod = "Tesseract4";
-                if (Configuration.IsRunningOnWindows && !File.Exists(Path.Combine(Configuration.TesseractDirectory, "tesseract.exe")))
-                {
-                    if (IntPtr.Size * 8 == 32)
-                    {
-                        MessageBox.Show("Sorry, Tesseract {Tesseract5Version} requires a 64-bit processor");
-                        return;
-                    }
-                    else if (MessageBox.Show($"{LanguageSettings.Current.GetTesseractDictionaries.Download} Tesseract {Tesseract5Version}", LanguageSettings.Current.General.Title, MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                    {
-                        using (var form = new DownloadTesseract5(Tesseract5Version))
-                        {
-                            if (form.ShowDialog(this) == DialogResult.OK)
-                            {
-                                buttonGetTesseractDictionaries_Click(sender, e);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-            }
-            else if (_ocrMethodIndex == _ocrMethodTesseract302)
-            {
-                ResetTesseractThread();
-                InitializeTesseract();
-                Configuration.Settings.VobSubOcr.LastOcrMethod = "Tesseract302";
-                if (!File.Exists(Path.Combine(Configuration.Tesseract302Directory, "tesseract.exe")))
-                {
-                    if (MessageBox.Show(LanguageSettings.Current.GetTesseractDictionaries.Download + " Tesseract 3.02", LanguageSettings.Current.General.Title, MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                    {
-                        using (var form = new DownloadTesseract302())
-                        {
-                            form.ShowDialog(this);
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-            }
-            else if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                Configuration.Settings.VobSubOcr.LastOcrMethod = "nOCR";
-                SetSpellCheckLanguage(Configuration.Settings.VobSubOcr.LineOcrLastSpellCheck);
-
-                int index = 0;
-                int selIndex = 0;
-                foreach (var s in NOcrDb.GetDatabases())
-                {
-                    if (s == Configuration.Settings.VobSubOcr.LineOcrLastLanguages)
-                    {
-                        selIndex = index;
-                    }
-
-                    index++;
-                }
-
-            }
-            
-
-            _ocrFixEngine = null;
-            SubtitleListView1SelectedIndexChanged(null, null);
-        }
-
-        private string GetNOcrLanguageFileName()
-        {
-
-            return null;
-        }
-
-        private void ContextMenuStripListviewOpening(object sender, CancelEventArgs e)
-        {
-            if (subtitleListView1.SelectedItems.Count == 0)
-            {
-                e.Cancel = true;
-            }
-
-            // Enable toolstrips if event was raised by Subtitle listview
-            bool enableIfRaisedBySubListView = contextMenuStripListview.SourceControl == subtitleListView1;
-            toolStripSeparator1.Visible = enableIfRaisedBySubListView && subtitleListView1.SelectedItems.Count == 1;
-            saveImageAsToolStripMenuItem.Visible = !enableIfRaisedBySubListView || subtitleListView1.SelectedItems.Count == 1;
-
-            // Image compare
-            bool enableIfImageCompare = _ocrMethodIndex == _ocrMethodBinaryImageCompare;
-            inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Visible = enableIfImageCompare;
-            EditLastAdditionsToolStripMenuItem.Visible = enableIfImageCompare && _lastAdditions != null && _lastAdditions.Count > 0;
-
-            // Use N-OCR compare
-            bool useNocrCompare = _ocrMethodIndex == _ocrMethodNocr;
-            toolStripMenuItemInspectNOcrMatches.Visible = useNocrCompare;
-            OcrTrainingToolStripMenuItem.Visible = useNocrCompare || enableIfImageCompare;
-
-            toolStripSeparatorImageCompare.Visible = useNocrCompare || enableIfImageCompare;
-
-            if (subtitleListView1.SelectedItems.Count > 0 && (_ocrMethodIndex == _ocrMethodNocr ||
-                                                              _ocrMethodIndex == _ocrMethodBinaryImageCompare ||
-                                                              _ocrMethodIndex == _ocrMethodCloudVision))
-            {
-                toolStripSeparatorOcrSelected.Visible = true;
-            }
-            else
-            {
-                toolStripSeparatorOcrSelected.Visible = true;
-            }
-        }
 
         private void SaveImageAsToolStripMenuItemClick(object sender, EventArgs e)
         {
@@ -5302,36 +3492,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
- 
-
-        private void ResetTesseractThread()
-        {
-            _ocrThreadStop = true;
-            _tesseractThreadRunner?.Cancel();
-            if (_tesseractAsyncStrings != null)
-            {
-                for (int i = 0; i < _tesseractAsyncStrings.Length; i++)
-                {
-                    _tesseractAsyncStrings[i] = string.Empty;
-                }
-            }
-
-            _tesseractAsyncIndex = 0;
-        }
-
         public string LanguageString
         {
             get
             {
                 return null;
-            }
-        }
-
-        private void SetSpellCheckLanguage(string languageString)
-        {
-            if (string.IsNullOrEmpty(languageString))
-            {
-                return;
             }
         }
 
@@ -5403,11 +3568,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             SetButtonsStartOcr();
             _vobSubOcrSettings = vobSubOcrSettings;
 
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
-
 
             Text = LanguageSettings.Current.VobSubOcr.TitleBluRay;
             Text += " - " + Path.GetFileName(_bdnFileName);
@@ -5416,10 +3576,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             autoTransparentBackgroundToolStripMenuItem.Visible = true;
         }
 
-        private void SetOcrMethod()
-        {
-            
-        }
 
         internal void StartOcrFromDelayed()
         {
@@ -5622,7 +3778,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void checkBoxAutoTransparentBackground_CheckedChanged(object sender, EventArgs e)
         {
-            ResetTesseractThread();
             SubtitleListView1SelectedIndexChanged(null, null);
             if (autoTransparentBackgroundToolStripMenuItem.Checked && _dvbSubtitles != null)
             {
@@ -5642,11 +3797,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             SetButtonsStartOcr();
             _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
 
             FileName = fileName;
             Text += " - " + Path.GetFileName(FileName);
@@ -5691,7 +3841,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _abort = true;
             _mainOcrTimer?.Stop();
 
-            _tesseractThreadRunner?.Cancel();
             _tesseractAsyncIndex = 10000;
 
             System.Threading.Thread.Sleep(100);
@@ -5725,193 +3874,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 });
             }
         }
-
-        private void subtitleListView1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A)
-            {
-                subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
-                subtitleListView1.SelectAll();
-                subtitleListView1.SelectedIndexChanged += SubtitleListView1SelectedIndexChanged;
-                e.SuppressKeyPress = true;
-            }
-
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.D)
-            {
-                subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
-                subtitleListView1.SelectFirstSelectedItemOnly();
-                subtitleListView1.SelectedIndexChanged += SubtitleListView1SelectedIndexChanged;
-                e.SuppressKeyPress = true;
-            }
-            else if (e.KeyCode == Keys.I && e.Modifiers == (Keys.Control | Keys.Shift)) //InverseSelection
-            {
-                subtitleListView1.SelectedIndexChanged -= SubtitleListView1SelectedIndexChanged;
-                subtitleListView1.InverseSelection();
-                subtitleListView1.SelectedIndexChanged += SubtitleListView1SelectedIndexChanged;
-                e.SuppressKeyPress = true;
-            }
-            else if (e.Modifiers == Keys.None && e.KeyCode == Keys.Delete)
-            {
-                DeleteToolStripMenuItemClick(sender, e);
-                e.SuppressKeyPress = true;
-                subtitleListView1.Focus();
-            }
-        }
-
-        private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            if (subtitleListView1.SelectedItems.Count == 0)
-            {
-                return;
-            }
-
-            string askText;
-            if (subtitleListView1.SelectedItems.Count > 1)
-            {
-                askText = string.Format(LanguageSettings.Current.Main.DeleteXLinesPrompt, subtitleListView1.SelectedItems.Count);
-            }
-            else
-            {
-                askText = LanguageSettings.Current.Main.DeleteOneLinePrompt;
-            }
-
-            if (Configuration.Settings.General.PromptDeleteLines && MessageBox.Show(askText, "", MessageBoxButtons.YesNo) == DialogResult.No)
-            {
-                return;
-            }
-
-            ResetTesseractThread();
-
-            int selIdx = subtitleListView1.SelectedItems[0].Index;
-            List<int> indices = new List<int>();
-            foreach (int idx in subtitleListView1.SelectedIndices)
-            {
-                indices.Add(idx);
-            }
-            indices.Reverse();
-
-            if (_mp4List != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _mp4List.RemoveAt(idx);
-                }
-            }
-            else if (_spList != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _spList.RemoveAt(idx);
-                }
-            }
-            else if (_dvbSubtitles != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _dvbSubtitles.RemoveAt(idx);
-                    _dvbSubColor.RemoveAt(idx);
-                }
-            }
-            else if (_dvbPesSubtitles != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _dvbPesSubtitles.RemoveAt(idx);
-                }
-            }
-            else if (_binaryParagraphWithPositions != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _binaryParagraphWithPositions.RemoveAt(idx);
-                }
-            }
-            else if (_bdnXmlSubtitle != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _bdnXmlSubtitle.Paragraphs.RemoveAt(idx);
-                }
-            }
-            else if (_xSubList != null)
-            {
-                foreach (int idx in indices)
-                {
-                    _xSubList.RemoveAt(idx);
-                }
-            }
-            else if (_bluRaySubtitlesOriginal != null)
-            {
-                foreach (int idx in indices)
-                {
-                    var x1 = _bluRaySubtitles[idx];
-                    int i = 0;
-                    while (i < _bluRaySubtitlesOriginal.Count)
-                    {
-                        var x2 = _bluRaySubtitlesOriginal[i];
-                        if (x2.StartTime == x1.StartTime)
-                        {
-                            _bluRaySubtitlesOriginal.Remove(x2);
-                            break;
-                        }
-
-                        i++;
-                    }
-
-                    _bluRaySubtitles.RemoveAt(idx);
-                }
-            }
-            else
-            {
-                foreach (int idx in indices)
-                {
-                    var x1 = _vobSubMergedPackList[idx];
-                    int i = 0;
-                    while (i < _vobSubMergedPackListOriginal.Count)
-                    {
-                        var x2 = _vobSubMergedPackListOriginal[i];
-                        if (Math.Abs(x2.StartTime.TotalMilliseconds - x1.StartTime.TotalMilliseconds) < 0.01)
-                        {
-                            _vobSubMergedPackListOriginal.Remove(x2);
-                            break;
-                        }
-
-                        i++;
-                    }
-
-                    _vobSubMergedPackList.RemoveAt(idx);
-                }
-            }
-
-
-            foreach (int idx in indices)
-            {
-                _subtitle.Paragraphs.RemoveAt(idx);
-            }
-
-            subtitleListView1.Fill(_subtitle);
-
-            if (selIdx < subtitleListView1.Items.Count)
-            {
-                subtitleListView1.SelectIndexAndEnsureVisible(selIdx, true);
-            }
-            else
-            {
-                subtitleListView1.SelectIndexAndEnsureVisible(subtitleListView1.Items.Count - 1, true);
-            }
-
-            subtitleListView1.BeginUpdate();
-            foreach (var p in _subtitle.Paragraphs)
-            {
-                if (_unknownWordsDictionary.ContainsKey(p.Id))
-                {
-                    SetUnknownWordsColor(_subtitle.Paragraphs.IndexOf(p), _unknownWordsDictionary[p.Id], p.Text);
-                }
-            }
-
-            subtitleListView1.EndUpdate();
-        }
-
         private void toolStripMenuItemSetUnItalicFactor_Click(object sender, EventArgs e)
         {
             using (var form = new VobSubOcrSetItalicFactor(GetSubtitleBitmap(_selectedIndex), _unItalicFactor))
@@ -5944,7 +3906,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     if (form.ShowDialog(this) == DialogResult.OK)
                     {
-                        ResetTesseractThread();
                         _preprocessingSettings = form.PreprocessingSettings;
                         Configuration.Settings.Tools.OcrTesseract4RgbThreshold = _preprocessingSettings.BinaryImageCompareThreshold;
                         SubtitleListView1SelectedIndexChanged(null, null);
@@ -5958,7 +3919,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
-                    ResetTesseractThread();
                     _preprocessingSettings = form.PreprocessingSettings;
                     Configuration.Settings.Tools.OcrBinaryImageCompareRgbThreshold = _preprocessingSettings.BinaryImageCompareThreshold;
                     SubtitleListView1SelectedIndexChanged(null, null);
@@ -5978,65 +3938,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
         }
 
-        private void buttonGetTesseractDictionaries_Click(object sender, EventArgs e)
-        {
-            if (_ocrMethodIndex == _ocrMethodTesseract302)
-            {
-                using (var form = new GetTesseract302Dictionaries())
-                {
-                    form.ShowDialog(this);
-                    InitializeTesseract(form.ChosenLanguage);
-                }
-
-                return;
-            }
-
-            using (var form = new GetTesseractDictionaries())
-            {
-                form.ShowDialog(this);
-                InitializeTesseract(form.ChosenLanguage);
-            }
-        }
-
-        private void toolStripMenuItemInspectNOcrMatches_Click(object sender, EventArgs e)
-        {
-            if (subtitleListView1.SelectedItems.Count != 1)
-            {
-                return;
-            }
-
-            if (_nOcrDb == null)
-            {
-                LoadNOcrWithCurrentLanguage();
-                if (_nOcrDb == null)
-                {
-                    MessageBox.Show("Unable to load OCR database.", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-            }
-
-            Cursor = Cursors.WaitCursor;
-            var bitmap = GetSubtitleBitmap(subtitleListView1.SelectedItems[0].Index);
-            Cursor = Cursors.Default;
-            using (var inspect = new VobSubNOcrCharacterInspect())
-            {
-                int minLineHeight = GetMinLineHeight();
-                if (inspect.ShowDialog(this) == DialogResult.OK)
-                {
-                    Cursor = Cursors.WaitCursor;
-                    SaveNOcrWithCurrentLanguage();
-                    _nOcrDb.LoadOcrCharacters();
-                    Cursor = Cursors.Default;
-                }
-                else
-                {
-                    Cursor = Cursors.WaitCursor;
-                    _nOcrDb.LoadOcrCharacters();
-                    Cursor = Cursors.Default;
-                }
-            }
-        }
-
         private void timerHideStatus_Tick(object sender, EventArgs e)
         {
             timerHideStatus.Stop();
@@ -6047,12 +3948,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             SetButtonsStartOcr();
             _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract(language);
-            SetTesseractLanguageFromLanguageString(language);
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
 
             _dvbSubtitles = subtitles;
             InitializeDvbSubColor();
@@ -6098,26 +3993,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             SaveImageAsToolStripMenuItemClick(sender, e);
         }
 
-        private void OcrTrainingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
-            {
-                using (var form = new BinaryOcrTrain())
-                {
-                    form.ShowDialog(this);
-                }
-            }
-            else if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                using (var form = new VobSubNOcrTrain())
-                {
-                    form.Initialize();
-                    form.ShowDialog(this);
-                    ComboBoxOcrMethodSelectedIndexChanged(null, null);
-                }
-            }
-        }
-
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -6136,19 +4011,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             base.Dispose(disposing);
         }
-
-        private void subtitleListView1_DoubleClick(object sender, EventArgs e)
-        {
-            if (subtitleListView1.SelectedItems.Count > 0 && _ocrMethodIndex == _ocrMethodBinaryImageCompare)
-            {
-                InspectImageCompareMatchesForCurrentImageToolStripMenuItem_Click(null, null);
-            }
-            else if (subtitleListView1.SelectedItems.Count > 0 && _ocrMethodIndex == _ocrMethodNocr)
-            {
-                toolStripMenuItemInspectNOcrMatches_Click(null, null);
-            }
-        }
-
 
         private void toolStripMenuItemSaveSubtitleAs_Click(object sender, EventArgs e)
         {

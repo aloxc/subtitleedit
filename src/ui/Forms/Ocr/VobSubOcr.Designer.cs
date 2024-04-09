@@ -26,10 +26,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorImageCompare = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItemInspectNOcrMatches = new System.Windows.Forms.ToolStripMenuItem();
             this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditLastAdditionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.OcrTrainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.labelSubtitleText = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
@@ -90,13 +88,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveImageAsToolStripMenuItem,
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem,
             this.toolStripSeparatorImageCompare,
-            this.toolStripMenuItemInspectNOcrMatches,
             this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem,
-            this.EditLastAdditionsToolStripMenuItem,
-            this.OcrTrainingToolStripMenuItem});
+            this.EditLastAdditionsToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
             this.contextMenuStripListview.Size = new System.Drawing.Size(333, 304);
-            this.contextMenuStripListview.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripListviewOpening);
             // 
             // toolStripSeparatorOcrSelected
             // 
@@ -139,13 +134,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparatorImageCompare.Name = "toolStripSeparatorImageCompare";
             this.toolStripSeparatorImageCompare.Size = new System.Drawing.Size(329, 6);
             // 
-            // toolStripMenuItemInspectNOcrMatches
-            // 
-            this.toolStripMenuItemInspectNOcrMatches.Name = "toolStripMenuItemInspectNOcrMatches";
-            this.toolStripMenuItemInspectNOcrMatches.Size = new System.Drawing.Size(332, 22);
-            this.toolStripMenuItemInspectNOcrMatches.Text = "Inspect nocr matches for current image...";
-            this.toolStripMenuItemInspectNOcrMatches.Click += new System.EventHandler(this.toolStripMenuItemInspectNOcrMatches_Click);
-            // 
             // inspectImageCompareMatchesForCurrentImageToolStripMenuItem
             // 
             this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Name = "inspectImageCompareMatchesForCurrentImageToolStripMenuItem";
@@ -159,14 +147,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.EditLastAdditionsToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
             this.EditLastAdditionsToolStripMenuItem.Text = "Edit last OCR image additions...";
             this.EditLastAdditionsToolStripMenuItem.Click += new System.EventHandler(this.inspectLastAdditionsToolStripMenuItem_Click);
-            // 
-            // OcrTrainingToolStripMenuItem
-            // 
-            this.OcrTrainingToolStripMenuItem.Name = "OcrTrainingToolStripMenuItem";
-            this.OcrTrainingToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.OcrTrainingToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.OcrTrainingToolStripMenuItem.Text = "OCR training..";
-            this.OcrTrainingToolStripMenuItem.Click += new System.EventHandler(this.OcrTrainingToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -456,8 +436,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.subtitleListView1.UseSyntaxColoring = true;
             this.subtitleListView1.View = System.Windows.Forms.View.Details;
             this.subtitleListView1.SelectedIndexChanged += new System.EventHandler(this.SubtitleListView1SelectedIndexChanged);
-            this.subtitleListView1.DoubleClick += new System.EventHandler(this.subtitleListView1_DoubleClick);
-            this.subtitleListView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.subtitleListView1_KeyDown);
             // 
             // contextMenuStripTextBox
             // 
@@ -544,7 +522,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VobSubOcr_FormClosing);
             this.Shown += new System.EventHandler(this.FormVobSubOcr_Shown);
             this.ResizeEnd += new System.EventHandler(this.VobSubOcr_ResizeEnd);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.VobSubOcr_KeyDown);
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOcrAutoFix.ResumeLayout(false);
@@ -593,13 +570,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearFixes;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripGuessesUsed;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearGuesses;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemInspectNOcrMatches;
         private System.Windows.Forms.Timer timerHideStatus;
         private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownAutoTransparentAlphaMax;
         private System.Windows.Forms.Label labelMinAlpha;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripImage;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImageSaveAs;
-        private System.Windows.Forms.ToolStripMenuItem OcrTrainingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSaveSubtitleAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCaptureTopAlign;

@@ -1492,7 +1492,6 @@ namespace Nikse.SubtitleEdit.Forms
                                                                 item.SubItems[3].Text = LanguageSettings.Current.BatchConvert.Ocr + "  " + progress;
                                                             };
                                                             vobSubOcr.FileName = Path.GetFileName(fileName);
-                                                            vobSubOcr.InitializeBatch(bluRaySubtitles, Configuration.Settings.VobSubOcr, fileName, false, track.Language, _ocrEngine, _cancellationTokenSource.Token);
                                                             sub = vobSubOcr.SubtitleFromOcr;
                                                         }
                                                     }
@@ -1623,7 +1622,6 @@ namespace Nikse.SubtitleEdit.Forms
                                         }
                                     };
                                     vobSubOcr.FileName = Path.GetFileName(fileName);
-                                    vobSubOcr.InitializeBatch(bluRaySubtitles, Configuration.Settings.VobSubOcr, fileName, false, _ocrLanguage, _ocrEngine, _cancellationTokenSource.Token);
                                     sub = vobSubOcr.SubtitleFromOcr;
                                 }
                             }
@@ -1648,7 +1646,6 @@ namespace Nikse.SubtitleEdit.Forms
                                         lastProgress = progress;
                                     }
                                 };
-                                vobSubOcr.InitializeBatch(fileName, Configuration.Settings.VobSubOcr, false, _ocrEngine, _ocrLanguage, _cancellationTokenSource.Token);
                                 sub = vobSubOcr.SubtitleFromOcr;
                             }
                         }
