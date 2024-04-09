@@ -407,7 +407,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Text = language.Title;
             buttonStartOcr.Text = language.StartOcr;
             buttonPause.Text = LanguageSettings.Current.Settings.Pause;
-            labelStartFrom.Text = language.StartOcrFrom;
             labelStatus.Text = language.LoadingVobSubImages;
             groupBoxSubtitleImage.Text = language.SubtitleImage;
             labelSubtitleText.Text = language.SubtitleText;
@@ -537,7 +536,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (_tesseractAsyncStrings == null)
             {
                 _tesseractAsyncStrings = new string[max];
-                _tesseractAsyncIndex = (int)numericUpDownStartNumber.Value + 5;
             }
 
             System.Threading.Thread.Sleep(1000);
@@ -786,7 +784,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (_ocrMethodIndex == _ocrMethodTesseract5 && _tesseractAsyncStrings == null)
             {
                 _tesseractAsyncStrings = new string[max];
-                _tesseractAsyncIndex = (int)numericUpDownStartNumber.Value + 5;
             }
 
             if (_ocrMethodIndex != _ocrMethodNocr)
@@ -1043,11 +1040,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.Fill(_subtitle);
             subtitleListView1.SelectIndexAndEnsureVisible(0);
 
-            numericUpDownStartNumber.Maximum = max;
-            if (numericUpDownStartNumber.Maximum > 0 && numericUpDownStartNumber.Minimum <= 1)
-            {
-                numericUpDownStartNumber.Value = 1;
-            }
 
             SetButtonsEnabledAfterOcrDone();
             buttonStartOcr.Focus();
@@ -1079,12 +1071,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             subtitleListView1.Fill(_subtitle);
             subtitleListView1.SelectIndexAndEnsureVisible(0);
-
-            numericUpDownStartNumber.Maximum = max;
-            if (numericUpDownStartNumber.Maximum > 0 && numericUpDownStartNumber.Minimum <= 1)
-            {
-                numericUpDownStartNumber.Value = 1;
-            }
 
             SetButtonsEnabledAfterOcrDone();
             buttonStartOcr.Focus();
@@ -1121,12 +1107,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.Fill(_subtitle);
             subtitleListView1.SelectIndexAndEnsureVisible(0);
 
-            numericUpDownStartNumber.Maximum = max;
-            if (numericUpDownStartNumber.Maximum > 0 && numericUpDownStartNumber.Minimum <= 1)
-            {
-                numericUpDownStartNumber.Value = 1;
-            }
-
             SetButtonsEnabledAfterOcrDone();
             buttonStartOcr.Focus();
         }
@@ -1151,11 +1131,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.Fill(_subtitle);
             subtitleListView1.SelectIndexAndEnsureVisible(0);
 
-            numericUpDownStartNumber.Maximum = max;
-            if (numericUpDownStartNumber.Maximum > 0 && numericUpDownStartNumber.Minimum <= 1)
-            {
-                numericUpDownStartNumber.Value = 1;
-            }
 
             SetButtonsEnabledAfterOcrDone();
             buttonStartOcr.Focus();
@@ -4017,7 +3992,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _fromMenuItem = false;
             _abort = false;
 
-            CleanLogsGreaterThanOrEqualTo(numericUpDownStartNumber.Value);
 
             int max = GetSubtitleCount();
 
@@ -4026,7 +4000,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 _nOcrDb = null;
                 _tesseractAsyncStrings = new string[max];
-                _tesseractAsyncIndex = (int)numericUpDownStartNumber.Value + 5;
             }
             else if (_ocrMethodIndex == _ocrMethodNocr)
             {
@@ -4060,7 +4033,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Visible = true;
 
             _mainOcrTimerMax = max;
-            _mainOcrIndex = (int)numericUpDownStartNumber.Value - 1;
             if (_mainOcrIndex > 0)
             {
                 var lastP = _subtitle.GetParagraphOrDefault(_mainOcrIndex - 1);
@@ -4090,29 +4062,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             _ocrThreadStop = false;
-            int start = (int)numericUpDownStartNumber.Value + 5;
-            if (noOfThreads >= 1 && max > 5)
-            {
-                // find letter size (uppercase/lowercase)
-                int testIndex = 0;
-                var noOfSubs = GetSubtitleCount();
-                while (testIndex < noOfSubs && testIndex < 10 && (_ocrLowercaseHeightsTotalCount < 25 || _ocrUppercaseHeightsTotalCount < 25))
-                {
-                    NOCRIntialize(GetSubtitleBitmap(testIndex));
-                    testIndex++;
-                }
-
-                for (int i = 0; i < noOfThreads; i++)
-                {
-                    if (start + i < max)
-                    {
-                        var bw = new BackgroundWorker();
-                        bw.DoWork += NOcrThreadDoWork;
-                        bw.RunWorkerCompleted += NOcrThreadRunWorkerCompleted;
-                        Application.DoEvents();
-                    }
-                }
-            }
+            
         }
 
         private void NOcrThreadRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -5433,7 +5383,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 bmp.Dispose();
             }
 
-            numericUpDownStartNumber.Value = _selectedIndex + 1;
         }
 
         private void TextBoxCurrentTextTextChanged(object sender, EventArgs e)
@@ -6254,7 +6203,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (_lastAdditions.Count > 0)
             {
                 var last = _lastAdditions[_lastAdditions.Count - 1];
-                numericUpDownStartNumber.Value = last.Index + 1;
 
                 // Simulate a click on ButtonStartOcr in 200ms.
                 var uiContext = TaskScheduler.FromCurrentSynchronizationContext();

@@ -54,8 +54,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBoxOCRControls = new System.Windows.Forms.GroupBox();
-            this.labelStartFrom = new System.Windows.Forms.Label();
-            this.numericUpDownStartNumber = new Nikse.SubtitleEdit.Controls.NikseUpDown();
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
@@ -400,8 +398,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // groupBoxOCRControls
             // 
             this.groupBoxOCRControls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxOCRControls.Controls.Add(this.labelStartFrom);
-            this.groupBoxOCRControls.Controls.Add(this.numericUpDownStartNumber);
             this.groupBoxOCRControls.Controls.Add(this.buttonPause);
             this.groupBoxOCRControls.Controls.Add(this.buttonStartOcr);
             this.groupBoxOCRControls.Location = new System.Drawing.Point(368, 207);
@@ -410,52 +406,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.groupBoxOCRControls.TabIndex = 2;
             this.groupBoxOCRControls.TabStop = false;
             this.groupBoxOCRControls.Text = "OCR Start/stop";
-            // 
-            // labelStartFrom
-            // 
-            this.labelStartFrom.AutoSize = true;
-            this.labelStartFrom.Location = new System.Drawing.Point(120, 26);
-            this.labelStartFrom.Name = "labelStartFrom";
-            this.labelStartFrom.Size = new System.Drawing.Size(127, 13);
-            this.labelStartFrom.TabIndex = 1;
-            this.labelStartFrom.Text = "Start OCR from subtitle#";
-            // 
-            // numericUpDownStartNumber
-            // 
-            this.numericUpDownStartNumber.BackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownStartNumber.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.numericUpDownStartNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.numericUpDownStartNumber.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.numericUpDownStartNumber.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.numericUpDownStartNumber.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.numericUpDownStartNumber.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.numericUpDownStartNumber.DecimalPlaces = 0;
-            this.numericUpDownStartNumber.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownStartNumber.Location = new System.Drawing.Point(123, 47);
-            this.numericUpDownStartNumber.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.numericUpDownStartNumber.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownStartNumber.Name = "numericUpDownStartNumber";
-            this.numericUpDownStartNumber.Size = new System.Drawing.Size(64, 21);
-            this.numericUpDownStartNumber.TabIndex = 3;
-            this.numericUpDownStartNumber.TabStop = false;
-            this.numericUpDownStartNumber.ThousandsSeparator = false;
-            this.numericUpDownStartNumber.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // buttonPause
             // 
@@ -927,7 +877,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOCRControls.ResumeLayout(false);
-            this.groupBoxOCRControls.PerformLayout();
             this.contextMenuStripAllFixes.ResumeLayout(false);
             this.contextMenuStripUnknownWords.ResumeLayout(false);
             this.contextMenuStripGuessesUsed.ResumeLayout(false);
@@ -957,8 +906,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private SubtitleListView subtitleListView1;
         private SETextBox textBoxCurrentText;
         private System.Windows.Forms.GroupBox groupBoxOCRControls;
-        private System.Windows.Forms.Label labelStartFrom;
-        private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownStartNumber;
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonStartOcr;
         private System.Windows.Forms.GroupBox groupBoxOcrAutoFix;
