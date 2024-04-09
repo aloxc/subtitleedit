@@ -158,7 +158,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         public string FileName { get; set; }
         private Subtitle _subtitle = new Subtitle();
-        private List<CompareItem> _compareBitmaps;
         private int _selectedIndex = -1;
         private double _unItalicFactor = 0.33;
 
@@ -179,11 +178,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private bool _fromMenuItem;
 
-        // DVD rip/vobsub
-        private List<VobSubMergedPack> _vobSubMergedPackListOriginal;
-        private List<VobSubMergedPack> _vobSubMergedPackList;
-        private List<Color> _palette;
-
         // Blu-ray sup
         private List<BluRaySupParser.PcsData> _bluRaySubtitlesOriginal;
         private List<BluRaySupParser.PcsData> _bluRaySubtitles;
@@ -191,12 +185,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         // SP list
         private List<SpHeader> _spList;
 
-        private bool _transportStreamUseColor;
 
         // Other
         private IList<IBinaryParagraphWithPosition> _binaryParagraphWithPositions;
 
-        private string _languageId;
         private string _importLanguageString;
 
         // Dictionaries/spellchecking/fixing
@@ -207,18 +199,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private readonly VobSubOcrCharacter _vobSubOcrCharacter = new VobSubOcrCharacter();
 
         private NOcrDb _nOcrDb;
-        private readonly VobSubOcrNOcrCharacter _vobSubOcrNOcrCharacter = new VobSubOcrNOcrCharacter();
         public const int NOcrMinColor = 300;
 
 
         private bool _okClicked;
-        private readonly Dictionary<string, int> _unknownWordsDictionary;
 
         // optimization vars
-        private int _numericUpDownPixelsIsSpace = 12;
-        private bool _autoLineHeight = true;
-        private double _numericUpDownMaxErrorPct = 6;
-        private int _ocrMethodIndex;
 
         private FindReplaceDialogHelper _findHelper;
         private FindDialog _findDialog;
@@ -241,7 +227,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             UiUtil.FixFonts(this);
             SetDoubleBuffered(subtitleListView1);
 
-            _unknownWordsDictionary = new Dictionary<string, int>();
             buttonPause.Text = LanguageSettings.Current.Settings.Pause;
             subtitleListView1.InitializeLanguage(LanguageSettings.Current.General, Configuration.Settings);
             subtitleListView1.HideColumn(SubtitleListView.SubtitleColumn.CharactersPerSeconds);
@@ -290,9 +275,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             SetButtonsStartOcr();
 
-            _vobSubMergedPackList = vobSubMergedPackList;
-            _palette = palette;
-
             _importLanguageString = languageString;
         }
 
@@ -300,8 +282,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void InitializeQuick(List<VobSubMergedPack> vobSubMergedPackist, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
-            _vobSubMergedPackList = vobSubMergedPackist;
-            _palette = palette;
 
             _importLanguageString = languageString;
             if (_importLanguageString != null && _importLanguageString.Contains('(') && !_importLanguageString.StartsWith('('))
@@ -365,16 +345,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         }
 
 
-        private void LoadImageCompareBitmaps()
-        {
-            DisposeImageCompareBitmaps();
-            _binaryOcrDb = null;
-            _nOcrDb = null;
-        }
+  
 
         private void DisposeImageCompareBitmaps()
         {
-            _compareBitmaps = null;
         }
 
         private void LoadBluRaySup()
@@ -392,30 +366,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     StartTime = new TimeCode(x.StartTime / 90.0),
                     EndTime = new TimeCode(x.EndTime / 90.0)
                 });
-            }
-
-            _subtitle.Renumber();
-
-            FixShortDisplayTimes(_subtitle);
-
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
-
-            SetButtonsEnabledAfterOcrDone();
-            buttonStartOcr.Focus();
-        }
-
-        private void LoadVobRip()
-        {
-            _subtitle = new Subtitle();
-            _vobSubMergedPackList = new List<VobSubMergedPack>();
-            int max = _vobSubMergedPackListOriginal.Count;
-            for (int i = 0; i < max; i++)
-            {
-                var x = _vobSubMergedPackListOriginal[i];
-                _vobSubMergedPackList.Add(x);
-                Paragraph p = new Paragraph(string.Empty, x.StartTime.TotalMilliseconds, x.EndTime.TotalMilliseconds);
-                _subtitle.Paragraphs.Add(p);
             }
 
             _subtitle.Renumber();
@@ -492,16 +442,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return _bluRaySubtitles[index].IsForced;
             }
 
-            if (_vobSubMergedPackList != null)
-            {
-                return _vobSubMergedPackList[index].SubPicture.Forced;
-            }
-
-            if (_vobSubMergedPackList != null && index < _vobSubMergedPackList.Count)
-            {
-                return _vobSubMergedPackList[index].SubPicture.Forced;
-            }
-
             return false;
         }
 
@@ -559,16 +499,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         returnBmp = _bluRaySubtitlesOriginal[index].GetBitmap();
                     }
                 }
-            }
-            else if (index >= 0 && index < _vobSubMergedPackList.Count)
-            {
-               
-                    returnBmp = _vobSubMergedPackList[index].SubPicture.GetBitmap(_palette, Color.Transparent, Color.Black, Color.White, Color.Black, false, crop);
-                    if (makeTransparent && autoTransparentBackgroundToolStripMenuItem.Checked)
-                    {
-                        returnBmp.MakeTransparent();
-                    }
-                
             }
 
             if (returnBmp == null)
@@ -704,23 +634,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return;
             }
 
-            if (_vobSubMergedPackList != null)
-            {
-                var item = _vobSubMergedPackList[index];
-                left = item.SubPicture.ImageDisplayArea.Left;
-                top = item.SubPicture.ImageDisplayArea.Top;
-                var bmp = item.SubPicture.GetBitmap(_palette, Color.Transparent, Color.Black, Color.White, Color.Black, false, false);
-                var nbmp = new NikseBitmap(bmp);
-                var topCropped = nbmp.CropTopTransparent(0);
-                top += topCropped;
-                var bottomCropped = nbmp.CalcBottomTransparent();
-                width = bmp.Width;
-                height = bmp.Height;
-                height -= topCropped;
-                height -= bottomCropped;
-                bmp.Dispose();
-                return;
-            }
 
             left = 0;
             top = 0;
@@ -756,12 +669,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 height = size.Height;
             }
 
-            if (_vobSubMergedPackList != null && index < _vobSubMergedPackList.Count)
-            {
-                var item = _vobSubMergedPackList[index];
-                width = item.SubPicture.ImageDisplayArea.Width + +item.SubPicture.ImageDisplayArea.Location.X + 1;
-                height = item.SubPicture.ImageDisplayArea.Height + item.SubPicture.ImageDisplayArea.Location.Y + 1;
-            }
         }
 
         private Bitmap ShowSubtitleImage(int index)
@@ -821,85 +728,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private static readonly HashSet<string> UppercaseWithAccent = new HashSet<string> { "Č", "Š", "Ž", "Ś", "Ż", "Ś", "Ö", "Ü", "Ú", "Ï", "Í", "Ç", "Ì", "Ò", "Ù", "Ó", "Í" };
         private static readonly HashSet<string> LowercaseWithAccent = new HashSet<string> { "č", "š", "ž", "ś", "ż", "ś", "ö", "ü", "ú", "ï", "í", "ç", "ì", "ò", "ù", "ó", "í" };
 
-        /// <summary>
-        /// Fix uppercase/lowercase issues (not I/l)
-        /// </summary>
-        private string FixUppercaseLowercaseIssues(ImageSplitterItem targetItem, NOcrChar result)
-        {
-            if (result.Text == "e" || result.Text == "a" || result.Text == "d" || result.Text == "t")
-            {
-                _ocrLowercaseHeightsTotalCount++;
-                _ocrLowercaseHeightsTotal += targetItem.NikseBitmap.Height;
-                if (_ocrUppercaseHeightsTotalCount < 3)
-                {
-                    _ocrUppercaseHeightsTotalCount++;
-                    _ocrUppercaseHeightsTotal += targetItem.NikseBitmap.Height + 10;
-                }
-            }
-
-            if (result.Text == "E" || result.Text == "H" || result.Text == "R" || result.Text == "D" || result.Text == "T" || result.Text == "M")
-            {
-                _ocrUppercaseHeightsTotalCount++;
-                _ocrUppercaseHeightsTotal += targetItem.NikseBitmap.Height;
-                if (_ocrLowercaseHeightsTotalCount < 3 && targetItem.NikseBitmap.Height > 20)
-                {
-                    _ocrLowercaseHeightsTotalCount++;
-                    _ocrLowercaseHeightsTotal += targetItem.NikseBitmap.Height - 10;
-                }
-            }
-
-            if (_ocrLowercaseHeightsTotalCount <= 2 || _ocrUppercaseHeightsTotalCount <= 2)
-            {
-                return result.Text;
-            }
-
-            // Latin letters where lowercase versions look like uppercase version 
-            if (UppercaseLikeLowercase.Contains(result.Text))
-            {
-                var averageLowercase = _ocrLowercaseHeightsTotal / _ocrLowercaseHeightsTotalCount;
-                var averageUppercase = _ocrUppercaseHeightsTotal / _ocrUppercaseHeightsTotalCount;
-                if (Math.Abs(averageLowercase - targetItem.NikseBitmap.Height) < Math.Abs(averageUppercase - targetItem.NikseBitmap.Height))
-                {
-                    return result.Text.ToLowerInvariant();
-                }
-
-                return result.Text;
-            }
-
-            if (LowercaseLikeUppercase.Contains(result.Text))
-            {
-                var averageLowercase = _ocrLowercaseHeightsTotal / _ocrLowercaseHeightsTotalCount;
-                var averageUppercase = _ocrUppercaseHeightsTotal / _ocrUppercaseHeightsTotalCount;
-                if (Math.Abs(averageLowercase - targetItem.NikseBitmap.Height) > Math.Abs(averageUppercase - targetItem.NikseBitmap.Height))
-                {
-                    return result.Text.ToUpperInvariant();
-                }
-
-                return result.Text;
-            }
-
-            if (UppercaseWithAccent.Contains(result.Text))
-            {
-                var averageUppercase = _ocrUppercaseHeightsTotal / (double)_ocrUppercaseHeightsTotalCount;
-                if (targetItem.NikseBitmap.Height < averageUppercase + 3)
-                {
-                    return result.Text.ToLowerInvariant();
-                }
-
-                return result.Text;
-            }
-
-            if (LowercaseWithAccent.Contains(result.Text))
-            {
-                var averageUppercase = _ocrUppercaseHeightsTotal / (double)_ocrUppercaseHeightsTotalCount;
-                if (targetItem.NikseBitmap.Height > averageUppercase + 4)
-                {
-                    return result.Text.ToUpperInvariant();
-                }
-            }
-
-            return result.Text;
-        }
 
         public static int _italicFixes = 0;
 
@@ -984,35 +812,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
             }
-            else
-            {
-                ReadyVobSubRip();
-            }
 
             VobSubOcr_Resize(null, null);
 
-        }
-
-        public Subtitle ReadyVobSubRip()
-        {
-            _vobSubMergedPackListOriginal = new List<VobSubMergedPack>();
-            bool hasIdxTimeCodes = false;
-            if (_vobSubMergedPackList == null)
-            {
-                return null;
-            }
-
-            foreach (var x in _vobSubMergedPackList)
-            {
-                _vobSubMergedPackListOriginal.Add(x);
-                if (x.IdxLine != null)
-                {
-                    hasIdxTimeCodes = true;
-                }
-            }
-
-            LoadVobRip();
-            return _subtitle;
         }
 
         private void SetButtonsStartOcr()
@@ -1120,14 +922,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     else if (_binaryParagraphWithPositions != null && idx < _binaryParagraphWithPositions.Count)
                     {
                         height = _binaryParagraphWithPositions[idx].GetScreenSize().Height;
-                        if (height > maxHeight)
-                        {
-                            maxHeight = height;
-                        }
-                    }
-                    else if (_vobSubMergedPackList != null && idx < _vobSubMergedPackList.Count)
-                    {
-                        height = _vobSubMergedPackList[idx].GetScreenSize().Height;
                         if (height > maxHeight)
                         {
                             maxHeight = height;
@@ -1653,87 +1447,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             GetSubtitleScreenSize(_selectedIndex, out var width, out var height);
         }
 
-        private void previewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GetSubtitleScreenSize(_selectedIndex, out var width, out var height);
-            if (width == 0 || height == 0)
-            {
-                return;
-            }
-
-            bool goNext;
-            bool goPrevious;
-            Cursor = Cursors.WaitCursor;
-            try
-            {
-                GetSubtitleTopAndHeight(_selectedIndex, out var left, out var top, out _, out _);
-                using (var bmp = new Bitmap(width, height))
-                {
-                    using (var g = Graphics.FromImage(bmp))
-                    {
-                        var p = _subtitle.Paragraphs[subtitleListView1.SelectedItems[0].Index];
-                        FillPreviewBackground(bmp, g, p);
-                        _fromMenuItem = true;
-                        var subBitmap = GetSubtitleBitmap(_selectedIndex, false);
-                        _fromMenuItem = false;
-
-                        if (_vobSubMergedPackList != null)
-                        {
-                            var nbmp = new NikseBitmap(subBitmap);
-                            var topCropped = nbmp.CropTopTransparent(0);
-                            top -= topCropped;
-                        }
-
-                        g.DrawImageUnscaled(subBitmap, new Point(left, top));
-                    }
-
-                    using (var form = new ExportPngXmlPreview(bmp))
-                    {
-
-                        Cursor = Cursors.Default;
-                        form.AllowNext = _selectedIndex < _subtitle.Paragraphs.Count - 1;
-                        form.AllowPrevious = _selectedIndex > 0;
-                        form.ShowDialog(this);
-                        goNext = form.NextPressed;
-                        goPrevious = form.PreviousPressed;
-                    }
-                }
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-
-            if (goNext)
-            {
-                subtitleListView1.SelectIndexAndEnsureVisible(_selectedIndex + 1);
-                previewToolStripMenuItem_Click(null, null);
-            }
-            else if (goPrevious)
-            {
-                subtitleListView1.SelectIndexAndEnsureVisible(_selectedIndex - 1);
-                previewToolStripMenuItem_Click(null, null);
-            }
-        }
-
-        private void FillPreviewBackground(Bitmap bmp, Graphics g, Paragraph p)
-        {
-            // Draw background with generated image
-            var rect = new Rectangle(0, 0, bmp.Width - 1, bmp.Height - 1);
-            using (var br = new LinearGradientBrush(rect, Color.Black, Color.Black, 0, false))
-            {
-                var cb = new ColorBlend
-                {
-                    Positions = new[] { 0, 1 / 6f, 2 / 6f, 3 / 6f, 4 / 6f, 5 / 6f, 1 },
-                    Colors = new[] { Color.Black, Color.Black, Color.White, Color.Black, Color.Black, Color.White, Color.Black }
-                };
-                br.InterpolationColors = cb;
-                br.RotateTransform(0);
-                g.FillRectangle(br, rect);
-            }
-        }
-
- 
 
         private void contextMenuStripUnknownWords_Opening(object sender, CancelEventArgs e)
         {
