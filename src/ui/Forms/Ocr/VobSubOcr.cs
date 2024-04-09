@@ -182,14 +182,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private string _importLanguageString;
 
-        // Dictionaries/spellchecking/fixing
-        private OcrFixEngine _ocrFixEngine;
-
 
         private List<ImageCompareAddition> _lastAdditions = new List<ImageCompareAddition>();
         private readonly VobSubOcrCharacter _vobSubOcrCharacter = new VobSubOcrCharacter();
 
-        private NOcrDb _nOcrDb;
         public const int NOcrMinColor = 300;
 
 
@@ -433,7 +429,7 @@ if (_bluRaySubtitlesOriginal != null)
             }
 
 
-            if (_binaryOcrDb == null && _nOcrDb == null || _fromMenuItem)
+            if (_binaryOcrDb == null  || _fromMenuItem)
             {
                 if (_preprocessingSettings == null || !_preprocessingSettings.Active)
                 {
@@ -819,31 +815,6 @@ if (_bluRaySubtitlesOriginal != null)
             return unItaliced;
         }
 
-        private bool HasSingleLetters(string line)
-        {
-            if (!_ocrFixEngine.IsDictionaryLoaded || !_ocrFixEngine.SpellCheckDictionaryName.StartsWith("en_", StringComparison.Ordinal))
-            {
-                return false;
-            }
-
-            line = line.RemoveChar('[');
-            line = line.RemoveChar(']');
-            line = HtmlUtil.RemoveOpenCloseTags(line, HtmlUtil.TagItalic);
-
-            var arr = line.Replace("a.m", string.Empty).Replace("p.m", string.Empty).Replace("o.r", string.Empty)
-                .Replace("e.g", string.Empty).Replace("Ph.D", string.Empty).Replace("d.t.s", string.Empty)
-                .Split(new[] { ' ', ',', '.', '?', '!', '(', ')', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in arr)
-            {
-                if (s.Length == 1 && !@"♪♫-:'”1234567890&aAI""".Contains(s))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private void ButtonPauseClick(object sender, EventArgs e)
         {
             _mainOcrTimer?.Stop();
@@ -1204,25 +1175,7 @@ if (_bluRaySubtitlesOriginal != null)
             SaveImageAsToolStripMenuItemClick(sender, e);
         }
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-                if (_ocrFixEngine != null)
-                {
-                    _ocrFixEngine.Dispose();
-                    _ocrFixEngine = null;
-                }
-            }
-
-            base.Dispose(disposing);
-        }
-
+       
         private void toolStripMenuItemSaveSubtitleAs_Click(object sender, EventArgs e)
         {
             var format = new SubRip();
