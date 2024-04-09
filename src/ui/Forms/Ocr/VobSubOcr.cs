@@ -440,9 +440,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             tabControlLogs.TabPages[1].Text = language.AllFixes;
             tabControlLogs.TabPages[2].Text = language.GuessesUsed;
 
-            buttonUknownToNames.Text = LanguageSettings.Current.SpellCheck.AddToNamesAndIgnoreList;
-            buttonUknownToUserDic.Text = LanguageSettings.Current.SpellCheck.AddToUserDictionary;
-            buttonAddToOcrReplaceList.Text = LanguageSettings.Current.SpellCheck.AddToOcrReplaceList;
 
             groupBoxSubtitleImage.Text = string.Empty;
             groupBoxOCRControls.Text = string.Empty;
