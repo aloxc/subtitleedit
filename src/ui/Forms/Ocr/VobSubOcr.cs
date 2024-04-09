@@ -270,7 +270,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             toolStripMenuItemSaveSubtitleAs.Text = LanguageSettings.Current.Main.SaveSubtitleAs;
 
             toolStripMenuItemClearFixes.Text = LanguageSettings.Current.DvdSubRip.Clear;
-            toolStripMenuItemClearGuesses.Text = LanguageSettings.Current.DvdSubRip.Clear;
             clearToolStripMenuItem.Text = LanguageSettings.Current.DvdSubRip.Clear;
 
 

@@ -35,8 +35,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripUnknownWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStripGuessesUsed = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemClearGuesses = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxSubtitleImage = new System.Windows.Forms.GroupBox();
             this.labelMinAlpha = new System.Windows.Forms.Label();
@@ -54,7 +52,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
             this.contextMenuStripUnknownWords.SuspendLayout();
-            this.contextMenuStripGuessesUsed.SuspendLayout();
             this.groupBoxSubtitleImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).BeginInit();
             this.contextMenuStripImage.SuspendLayout();
@@ -194,20 +191,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
-            // 
-            // contextMenuStripGuessesUsed
-            // 
-            this.contextMenuStripGuessesUsed.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemClearGuesses});
-            this.contextMenuStripGuessesUsed.Name = "contextMenuStripUnknownWords";
-            this.contextMenuStripGuessesUsed.Size = new System.Drawing.Size(107, 26);
-            // 
-            // toolStripMenuItemClearGuesses
-            // 
-            this.toolStripMenuItemClearGuesses.Name = "toolStripMenuItemClearGuesses";
-            this.toolStripMenuItemClearGuesses.Size = new System.Drawing.Size(106, 22);
-            this.toolStripMenuItemClearGuesses.Text = "Clear";
-            this.toolStripMenuItemClearGuesses.Click += new System.EventHandler(this.toolStripMenuItemClearGuesses_Click);
             // 
             // groupBoxSubtitleImage
             // 
@@ -402,7 +385,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOcrAutoFix.ResumeLayout(false);
             this.contextMenuStripUnknownWords.ResumeLayout(false);
-            this.contextMenuStripGuessesUsed.ResumeLayout(false);
             this.groupBoxSubtitleImage.ResumeLayout(false);
             this.groupBoxSubtitleImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).EndInit();
@@ -440,8 +422,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUnknownWords;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearFixes;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripGuessesUsed;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemClearGuesses;
         private System.Windows.Forms.Timer timerHideStatus;
         private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownAutoTransparentAlphaMax;
         private System.Windows.Forms.Label labelMinAlpha;
