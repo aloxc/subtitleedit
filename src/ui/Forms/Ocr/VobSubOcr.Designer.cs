@@ -48,7 +48,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.autoTransparentBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setItalicAngleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCaptureTopAlign = new System.Windows.Forms.ToolStripMenuItem();
-            this.imagePreprocessingToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemImageSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -324,10 +323,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.contextMenuStripImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoTransparentBackgroundToolStripMenuItem,
-            this.setItalicAngleToolStripMenuItem,
             this.toolStripMenuItemCaptureTopAlign,
-            this.imagePreprocessingToolStripMenuItem1,
-            this.toolStripSeparator5,
             this.toolStripMenuItemImageSaveAs,
             this.previewToolStripMenuItem});
             this.contextMenuStripImage.Name = "contextMenuStripUnknownWords";
@@ -355,15 +351,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemCaptureTopAlign.Size = new System.Drawing.Size(288, 22);
             this.toolStripMenuItemCaptureTopAlign.Text = "Capture top alignment";
             this.toolStripMenuItemCaptureTopAlign.Click += new System.EventHandler(this.toolStripMenuItemCaptureTopAlign_Click);
-            // 
-            // imagePreprocessingToolStripMenuItem1
-            // 
-            this.imagePreprocessingToolStripMenuItem1.Name = "imagePreprocessingToolStripMenuItem1";
-            this.imagePreprocessingToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.P)));
-            this.imagePreprocessingToolStripMenuItem1.Size = new System.Drawing.Size(288, 22);
-            this.imagePreprocessingToolStripMenuItem1.Text = "Image preprocessing...";
-            this.imagePreprocessingToolStripMenuItem1.Click += new System.EventHandler(this.imagePreprocessingToolStripMenuItem1_Click);
             // 
             // toolStripSeparator5
             // 
@@ -579,7 +566,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCaptureTopAlign;
         private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem imagePreprocessingToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem setItalicAngleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoTransparentBackgroundToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTextBox;
