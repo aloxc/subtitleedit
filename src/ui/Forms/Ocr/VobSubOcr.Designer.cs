@@ -55,17 +55,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBoxOcrMethod = new System.Windows.Forms.GroupBox();
             this.comboBoxOcrMethod = new Nikse.SubtitleEdit.Controls.NikseComboBox();
-            this.groupBoxImageCompareMethod = new System.Windows.Forms.GroupBox();
-            this.buttonChooseEditBinaryImageCompareDb = new System.Windows.Forms.Button();
-            this.labelMinLineSplitHeight = new System.Windows.Forms.Label();
-            this.comboBoxLineSplitMinLineHeight = new Nikse.SubtitleEdit.Controls.NikseComboBox();
-            this.labelMaxErrorPercent = new System.Windows.Forms.Label();
-            this.numericUpDownMaxErrorPct = new Nikse.SubtitleEdit.Controls.NikseUpDown();
-            this.checkBoxRightToLeft = new System.Windows.Forms.CheckBox();
-            this.numericUpDownPixelsIsSpace = new Nikse.SubtitleEdit.Controls.NikseUpDown();
-            this.labelNoOfPixelsIsSpace = new System.Windows.Forms.Label();
-            this.comboBoxCharacterDatabase = new Nikse.SubtitleEdit.Controls.NikseComboBox();
-            this.labelImageDatabase = new System.Windows.Forms.Label();
             this.groupBoxOCRControls = new System.Windows.Forms.GroupBox();
             this.labelStartFrom = new System.Windows.Forms.Label();
             this.numericUpDownStartNumber = new Nikse.SubtitleEdit.Controls.NikseUpDown();
@@ -146,7 +135,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOcrMethod.SuspendLayout();
-            this.groupBoxImageCompareMethod.SuspendLayout();
             this.groupBoxOCRControls.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
             this.tabControlLogs.SuspendLayout();
@@ -458,7 +446,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // groupBoxOcrMethod
             // 
             this.groupBoxOcrMethod.Controls.Add(this.comboBoxOcrMethod);
-            this.groupBoxOcrMethod.Controls.Add(this.groupBoxImageCompareMethod);
             this.groupBoxOcrMethod.Location = new System.Drawing.Point(13, 5);
             this.groupBoxOcrMethod.Name = "groupBoxOcrMethod";
             this.groupBoxOcrMethod.Size = new System.Drawing.Size(392, 192);
@@ -495,275 +482,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.comboBoxOcrMethod.TabIndex = 0;
             this.comboBoxOcrMethod.UsePopupWindow = false;
             this.comboBoxOcrMethod.SelectedIndexChanged += new System.EventHandler(this.ComboBoxOcrMethodSelectedIndexChanged);
-            // 
-            // groupBoxImageCompareMethod
-            // 
-            this.groupBoxImageCompareMethod.Controls.Add(this.buttonChooseEditBinaryImageCompareDb);
-            this.groupBoxImageCompareMethod.Controls.Add(this.labelMinLineSplitHeight);
-            this.groupBoxImageCompareMethod.Controls.Add(this.comboBoxLineSplitMinLineHeight);
-            this.groupBoxImageCompareMethod.Controls.Add(this.labelMaxErrorPercent);
-            this.groupBoxImageCompareMethod.Controls.Add(this.numericUpDownMaxErrorPct);
-            this.groupBoxImageCompareMethod.Controls.Add(this.checkBoxRightToLeft);
-            this.groupBoxImageCompareMethod.Controls.Add(this.numericUpDownPixelsIsSpace);
-            this.groupBoxImageCompareMethod.Controls.Add(this.labelNoOfPixelsIsSpace);
-            this.groupBoxImageCompareMethod.Controls.Add(this.comboBoxCharacterDatabase);
-            this.groupBoxImageCompareMethod.Controls.Add(this.labelImageDatabase);
-            this.groupBoxImageCompareMethod.Location = new System.Drawing.Point(13, 38);
-            this.groupBoxImageCompareMethod.Name = "groupBoxImageCompareMethod";
-            this.groupBoxImageCompareMethod.Size = new System.Drawing.Size(366, 131);
-            this.groupBoxImageCompareMethod.TabIndex = 2;
-            this.groupBoxImageCompareMethod.TabStop = false;
-            this.groupBoxImageCompareMethod.Text = "Image compare";
-            // 
-            // buttonChooseEditBinaryImageCompareDb
-            // 
-            this.buttonChooseEditBinaryImageCompareDb.Location = new System.Drawing.Point(318, 17);
-            this.buttonChooseEditBinaryImageCompareDb.Name = "buttonChooseEditBinaryImageCompareDb";
-            this.buttonChooseEditBinaryImageCompareDb.Size = new System.Drawing.Size(28, 23);
-            this.buttonChooseEditBinaryImageCompareDb.TabIndex = 48;
-            this.buttonChooseEditBinaryImageCompareDb.Text = "...";
-            this.buttonChooseEditBinaryImageCompareDb.UseVisualStyleBackColor = true;
-            this.buttonChooseEditBinaryImageCompareDb.Click += new System.EventHandler(this.buttonChooseEditBinaryImageCompareDb_Click);
-            // 
-            // labelMinLineSplitHeight
-            // 
-            this.labelMinLineSplitHeight.AutoSize = true;
-            this.labelMinLineSplitHeight.Location = new System.Drawing.Point(238, 86);
-            this.labelMinLineSplitHeight.Name = "labelMinLineSplitHeight";
-            this.labelMinLineSplitHeight.Size = new System.Drawing.Size(104, 13);
-            this.labelMinLineSplitHeight.TabIndex = 47;
-            this.labelMinLineSplitHeight.Text = "Line split min. height";
-            // 
-            // comboBoxLineSplitMinLineHeight
-            // 
-            this.comboBoxLineSplitMinLineHeight.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxLineSplitMinLineHeight.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxLineSplitMinLineHeight.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxLineSplitMinLineHeight.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxLineSplitMinLineHeight.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxLineSplitMinLineHeight.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxLineSplitMinLineHeight.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxLineSplitMinLineHeight.DropDownHeight = 400;
-            this.comboBoxLineSplitMinLineHeight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxLineSplitMinLineHeight.DropDownWidth = 121;
-            this.comboBoxLineSplitMinLineHeight.FormattingEnabled = true;
-            this.comboBoxLineSplitMinLineHeight.Items.AddRange(new object[] {
-            "Auto",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
-            "30",
-            "31",
-            "32",
-            "33",
-            "34",
-            "35",
-            "36",
-            "37",
-            "38",
-            "39",
-            "40",
-            "41",
-            "42",
-            "43",
-            "44",
-            "45",
-            "46",
-            "47",
-            "48",
-            "49",
-            "50",
-            "51",
-            "52",
-            "53",
-            "54",
-            "55",
-            "56",
-            "57",
-            "58",
-            "59",
-            "60",
-            "65",
-            "70",
-            "75",
-            "80",
-            "85",
-            "90",
-            "95",
-            "100",
-            "110",
-            "120",
-            "130",
-            "140",
-            "150"});
-            this.comboBoxLineSplitMinLineHeight.Location = new System.Drawing.Point(239, 102);
-            this.comboBoxLineSplitMinLineHeight.MaxLength = 32767;
-            this.comboBoxLineSplitMinLineHeight.Name = "comboBoxLineSplitMinLineHeight";
-            this.comboBoxLineSplitMinLineHeight.SelectedIndex = -1;
-            this.comboBoxLineSplitMinLineHeight.SelectedItem = null;
-            this.comboBoxLineSplitMinLineHeight.SelectedText = "";
-            this.comboBoxLineSplitMinLineHeight.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxLineSplitMinLineHeight.TabIndex = 46;
-            this.comboBoxLineSplitMinLineHeight.UsePopupWindow = false;
-            // 
-            // labelMaxErrorPercent
-            // 
-            this.labelMaxErrorPercent.AutoSize = true;
-            this.labelMaxErrorPercent.Location = new System.Drawing.Point(7, 83);
-            this.labelMaxErrorPercent.Name = "labelMaxErrorPercent";
-            this.labelMaxErrorPercent.Size = new System.Drawing.Size(55, 13);
-            this.labelMaxErrorPercent.TabIndex = 45;
-            this.labelMaxErrorPercent.Text = "Max Err%";
-            // 
-            // numericUpDownMaxErrorPct
-            // 
-            this.numericUpDownMaxErrorPct.BackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownMaxErrorPct.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.numericUpDownMaxErrorPct.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.numericUpDownMaxErrorPct.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.numericUpDownMaxErrorPct.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.numericUpDownMaxErrorPct.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.numericUpDownMaxErrorPct.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.numericUpDownMaxErrorPct.DecimalPlaces = 1;
-            this.numericUpDownMaxErrorPct.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDownMaxErrorPct.Location = new System.Drawing.Point(173, 81);
-            this.numericUpDownMaxErrorPct.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numericUpDownMaxErrorPct.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.numericUpDownMaxErrorPct.Name = "numericUpDownMaxErrorPct";
-            this.numericUpDownMaxErrorPct.Size = new System.Drawing.Size(50, 21);
-            this.numericUpDownMaxErrorPct.TabIndex = 44;
-            this.numericUpDownMaxErrorPct.TabStop = false;
-            this.numericUpDownMaxErrorPct.ThousandsSeparator = false;
-            this.numericUpDownMaxErrorPct.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            65536});
-            this.numericUpDownMaxErrorPct.ValueChanged += new System.EventHandler(this.numericUpDownMaxErrorPct_ValueChanged);
-            // 
-            // checkBoxRightToLeft
-            // 
-            this.checkBoxRightToLeft.AutoSize = true;
-            this.checkBoxRightToLeft.Location = new System.Drawing.Point(9, 107);
-            this.checkBoxRightToLeft.Name = "checkBoxRightToLeft";
-            this.checkBoxRightToLeft.Size = new System.Drawing.Size(83, 17);
-            this.checkBoxRightToLeft.TabIndex = 6;
-            this.checkBoxRightToLeft.Text = "Right to left";
-            this.checkBoxRightToLeft.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDownPixelsIsSpace
-            // 
-            this.numericUpDownPixelsIsSpace.BackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownPixelsIsSpace.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.numericUpDownPixelsIsSpace.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.numericUpDownPixelsIsSpace.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.numericUpDownPixelsIsSpace.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.numericUpDownPixelsIsSpace.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.numericUpDownPixelsIsSpace.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.numericUpDownPixelsIsSpace.DecimalPlaces = 0;
-            this.numericUpDownPixelsIsSpace.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownPixelsIsSpace.Location = new System.Drawing.Point(173, 54);
-            this.numericUpDownPixelsIsSpace.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numericUpDownPixelsIsSpace.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownPixelsIsSpace.Name = "numericUpDownPixelsIsSpace";
-            this.numericUpDownPixelsIsSpace.Size = new System.Drawing.Size(50, 21);
-            this.numericUpDownPixelsIsSpace.TabIndex = 5;
-            this.numericUpDownPixelsIsSpace.TabStop = false;
-            this.numericUpDownPixelsIsSpace.ThousandsSeparator = false;
-            this.numericUpDownPixelsIsSpace.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownPixelsIsSpace.ValueChanged += new System.EventHandler(this.numericUpDownPixelsIsSpace_ValueChanged);
-            // 
-            // labelNoOfPixelsIsSpace
-            // 
-            this.labelNoOfPixelsIsSpace.AutoSize = true;
-            this.labelNoOfPixelsIsSpace.Location = new System.Drawing.Point(6, 56);
-            this.labelNoOfPixelsIsSpace.Name = "labelNoOfPixelsIsSpace";
-            this.labelNoOfPixelsIsSpace.Size = new System.Drawing.Size(104, 13);
-            this.labelNoOfPixelsIsSpace.TabIndex = 4;
-            this.labelNoOfPixelsIsSpace.Text = "No of pixels is space";
-            // 
-            // comboBoxCharacterDatabase
-            // 
-            this.comboBoxCharacterDatabase.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxCharacterDatabase.BackColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.comboBoxCharacterDatabase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(173)))), ((int)(((byte)(179)))));
-            this.comboBoxCharacterDatabase.BorderColorDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.comboBoxCharacterDatabase.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.comboBoxCharacterDatabase.ButtonForeColorDown = System.Drawing.Color.Orange;
-            this.comboBoxCharacterDatabase.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.comboBoxCharacterDatabase.DropDownHeight = 400;
-            this.comboBoxCharacterDatabase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCharacterDatabase.DropDownWidth = 182;
-            this.comboBoxCharacterDatabase.FormattingEnabled = true;
-            this.comboBoxCharacterDatabase.Location = new System.Drawing.Point(130, 19);
-            this.comboBoxCharacterDatabase.MaxLength = 32767;
-            this.comboBoxCharacterDatabase.Name = "comboBoxCharacterDatabase";
-            this.comboBoxCharacterDatabase.SelectedIndex = -1;
-            this.comboBoxCharacterDatabase.SelectedItem = null;
-            this.comboBoxCharacterDatabase.SelectedText = "";
-            this.comboBoxCharacterDatabase.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxCharacterDatabase.TabIndex = 1;
-            this.comboBoxCharacterDatabase.UsePopupWindow = false;
-            this.comboBoxCharacterDatabase.SelectedIndexChanged += new System.EventHandler(this.ComboBoxCharacterDatabaseSelectedIndexChanged);
-            // 
-            // labelImageDatabase
-            // 
-            this.labelImageDatabase.AutoSize = true;
-            this.labelImageDatabase.Location = new System.Drawing.Point(7, 22);
-            this.labelImageDatabase.Name = "labelImageDatabase";
-            this.labelImageDatabase.Size = new System.Drawing.Size(85, 13);
-            this.labelImageDatabase.TabIndex = 0;
-            this.labelImageDatabase.Text = "Image database";
             // 
             // groupBoxOCRControls
             // 
@@ -1708,8 +1426,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.Resize += new System.EventHandler(this.VobSubOcr_Resize);
             this.contextMenuStripListview.ResumeLayout(false);
             this.groupBoxOcrMethod.ResumeLayout(false);
-            this.groupBoxImageCompareMethod.ResumeLayout(false);
-            this.groupBoxImageCompareMethod.PerformLayout();
             this.groupBoxOCRControls.ResumeLayout(false);
             this.groupBoxOCRControls.PerformLayout();
             this.groupBoxOcrAutoFix.ResumeLayout(false);
@@ -1861,16 +1577,5 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
         private NikseComboBox comboBoxOcrMethod;
-        private System.Windows.Forms.GroupBox groupBoxImageCompareMethod;
-        private System.Windows.Forms.Button buttonChooseEditBinaryImageCompareDb;
-        private System.Windows.Forms.Label labelMinLineSplitHeight;
-        private NikseComboBox comboBoxLineSplitMinLineHeight;
-        private System.Windows.Forms.Label labelMaxErrorPercent;
-        private NikseUpDown numericUpDownMaxErrorPct;
-        private System.Windows.Forms.CheckBox checkBoxRightToLeft;
-        private NikseUpDown numericUpDownPixelsIsSpace;
-        private System.Windows.Forms.Label labelNoOfPixelsIsSpace;
-        private NikseComboBox comboBoxCharacterDatabase;
-        private System.Windows.Forms.Label labelImageDatabase;
     }
 }
