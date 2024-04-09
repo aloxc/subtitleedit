@@ -19,13 +19,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             this.components = new System.ComponentModel.Container();
             this.contextMenuStripListview = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.oCRSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorOcrSelected = new System.Windows.Forms.ToolStripSeparator();
             this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.italicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.importTextWithMatchingTimeCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importNewTimeCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSaveSubtitleAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +49,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripUnknownWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeAllXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripGuessesUsed = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearGuesses = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -100,13 +95,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // contextMenuStripListview
             // 
             this.contextMenuStripListview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.oCRSelectedLinesToolStripMenuItem,
             this.toolStripSeparatorOcrSelected,
             this.normalToolStripMenuItem,
-            this.italicToolStripMenuItem,
             this.toolStripSeparator1,
-            this.importTextWithMatchingTimeCodesToolStripMenuItem,
-            this.importNewTimeCodesToolStripMenuItem,
             this.toolStripMenuItemSaveSubtitleAs,
             this.toolStripSeparator2,
             this.saveImageAsToolStripMenuItem,
@@ -126,13 +117,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripListview.Size = new System.Drawing.Size(333, 414);
             this.contextMenuStripListview.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripListviewOpening);
             // 
-            // oCRSelectedLinesToolStripMenuItem
-            // 
-            this.oCRSelectedLinesToolStripMenuItem.Name = "oCRSelectedLinesToolStripMenuItem";
-            this.oCRSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.oCRSelectedLinesToolStripMenuItem.Text = "OCR selected lines...";
-            this.oCRSelectedLinesToolStripMenuItem.Click += new System.EventHandler(this.oCRSelectedLinesToolStripMenuItem_Click);
-            // 
             // toolStripSeparatorOcrSelected
             // 
             this.toolStripSeparatorOcrSelected.Name = "toolStripSeparatorOcrSelected";
@@ -145,31 +129,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.NormalToolStripMenuItemClick);
             // 
-            // italicToolStripMenuItem
-            // 
-            this.italicToolStripMenuItem.Name = "italicToolStripMenuItem";
-            this.italicToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.italicToolStripMenuItem.Text = "Italic";
-            this.italicToolStripMenuItem.Click += new System.EventHandler(this.ItalicToolStripMenuItemClick);
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(329, 6);
-            // 
-            // importTextWithMatchingTimeCodesToolStripMenuItem
-            // 
-            this.importTextWithMatchingTimeCodesToolStripMenuItem.Name = "importTextWithMatchingTimeCodesToolStripMenuItem";
-            this.importTextWithMatchingTimeCodesToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.importTextWithMatchingTimeCodesToolStripMenuItem.Text = "Import text with matching time codes...";
-            this.importTextWithMatchingTimeCodesToolStripMenuItem.Click += new System.EventHandler(this.importTextWithMatchingTimeCodesToolStripMenuItem_Click);
-            // 
-            // importNewTimeCodesToolStripMenuItem
-            // 
-            this.importNewTimeCodesToolStripMenuItem.Name = "importNewTimeCodesToolStripMenuItem";
-            this.importNewTimeCodesToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.importNewTimeCodesToolStripMenuItem.Text = "Import new time codes...";
-            this.importNewTimeCodesToolStripMenuItem.Click += new System.EventHandler(this.importNewTimeCodesToolStripMenuItem_Click);
             // 
             // toolStripMenuItemSaveSubtitleAs
             // 
@@ -376,8 +339,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // contextMenuStripUnknownWords
             // 
             this.contextMenuStripUnknownWords.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearToolStripMenuItem,
-            this.removeAllXToolStripMenuItem});
+            this.clearToolStripMenuItem});
             this.contextMenuStripUnknownWords.Name = "contextMenuStripUnknownWords";
             this.contextMenuStripUnknownWords.Size = new System.Drawing.Size(146, 48);
             this.contextMenuStripUnknownWords.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripUnknownWords_Opening);
@@ -388,13 +350,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
-            // 
-            // removeAllXToolStripMenuItem
-            // 
-            this.removeAllXToolStripMenuItem.Name = "removeAllXToolStripMenuItem";
-            this.removeAllXToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.removeAllXToolStripMenuItem.Text = "RemoveAllX";
-            this.removeAllXToolStripMenuItem.Click += new System.EventHandler(this.removeAllXToolStripMenuItem_Click);
             // 
             // contextMenuStripGuessesUsed
             // 
@@ -735,14 +690,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.GroupBox groupBoxOcrAutoFix;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripListview;
         private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem italicToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveImageAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem importTextWithMatchingTimeCodesToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem saveAllImagesWithHtmlIndexViewToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorImageCompare;
@@ -766,7 +719,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ContextMenuStrip contextMenuStripImage;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImageSaveAs;
         private System.Windows.Forms.ToolStripMenuItem OcrTrainingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importNewTimeCodesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ImagePreProcessingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSaveSubtitleAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -784,8 +736,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
         private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
-        private System.Windows.Forms.ToolStripMenuItem removeAllXToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
     }
 }

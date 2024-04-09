@@ -452,11 +452,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
 
-            oCRSelectedLinesToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.OcrSelectedLines;
             normalToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.RemoveFormattingAll;
-            italicToolStripMenuItem.Text = LanguageSettings.Current.General.Italic;
-            importTextWithMatchingTimeCodesToolStripMenuItem.Text = language.ImportTextWithMatchingTimeCodes;
-            importNewTimeCodesToolStripMenuItem.Text = language.ImportNewTimeCodes;
             saveImageAsToolStripMenuItem.Text = language.SaveSubtitleImageAs;
             toolStripMenuItemImageSaveAs.Text = language.SaveSubtitleImageAs;
             previewToolStripMenuItem.Text = LanguageSettings.Current.General.Preview;
@@ -480,7 +476,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             subtitleListView1.AutoSizeAllColumns(this);
 
 
-            italicToolStripMenuItem.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewItalic);
 
 
             UiUtil.FixLargeFonts(this, buttonCancel);
@@ -5577,7 +5572,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // Enable toolstrips if event was raised by Subtitle listview
             bool enableIfRaisedBySubListView = contextMenuStripListview.SourceControl == subtitleListView1;
             normalToolStripMenuItem.Visible = enableIfRaisedBySubListView;
-            italicToolStripMenuItem.Visible = enableIfRaisedBySubListView;
             toolStripSeparator1.Visible = enableIfRaisedBySubListView && subtitleListView1.SelectedItems.Count == 1;
             saveImageAsToolStripMenuItem.Visible = !enableIfRaisedBySubListView || subtitleListView1.SelectedItems.Count == 1;
 
@@ -5597,12 +5591,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                                                               _ocrMethodIndex == _ocrMethodBinaryImageCompare ||
                                                               _ocrMethodIndex == _ocrMethodCloudVision))
             {
-                oCRSelectedLinesToolStripMenuItem.Visible = true;
                 toolStripSeparatorOcrSelected.Visible = true;
             }
             else
             {
-                oCRSelectedLinesToolStripMenuItem.Visible = true;
                 toolStripSeparatorOcrSelected.Visible = true;
             }
         }
@@ -7131,13 +7123,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void comboBoxTesseractEngineMode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_tesseractAsyncStrings != null)
-            {
-                _tesseractAsyncStrings = new string[GetSubtitleCount()];
-            }
-        }
 
         private void toolStripMenuItemSaveSubtitleAs_Click(object sender, EventArgs e)
         {
@@ -7355,32 +7340,20 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         }
 
 
-        private void removeAllXToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-            var unknownWords = new List<LogItem>();
-
-        }
+ 
 
         private void contextMenuStripUnknownWords_Opening(object sender, CancelEventArgs e)
         {
             string word = null;
             if (string.IsNullOrEmpty(word))
             {
-                removeAllXToolStripMenuItem.Visible = false;
             }
             else
             {
-                removeAllXToolStripMenuItem.Visible = true;
-                removeAllXToolStripMenuItem.Text = string.Format(LanguageSettings.Current.Settings.RemoveX.RemoveChar('?'), word);
             }
         }
 
-        private void oCRSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _mainOcrSelectedIndices = subtitleListView1.GetSelectedIndices().ToList();
-            ButtonStartOcrClick(null, null);
-        }
+      
 
 
         public void FindDialogFind(string findText, ReplaceType findReplaceType, Regex regex)
