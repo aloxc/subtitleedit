@@ -406,11 +406,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Text = language.Title;
             buttonStartOcr.Text = language.StartOcr;
             buttonPause.Text = LanguageSettings.Current.Settings.Pause;
-            labelStatus.Text = language.LoadingVobSubImages;
             groupBoxSubtitleImage.Text = language.SubtitleImage;
             labelSubtitleText.Text = language.SubtitleText;
-            buttonOK.Text = LanguageSettings.Current.General.Ok;
-            buttonCancel.Text = LanguageSettings.Current.General.Cancel;
             subtitleListView1.InitializeLanguage(LanguageSettings.Current.General, Configuration.Settings);
             subtitleListView1.HideColumn(SubtitleListView.SubtitleColumn.CharactersPerSeconds);
             subtitleListView1.HideColumn(SubtitleListView.SubtitleColumn.Actor);
@@ -475,10 +472,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             UiUtil.InitializeSubtitleFont(subtitleListView1);
             subtitleListView1.AutoSizeAllColumns(this);
 
-
-
-
-            UiUtil.FixLargeFonts(this, buttonCancel);
 
             splitContainerBottom.Panel1MinSize = 400;
             splitContainerBottom.Panel2MinSize = 250;
@@ -574,9 +567,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             _main = main;
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -593,9 +583,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void Initialize(List<VobSubMergedPack> vobSubMergedPackList, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -610,33 +597,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _importLanguageString = languageString;
         }
 
-        internal void Initialize(Subtitle subtitle, List<DvbSubPes> subtitleImages, VobSubOcrSettings vobSubOcrSettings)
-        {
-            SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
-            _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            SetOcrMethod();
-            _dvbPesSubtitles = subtitleImages;
-            _subtitle = subtitle;
-            _subtitle.Renumber();
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
-            autoTransparentBackgroundToolStripMenuItem.Checked = false;
-            autoTransparentBackgroundToolStripMenuItem.Visible = false;
-        }
 
         internal void InitializeQuick(List<VobSubMergedPack> vobSubMergedPackist, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, string languageString)
         {
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
             _vobSubMergedPackList = vobSubMergedPackist;
             _palette = palette;
@@ -848,9 +812,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         internal void Initialize(List<BluRaySupParser.PcsData> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName)
         {
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -3868,25 +3829,17 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void SetButtonsStartOcr()
         {
-            buttonOK.Enabled = false;
-            buttonCancel.Enabled = false;
             buttonStartOcr.Enabled = false;
             buttonPause.Enabled = true;
             _mainOcrRunning = true;
-            progressBar1.Visible = true;
             subtitleListView1.MultiSelect = false;
-            labelStatus.Text = string.Empty;
         }
 
         private void SetButtonsEnabledAfterOcrDone()
         {
-            buttonOK.Enabled = true;
-            buttonCancel.Enabled = true;
             buttonStartOcr.Enabled = true;
             buttonPause.Enabled = false;
             _mainOcrRunning = false;
-            labelStatus.Text = string.Empty;
-            progressBar1.Visible = false;
             subtitleListView1.MultiSelect = true;
             _mainOcrSelectedIndices = null;
         }
@@ -3903,7 +3856,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (_ocrMethodIndex == _ocrMethodTesseract302 || _ocrMethodIndex == _ocrMethodTesseract5)
             {
-                labelStatus.Text = LanguageSettings.Current.General.PleaseWait;
                 _tesseractThreadRunner?.Cancel();
                 _tesseractThreadRunner = new TesseractThreadRunner(OcrDone);
                 _tesseractRunner = new TesseractRunner();
@@ -3952,10 +3904,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
             }
-
-            progressBar1.Maximum = max;
-            progressBar1.Value = 0;
-            progressBar1.Visible = true;
 
             _mainOcrTimerMax = max;
             if (_mainOcrIndex > 0)
@@ -4130,15 +4078,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
                 var max = GetSubtitleCount();
                 GetSubtitleTime(index, out var startTime, out var endTime);
-                labelStatus.Text = $"{index + 1} / {max}: {startTime} - {endTime}";
-                progressBar1.Value = index + 1;
                 if (ProgressCallback != null)
                 {
                     var percent = (int)Math.Round((index + 1) * 100.0 / max);
                     ProgressCallback?.Invoke($"{percent}%");
                 }
-                labelStatus.Refresh();
-                progressBar1.Refresh();
 
                 job.Bitmap.Dispose();
                 if (index >= max - 1)
@@ -4162,15 +4106,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             var bmp = ShowSubtitleImage(i);
             GetSubtitleTime(i, out var startTime, out var endTime);
-            labelStatus.Text = $"{i + 1} / {max}: {startTime} - {endTime}";
-            progressBar1.Value = i + 1;
             if (ProgressCallback != null)
             {
                 var percent = (int)Math.Round((i + 1) * 100.0 / max);
                 ProgressCallback?.Invoke($"{percent}%");
             }
-            labelStatus.Refresh();
-            progressBar1.Refresh();
             if (_abort)
             {
                 bmp.Dispose();
@@ -5125,8 +5065,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _ocrThreadStop = true;
             _tesseractThreadRunner?.Cancel();
             buttonPause.Enabled = false;
-            progressBar1.Visible = false;
-            labelStatus.Text = string.Empty;
             SetButtonsEnabledAfterOcrDone();
         }
 
@@ -5928,9 +5866,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -5971,7 +5906,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             groupBoxSubtitleImage.Height = originalTopHeight + adjustPercent;
 
             splitContainerBottom.Top = groupBoxSubtitleImage.Bottom + 5;
-            splitContainerBottom.Height = buttonOK.Top - (splitContainerBottom.Top + 20);
 
 
             // Hack for resize after minimize...
@@ -6040,9 +5974,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             if (folderBrowserDialog1.ShowDialog(this) == DialogResult.OK)
             {
-                progressBar1.Maximum = _subtitle.Paragraphs.Count - 1;
-                progressBar1.Value = 0;
-                progressBar1.Visible = true;
                 int imagesSavedCount = 0;
                 var sb = new StringBuilder();
                 sb.AppendLine("<!DOCTYPE html>");
@@ -6055,7 +5986,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 _fromMenuItem = true;
                 for (int i = 0; i < _subtitle.Paragraphs.Count; i++)
                 {
-                    progressBar1.Value = i;
                     var bmp = GetSubtitleBitmap(i);
                     if (bmp != null)
                     {
@@ -6082,7 +6012,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 sb.AppendLine("</html>");
                 var htmlFileName = Path.Combine(folderBrowserDialog1.SelectedPath, "index.html");
                 File.WriteAllText(htmlFileName, sb.ToString(), Encoding.UTF8);
-                progressBar1.Visible = false;
                 MessageBox.Show($"{imagesSavedCount} images saved in {folderBrowserDialog1.SelectedPath}");
                 UiUtil.OpenFile(htmlFileName);
             }
@@ -6223,35 +6152,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             labelMinAlpha.Visible = numericUpDownAutoTransparentAlphaMax.Visible;
         }
 
-        internal void Initialize(string fileName, List<Color> palette, VobSubOcrSettings vobSubOcrSettings, List<SpHeader> spList)
-        {
-            _spList = spList;
-            SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
-            _vobSubOcrSettings = vobSubOcrSettings;
-
-            InitializeTesseract();
-            LoadImageCompareCharacterDatabaseList(Configuration.Settings.VobSubOcr.LastBinaryImageCompareDb);
-
-            _palette = palette;
-
-            SetOcrMethod();
-
-            FileName = fileName;
-            Text += " - " + Path.GetFileName(FileName);
-
-            foreach (SpHeader header in _spList)
-            {
-                Paragraph p = new Paragraph(string.Empty, header.StartTime.TotalMilliseconds, header.StartTime.TotalMilliseconds + header.Picture.Delay.TotalMilliseconds);
-                _subtitle.Paragraphs.Add(p);
-            }
-
-            _subtitle.Renumber();
-            subtitleListView1.Fill(_subtitle);
-            subtitleListView1.SelectIndexAndEnsureVisible(0);
-        }
 
 
         internal void Initialize(List<SubPicturesWithSeparateTimeCodes> subPicturesWithTimeCodes, VobSubOcrSettings vobSubOcrSettings, string fileName)
@@ -6259,9 +6159,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _mp4List = subPicturesWithTimeCodes;
 
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -6664,16 +6561,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void timerHideStatus_Tick(object sender, EventArgs e)
         {
             timerHideStatus.Stop();
-            labelStatus.Text = string.Empty;
         }
 
 
         internal void Initialize(List<TransportStreamSubtitle> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, string language, bool skipMakeBinary = false)
         {
             SetButtonsStartOcr();
-            progressBar1.Visible = false;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 0;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract(language);

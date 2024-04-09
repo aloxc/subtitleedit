@@ -38,10 +38,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelSubtitleText = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.labelStatus = new System.Windows.Forms.Label();
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
             this.groupBoxOcrAutoFix = new System.Windows.Forms.GroupBox();
@@ -67,6 +63,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
+            this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
             this.contextMenuStripTextBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +72,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
-            this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
@@ -114,7 +110,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripSeparator3,
             this.deleteToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
-            this.contextMenuStripListview.Size = new System.Drawing.Size(333, 414);
+            this.contextMenuStripListview.Size = new System.Drawing.Size(333, 304);
             this.contextMenuStripListview.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripListviewOpening);
             // 
             // toolStripSeparatorOcrSelected
@@ -244,49 +240,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.labelSubtitleText.TabIndex = 6;
             this.labelSubtitleText.Text = "Subtitle text";
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(12, 564);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(885, 10);
-            this.progressBar1.TabIndex = 7;
-            // 
-            // labelStatus
-            // 
-            this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(12, 543);
-            this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(131, 13);
-            this.labelStatus.TabIndex = 8;
-            this.labelStatus.Text = "Loading VobSub images...";
-            // 
-            // buttonOK
-            // 
-            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.buttonOK.Location = new System.Drawing.Point(903, 550);
-            this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(83, 23);
-            this.buttonOK.TabIndex = 1;
-            this.buttonOK.Text = "&OK";
-            this.buttonOK.UseVisualStyleBackColor = true;
-            this.buttonOK.Click += new System.EventHandler(this.ButtonOkClick);
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.buttonCancel.Location = new System.Drawing.Point(992, 550);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(85, 23);
-            this.buttonCancel.TabIndex = 2;
-            this.buttonCancel.Text = "C&ancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            // 
             // buttonPause
             // 
             this.buttonPause.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -341,13 +294,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripUnknownWords.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearToolStripMenuItem});
             this.contextMenuStripUnknownWords.Name = "contextMenuStripUnknownWords";
-            this.contextMenuStripUnknownWords.Size = new System.Drawing.Size(146, 48);
+            this.contextMenuStripUnknownWords.Size = new System.Drawing.Size(107, 26);
             this.contextMenuStripUnknownWords.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripUnknownWords_Opening);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -536,6 +489,34 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.splitContainerBottom.SplitterDistance = 914;
             this.splitContainerBottom.TabIndex = 39;
             // 
+            // subtitleListView1
+            // 
+            this.subtitleListView1.AllowColumnReorder = true;
+            this.subtitleListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.subtitleListView1.ContextMenuStrip = this.contextMenuStripListview;
+            this.subtitleListView1.FirstVisibleIndex = -1;
+            this.subtitleListView1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.subtitleListView1.FullRowSelect = true;
+            this.subtitleListView1.GridLines = true;
+            this.subtitleListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.subtitleListView1.HideSelection = false;
+            this.subtitleListView1.Location = new System.Drawing.Point(8, 21);
+            this.subtitleListView1.Name = "subtitleListView1";
+            this.subtitleListView1.OwnerDraw = true;
+            this.subtitleListView1.Size = new System.Drawing.Size(887, 183);
+            this.subtitleListView1.SubtitleFontBold = false;
+            this.subtitleListView1.SubtitleFontName = "Tahoma";
+            this.subtitleListView1.SubtitleFontSize = 8;
+            this.subtitleListView1.TabIndex = 0;
+            this.subtitleListView1.UseCompatibleStateImageBehavior = false;
+            this.subtitleListView1.UseSyntaxColoring = true;
+            this.subtitleListView1.View = System.Windows.Forms.View.Details;
+            this.subtitleListView1.SelectedIndexChanged += new System.EventHandler(this.SubtitleListView1SelectedIndexChanged);
+            this.subtitleListView1.DoubleClick += new System.EventHandler(this.subtitleListView1_DoubleClick);
+            this.subtitleListView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.subtitleListView1_KeyDown);
+            // 
             // contextMenuStripTextBox
             // 
             this.contextMenuStripTextBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -547,7 +528,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.selectAllToolStripMenuItem,
             this.toolStripSeparator17});
             this.contextMenuStripTextBox.Name = "contextMenuStripTextBoxListView";
-            this.contextMenuStripTextBox.Size = new System.Drawing.Size(173, 214);
+            this.contextMenuStripTextBox.Size = new System.Drawing.Size(173, 126);
             // 
             // cutToolStripMenuItem
             // 
@@ -597,35 +578,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.toolStripSeparator17.Name = "toolStripSeparator17";
             this.toolStripSeparator17.Size = new System.Drawing.Size(169, 6);
-          
-            // 
-            // subtitleListView1
-            // 
-            this.subtitleListView1.AllowColumnReorder = true;
-            this.subtitleListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.subtitleListView1.ContextMenuStrip = this.contextMenuStripListview;
-            this.subtitleListView1.FirstVisibleIndex = -1;
-            this.subtitleListView1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subtitleListView1.FullRowSelect = true;
-            this.subtitleListView1.GridLines = true;
-            this.subtitleListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.subtitleListView1.HideSelection = false;
-            this.subtitleListView1.Location = new System.Drawing.Point(8, 21);
-            this.subtitleListView1.Name = "subtitleListView1";
-            this.subtitleListView1.OwnerDraw = true;
-            this.subtitleListView1.Size = new System.Drawing.Size(887, 183);
-            this.subtitleListView1.SubtitleFontBold = false;
-            this.subtitleListView1.SubtitleFontName = "Tahoma";
-            this.subtitleListView1.SubtitleFontSize = 8;
-            this.subtitleListView1.TabIndex = 0;
-            this.subtitleListView1.UseCompatibleStateImageBehavior = false;
-            this.subtitleListView1.UseSyntaxColoring = true;
-            this.subtitleListView1.View = System.Windows.Forms.View.Details;
-            this.subtitleListView1.SelectedIndexChanged += new System.EventHandler(this.SubtitleListView1SelectedIndexChanged);
-            this.subtitleListView1.DoubleClick += new System.EventHandler(this.subtitleListView1_DoubleClick);
-            this.subtitleListView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.subtitleListView1_KeyDown);
             // 
             // timerHideStatus
             // 
@@ -639,10 +591,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.ClientSize = new System.Drawing.Size(1089, 582);
             this.Controls.Add(this.splitContainerBottom);
             this.Controls.Add(this.groupBoxSubtitleImage);
-            this.Controls.Add(this.labelStatus);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.progressBar1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(920, 560);
@@ -672,7 +620,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.splitContainerBottom.ResumeLayout(false);
             this.contextMenuStripTextBox.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -680,10 +627,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private System.Windows.Forms.PictureBox pictureBoxSubtitleImage;
         private System.Windows.Forms.Label labelSubtitleText;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label labelStatus;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.Button buttonCancel;
         private SubtitleListView subtitleListView1;
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonStartOcr;
