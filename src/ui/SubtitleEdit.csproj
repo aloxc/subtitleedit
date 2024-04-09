@@ -80,6 +80,9 @@
     <Reference Include="NHunspell, Version=1.2.5554.16953, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NHunspell.1.2.5554.16953\lib\net\NHunspell.dll</HintPath>
     </Reference>
+    <Reference Include="PaddleOCRSharp, Version=4.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\..\packages\PaddleOCRSharp.4.2.0\lib\net48\PaddleOCRSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -2753,6 +2756,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Vosk.0.3.38\build\Vosk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Vosk.0.3.38\build\Vosk.targets'))" />
+    <Error Condition="!Exists('..\..\packages\PaddleOCRSharp.4.2.0\build\PaddleOCRSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\PaddleOCRSharp.4.2.0\build\PaddleOCRSharp.targets'))" />
   </Target>
   <Import Project="..\..\packages\Vosk.0.3.38\build\Vosk.targets" Condition="Exists('..\..\packages\Vosk.0.3.38\build\Vosk.targets')" />
+  <Import Project="..\..\packages\PaddleOCRSharp.4.2.0\build\PaddleOCRSharp.targets" Condition="Exists('..\..\packages\PaddleOCRSharp.4.2.0\build\PaddleOCRSharp.targets')" />
 </Project>

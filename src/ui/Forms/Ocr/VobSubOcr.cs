@@ -12,6 +12,7 @@ using Nikse.SubtitleEdit.Logic;
 using Nikse.SubtitleEdit.Logic.Ocr;
 using Nikse.SubtitleEdit.Logic.Ocr.Binary;
 using Nikse.SubtitleEdit.Logic.Ocr.Tesseract;
+using PaddleOCRSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1548,47 +1549,12 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private int GetSubtitleCount()
         {
-            if (_mp4List != null)
-            {
-                return _mp4List.Count;
-            }
-
-            if (_spList != null)
-            {
-                return _spList.Count;
-            }
-
-            if (_bdnXmlSubtitle != null)
-            {
-                return _bdnXmlSubtitle.Paragraphs.Count;
-            }
-
             if (_bluRaySubtitlesOriginal != null)
             {
                 return _bluRaySubtitles?.Count ?? _bluRaySubtitlesOriginal.Count;
             }
 
-            if (_xSubList != null)
-            {
-                return _xSubList.Count;
-            }
-
-            if (_dvbSubtitles != null)
-            {
-                return _dvbSubtitles.Count;
-            }
-
-            if (_dvbPesSubtitles != null)
-            {
-                return _dvbPesSubtitles.Count;
-            }
-
-            if (_binaryParagraphWithPositions != null)
-            {
-                return _binaryParagraphWithPositions.Count;
-            }
-
-            return _vobSubMergedPackList.Count;
+            return 0;
         }
 
         /// <summary>
@@ -3576,8 +3542,70 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         }
 
         private bool _isLatinDb;
-
         private void ButtonStartOcrClick(object sender, EventArgs e)
+        {
+            if (_subtitle.Paragraphs.Count == 0)
+            {
+                return;
+            }
+            InitializeTopAlign();
+
+           
+
+            _mainOcrBitmap = null;
+
+            SetButtonsStartOcr();
+            _fromMenuItem = false;
+            _abort = false;
+
+
+            int max = GetSubtitleCount();
+
+            new Task(() =>
+            {
+                //识别结果对象
+                var ocrResult = new OCRResult();
+                 PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
+                Bitmap bitmap = GetSubtitleBitmap(3);
+                //_subtitle.Paragraphs[2].
+                if (bitmap == null)
+                {
+                    MessageBox.Show("No image!");
+                    return;
+                }
+                ocrResult = engine.DetectText(bitmap);
+                var txt = "";
+                if (ocrResult.TextBlocks.Count > 0)
+                {
+                    List<TextBlock> list = ocrResult.TextBlocks;
+                    if (list.Count == 1)
+                    {
+                        txt = list[0].Text;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < list.Count - 1; i++)
+                        {
+                            txt += list[i].Text + "\r\n";
+                        }
+                        txt += list[list.Count - 1].Text;
+                    }
+                }
+                this.BeginInvoke(new Action(() =>
+                {
+                    Clipboard.SetText(txt);
+                }));
+
+            }).Start();
+
+            _mainOcrTimer = new Timer();
+            _mainOcrTimer.Tick += mainOcrTimer_Tick;
+            _mainOcrTimer.Interval = 5;
+            _mainOcrRunning = true;
+            subtitleListView1.MultiSelect = false;
+            mainOcrTimer_Tick(null, null);
+        }
+        private void ButtonStartOcrClickBak(object sender, EventArgs e)
         {
             if (_subtitle.Paragraphs.Count == 0)
             {
