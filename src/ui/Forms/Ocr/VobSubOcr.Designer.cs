@@ -26,7 +26,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorImageCompare = new System.Windows.Forms.ToolStripSeparator();
-            this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditLastAdditionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.labelSubtitleText = new System.Windows.Forms.Label();
@@ -75,7 +74,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.saveImageAsToolStripMenuItem,
             this.saveAllImagesWithHtmlIndexViewToolStripMenuItem,
             this.toolStripSeparatorImageCompare,
-            this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem,
             this.EditLastAdditionsToolStripMenuItem});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
             this.contextMenuStripListview.Size = new System.Drawing.Size(333, 304);
@@ -120,13 +118,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.toolStripSeparatorImageCompare.Name = "toolStripSeparatorImageCompare";
             this.toolStripSeparatorImageCompare.Size = new System.Drawing.Size(329, 6);
-            // 
-            // inspectImageCompareMatchesForCurrentImageToolStripMenuItem
-            // 
-            this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Name = "inspectImageCompareMatchesForCurrentImageToolStripMenuItem";
-            this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Text = "Inspect compare matches for current image";
-            this.inspectImageCompareMatchesForCurrentImageToolStripMenuItem.Click += new System.EventHandler(this.InspectImageCompareMatchesForCurrentImageToolStripMenuItem_Click);
             // 
             // EditLastAdditionsToolStripMenuItem
             // 
@@ -453,7 +444,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem saveAllImagesWithHtmlIndexViewToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorImageCompare;
-        private System.Windows.Forms.ToolStripMenuItem inspectImageCompareMatchesForCurrentImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem EditLastAdditionsToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainerBottom;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

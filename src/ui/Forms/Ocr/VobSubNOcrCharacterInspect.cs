@@ -59,52 +59,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        internal void Initialize(Bitmap bitmap, int pixelsIsSpace, bool rightToLeft, NOcrDb nOcrDb, VobSubOcr vobSubOcr, bool italic, int minLineHeight, bool deepSeek)
-        {
-            _bitmap = bitmap;
-            var nikseBitmap = new NikseBitmap(bitmap);
-            nikseBitmap.ReplaceNonWhiteWithTransparent();
-            _nOcrChars = nOcrDb.OcrCharacters;
-            _nOcrDb = nOcrDb;
-            _matchList = new List<VobSubOcr.CompareMatch>();
-
-            _imageList = NikseBitmapImageSplitter.SplitBitmapToLettersNew(nikseBitmap, pixelsIsSpace, rightToLeft, Configuration.Settings.VobSubOcr.TopToBottom, minLineHeight, false);
-
-            int index = 0;
-            _indexLookup = new Dictionary<int, int>();
-            while (index < _imageList.Count)
-            {
-                var item = _imageList[index];
-                if (item.NikseBitmap == null)
-                {
-                    _indexLookup.Add(listBoxInspectItems.Items.Count, index);
-                    listBoxInspectItems.Items.Add(item.SpecialCharacter);
-                    _matchList.Add(null);
-                }
-                else
-                {
-                    var match = vobSubOcr.GetNOcrCompareMatchNew(item, nikseBitmap, nOcrDb, italic, deepSeek, index, _imageList);
-                    if (match == null)
-                    {
-                        _indexLookup.Add(listBoxInspectItems.Items.Count, index);
-                        listBoxInspectItems.Items.Add("?");
-                        _matchList.Add(null);
-                    }
-                    else
-                    {
-                        _indexLookup.Add(listBoxInspectItems.Items.Count, index);
-                        listBoxInspectItems.Items.Add(match.Text);
-                        _matchList.Add(match);
-                        if (match.ExpandCount > 0)
-                        {
-                            index += match.ExpandCount - 1;
-                        }
-                    }
-                }
-                index++;
-            }
-        }
-
         private void listBoxInspectItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             labelImageSize.Text = string.Empty;
