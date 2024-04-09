@@ -70,7 +70,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageAllFixes = new System.Windows.Forms.TabPage();
             this.listBoxLog = new System.Windows.Forms.ListBox();
             this.tabPageSuggestions = new System.Windows.Forms.TabPage();
-            this.listBoxLogSuggestions = new System.Windows.Forms.ListBox();
             this.contextMenuStripGuessesUsed = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearGuesses = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -114,7 +113,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageUnknownWords.SuspendLayout();
             this.contextMenuStripUnknownWords.SuspendLayout();
             this.tabPageAllFixes.SuspendLayout();
-            this.tabPageSuggestions.SuspendLayout();
             this.contextMenuStripGuessesUsed.SuspendLayout();
             this.groupBoxSubtitleImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSubtitleImage)).BeginInit();
@@ -607,7 +605,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // tabPageSuggestions
             // 
-            this.tabPageSuggestions.Controls.Add(this.listBoxLogSuggestions);
             this.tabPageSuggestions.Location = new System.Drawing.Point(4, 22);
             this.tabPageSuggestions.Name = "tabPageSuggestions";
             this.tabPageSuggestions.Padding = new System.Windows.Forms.Padding(3);
@@ -615,20 +612,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageSuggestions.TabIndex = 1;
             this.tabPageSuggestions.Text = "Guesses used";
             this.tabPageSuggestions.UseVisualStyleBackColor = true;
-            // 
-            // listBoxLogSuggestions
-            // 
-            this.listBoxLogSuggestions.ContextMenuStrip = this.contextMenuStripGuessesUsed;
-            this.listBoxLogSuggestions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxLogSuggestions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxLogSuggestions.FormattingEnabled = true;
-            this.listBoxLogSuggestions.HorizontalScrollbar = true;
-            this.listBoxLogSuggestions.Location = new System.Drawing.Point(3, 3);
-            this.listBoxLogSuggestions.Name = "listBoxLogSuggestions";
-            this.listBoxLogSuggestions.Size = new System.Drawing.Size(369, 149);
-            this.listBoxLogSuggestions.TabIndex = 40;
-            this.listBoxLogSuggestions.SelectedIndexChanged += new System.EventHandler(this.ListBoxLogSelectedIndexChanged);
-            this.listBoxLogSuggestions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxCopyToClipboard_KeyDown);
             // 
             // contextMenuStripGuessesUsed
             // 
@@ -1037,7 +1020,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageUnknownWords.ResumeLayout(false);
             this.contextMenuStripUnknownWords.ResumeLayout(false);
             this.tabPageAllFixes.ResumeLayout(false);
-            this.tabPageSuggestions.ResumeLayout(false);
             this.contextMenuStripGuessesUsed.ResumeLayout(false);
             this.groupBoxSubtitleImage.ResumeLayout(false);
             this.groupBoxSubtitleImage.PerformLayout();
@@ -1080,7 +1062,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.TabControl tabControlLogs;
         private System.Windows.Forms.TabPage tabPageAllFixes;
         private System.Windows.Forms.TabPage tabPageSuggestions;
-        private System.Windows.Forms.ListBox listBoxLogSuggestions;
         private System.Windows.Forms.TabPage tabPageUnknownWords;
         private System.Windows.Forms.ListBox listBoxUnknownWords;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;

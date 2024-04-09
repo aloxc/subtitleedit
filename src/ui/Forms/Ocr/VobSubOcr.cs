@@ -3116,10 +3116,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
                 // Log used word guesses (via word replace list)
-                foreach (var guess in _ocrFixEngine.AutoGuessesUsed)
-                {
-                    listBoxLogSuggestions.Items.Add(guess);
-                }
+
 
                 _ocrFixEngine.AutoGuessesUsed.Clear();
 
@@ -3505,11 +3502,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     return string.Empty;
                 }
 
-                // Log used word guesses (via word replace list)
-                foreach (var guess in _ocrFixEngine.AutoGuessesUsed)
-                {
-                    listBoxLogSuggestions.Items.Add(guess);
-                }
 
                 _ocrFixEngine.AutoGuessesUsed.Clear();
 
@@ -4198,7 +4190,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             var start = (int)Math.Round(value);
             CleanLogGreaterThanOrEqualTo(listBoxUnknownWords, start);
             CleanLogGreaterThanOrEqualTo(listBoxLog, start);
-            CleanLogGreaterThanOrEqualTo(listBoxLogSuggestions, start);
         }
 
         private void CleanLogGreaterThanOrEqualTo(ListBox listBox, int start)
@@ -4943,11 +4934,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     return string.Empty;
                 }
 
-                // Log used word guesses (via word replace list)
-                foreach (var guess in _ocrFixEngine.AutoGuessesUsed)
-                {
-                    listBoxLogSuggestions.Items.Add(guess);
-                }
+
 
                 _ocrFixEngine.AutoGuessesUsed.Clear();
 
@@ -5233,10 +5220,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
                 // Log used word guesses (via word replace list)
-                foreach (var guess in _ocrFixEngine.AutoGuessesUsed)
-                {
-                    listBoxLogSuggestions.Items.Add(guess);
-                }
+
 
                 _ocrFixEngine.AutoGuessesUsed.Clear();
 
@@ -6886,7 +6870,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             UpdateLogLineNumbersAfterDelete(listBoxUnknownWords, indices);
             UpdateLogLineNumbersAfterDelete(listBoxLog, indices);
-            UpdateLogLineNumbersAfterDelete(listBoxLogSuggestions, indices);
 
             foreach (int idx in indices)
             {
@@ -7177,7 +7160,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private void toolStripMenuItemClearGuesses_Click(object sender, EventArgs e)
         {
-            listBoxLogSuggestions.Items.Clear();
         }
 
         private void buttonGetTesseractDictionaries_Click(object sender, EventArgs e)
