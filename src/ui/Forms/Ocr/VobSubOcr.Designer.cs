@@ -78,7 +78,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemImageSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxShowOnlyForced = new System.Windows.Forms.CheckBox();
-            this.checkBoxUseTimeCodesFromIdx = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
@@ -648,18 +647,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.checkBoxShowOnlyForced.UseVisualStyleBackColor = true;
             this.checkBoxShowOnlyForced.CheckedChanged += new System.EventHandler(this.checkBoxShowOnlyForced_CheckedChanged);
             // 
-            // checkBoxUseTimeCodesFromIdx
-            // 
-            this.checkBoxUseTimeCodesFromIdx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxUseTimeCodesFromIdx.AutoSize = true;
-            this.checkBoxUseTimeCodesFromIdx.Location = new System.Drawing.Point(335, 295);
-            this.checkBoxUseTimeCodesFromIdx.Name = "checkBoxUseTimeCodesFromIdx";
-            this.checkBoxUseTimeCodesFromIdx.Size = new System.Drawing.Size(186, 17);
-            this.checkBoxUseTimeCodesFromIdx.TabIndex = 3;
-            this.checkBoxUseTimeCodesFromIdx.Text = "Use lines/time codes from .idx file";
-            this.checkBoxUseTimeCodesFromIdx.UseVisualStyleBackColor = true;
-            this.checkBoxUseTimeCodesFromIdx.CheckedChanged += new System.EventHandler(this.checkBoxUseTimeCodesFromIdx_CheckedChanged);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -677,7 +664,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.splitContainerBottom.Panel1.Controls.Add(this.checkBoxShowOnlyForced);
             this.splitContainerBottom.Panel1.Controls.Add(this.textBoxCurrentText);
             this.splitContainerBottom.Panel1.Controls.Add(this.groupBoxOCRControls);
-            this.splitContainerBottom.Panel1.Controls.Add(this.checkBoxUseTimeCodesFromIdx);
             this.splitContainerBottom.Panel1.Controls.Add(this.subtitleListView1);
             this.splitContainerBottom.Panel1.Controls.Add(this.labelSubtitleText);
             this.splitContainerBottom.Panel1MinSize = 100;
@@ -917,7 +903,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBoxSubtitleImage;
         private System.Windows.Forms.CheckBox checkBoxShowOnlyForced;
-        private System.Windows.Forms.CheckBox checkBoxUseTimeCodesFromIdx;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem importTextWithMatchingTimeCodesToolStripMenuItem;

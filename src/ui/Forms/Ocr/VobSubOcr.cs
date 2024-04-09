@@ -458,7 +458,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
 
             checkBoxShowOnlyForced.Text = language.ShowOnlyForcedSubtitles;
-            checkBoxUseTimeCodesFromIdx.Text = language.UseTimeCodesFromIdx;
 
             oCRSelectedLinesToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.OcrSelectedLines;
             normalToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.RemoveFormattingAll;
@@ -1089,12 +1088,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 {
                     _vobSubMergedPackList.Add(x);
                     Paragraph p = new Paragraph(string.Empty, x.StartTime.TotalMilliseconds, x.EndTime.TotalMilliseconds);
-                    if (checkBoxUseTimeCodesFromIdx.Checked && x.IdxLine != null)
-                    {
-                        double durationMilliseconds = p.DurationTotalMilliseconds;
-                        p.StartTime = new TimeCode(x.IdxLine.StartTime.TotalMilliseconds);
-                        p.EndTime = new TimeCode(x.IdxLine.StartTime.TotalMilliseconds + durationMilliseconds);
-                    }
 
                     _subtitle.Paragraphs.Add(p);
                 }
@@ -3794,7 +3787,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (_mp4List != null)
             {
                 checkBoxShowOnlyForced.Visible = false;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
 
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
@@ -3802,7 +3794,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             else if (_spList != null)
             {
                 checkBoxShowOnlyForced.Visible = false;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
 
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
@@ -3810,7 +3801,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             else if (_dvbSubtitles != null)
             {
                 checkBoxShowOnlyForced.Visible = false;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
 
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
@@ -3818,7 +3808,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             else if (_dvbPesSubtitles != null)
             {
                 checkBoxShowOnlyForced.Visible = false;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
 
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
@@ -3826,7 +3815,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             else if (_binaryParagraphWithPositions != null)
             {
                 checkBoxShowOnlyForced.Visible = false;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
                 LoadBinarySubtitlesWithPosition();
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
@@ -3845,7 +3833,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
                 checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
             }
             else if (_bluRaySubtitlesOriginal != null)
             {
@@ -3863,13 +3850,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
                 checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
             }
             else if (_xSubList != null)
             {
                 checkBoxShowOnlyForced.Visible = false;
-                checkBoxUseTimeCodesFromIdx.Visible = false;
-
                 SetButtonsEnabledAfterOcrDone();
                 buttonStartOcr.Focus();
             }
@@ -3917,10 +3901,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
             }
 
-            checkBoxUseTimeCodesFromIdx.CheckedChanged -= checkBoxUseTimeCodesFromIdx_CheckedChanged;
-            checkBoxUseTimeCodesFromIdx.Visible = hasIdxTimeCodes;
-            checkBoxUseTimeCodesFromIdx.Checked = hasIdxTimeCodes;
-            checkBoxUseTimeCodesFromIdx.CheckedChanged += checkBoxUseTimeCodesFromIdx_CheckedChanged;
             checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
             LoadVobRip();
             return _subtitle;
@@ -3946,7 +3926,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             _mainOcrRunning = true;
             progressBar1.Visible = true;
             subtitleListView1.MultiSelect = false;
-            checkBoxUseTimeCodesFromIdx.Enabled = false;
             checkBoxShowOnlyForced.Enabled = false;
             labelStatus.Text = string.Empty;
         }
@@ -3961,7 +3940,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             labelStatus.Text = string.Empty;
             progressBar1.Visible = false;
             subtitleListView1.MultiSelect = true;
-            checkBoxUseTimeCodesFromIdx.Enabled = checkBoxUseTimeCodesFromIdx.Visible;
             checkBoxShowOnlyForced.Enabled = _hasForcedSubtitles;
             _mainOcrSelectedIndices = null;
         }
@@ -6128,8 +6106,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             splitContainerBottom.Top = groupBoxSubtitleImage.Bottom + 5;
             splitContainerBottom.Height = buttonOK.Top - (splitContainerBottom.Top + 20);
-            checkBoxUseTimeCodesFromIdx.Left = groupBoxOCRControls.Left + 1;
-            checkBoxShowOnlyForced.Left = checkBoxUseTimeCodesFromIdx.Left;
 
 
             // Hack for resize after minimize...
