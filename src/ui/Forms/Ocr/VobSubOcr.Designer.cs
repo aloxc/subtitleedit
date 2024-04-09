@@ -36,7 +36,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.captureTopAlignmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ImagePreProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelSubtitleText = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStartOcr = new System.Windows.Forms.Button();
@@ -107,8 +106,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.toolStripMenuItemSetUnItalicFactor,
             this.captureTopAlignmentToolStripMenuItem,
             this.ImagePreProcessingToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.deleteToolStripMenuItem});
+            this.toolStripSeparator3});
             this.contextMenuStripListview.Name = "contextMenuStripListview";
             this.contextMenuStripListview.Size = new System.Drawing.Size(333, 304);
             this.contextMenuStripListview.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripListviewOpening);
@@ -223,13 +221,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(329, 6);
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
             // 
             // labelSubtitleText
             // 
@@ -646,7 +637,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem EditLastAdditionsToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainerBottom;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSetUnItalicFactor;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUnknownWords;

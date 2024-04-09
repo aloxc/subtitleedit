@@ -432,7 +432,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             cutToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Cut;
             copyToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Copy;
             pasteToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Paste;
-            deleteToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Delete;
             selectAllToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.SelectAll;
 
             InitializeModi();
@@ -458,7 +457,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             EditLastAdditionsToolStripMenuItem.Text = language.EditLastAdditions;
             toolStripMenuItemSetUnItalicFactor.Text = language.SetItalicAngle;
             setItalicAngleToolStripMenuItem.Text = language.SetItalicAngle;
-            deleteToolStripMenuItem.Text = LanguageSettings.Current.Main.Menu.ContextMenu.Delete;
             imagePreprocessingToolStripMenuItem1.Text = language.ImagePreProcessing;
             ImagePreProcessingToolStripMenuItem.Text = language.ImagePreProcessing;
             autoTransparentBackgroundToolStripMenuItem.Text = language.AutoTransparentBackground;
@@ -3132,24 +3130,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void NOCRIntialize(Bitmap bitmap)
-        {
-            var nikseBitmap = new NikseBitmap(bitmap);
-            var list = NikseBitmapImageSplitter.SplitBitmapToLettersNew(nikseBitmap, _numericUpDownPixelsIsSpace, false, Configuration.Settings.VobSubOcr.TopToBottom, 12, _autoLineHeight);
-            UpdateLineHeights(list);
-            foreach (var item in list)
-            {
-                if (item.NikseBitmap != null)
-                {
-                    var bmp = item.NikseBitmap;
-                    bmp.ReplaceNonWhiteWithTransparent();
-                    item.Y += bmp.CropTopTransparent(0);
-                    bmp.CropTransparentSidesAndBottom(0, true);
-                    GetNOcrCompareMatchNew(item, nikseBitmap, _nOcrDb, false, false, list.IndexOf(item), list);
-                }
-            }
-        }
-
         private string OcrViaNOCR(Bitmap bitmap, int listViewIndex)
         {
             if (_ocrFixEngine == null)
@@ -3437,223 +3417,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return _bluRaySubtitlesOriginal != null ? 25 : 12;
         }
 
-        private static string FixZeroInsideWords(string line)
-        {
-            if (!Configuration.Settings.Tools.OcrFixUseHardcodedRules || !line.Contains('0') || line.Length < 3)
-            {
-                return line;
-            }
-
-            var sb = new StringBuilder(line.Length);
-            if (line[0] == '0' && char.IsLetter(line[1]))
-            {
-                sb.Append('o');
-            }
-            else
-            {
-                sb.Append(line[0]);
-            }
-
-            for (var index = 1; index < line.Length - 1; index++)
-            {
-                var ch = line[index];
-                if (ch == '0' && (index < 2 || !char.IsNumber(line[index - 2])))
-                {
-                    var prev = line[index - 1];
-                    var next = line[index + 1];
-                    if (char.IsLetter(prev) && char.IsLetter(next))
-                    {
-                        if (prev == char.ToUpperInvariant(prev) && next == char.ToUpperInvariant(next))
-                        {
-                            sb.Append("O");
-                        }
-                        else
-                        {
-                            sb.Append("o");
-                        }
-                    }
-                    else
-                    {
-                        sb.Append(ch);
-                    }
-                }
-                else
-                {
-                    sb.Append(ch);
-                }
-            }
-            sb.Append(line[line.Length - 1]);
-            return sb.ToString();
-        }
-
-        private string FixNocrHardcodedStuff(string input)
-        {
-            if (!Configuration.Settings.Tools.OcrFixUseHardcodedRules || string.IsNullOrEmpty(input))
-            {
-                return input;
-            }
-
-            var line = input;
-
-            var l = LanguageString;
-            if (l != null && l.StartsWith("en", StringComparison.OrdinalIgnoreCase))
-            {
-                // fix I/l
-                int start = line.IndexOf('I');
-                while (start > 0)
-                {
-                    if (start > 0 && char.IsLower(line[start - 1]))
-                    {
-                        line = line.Remove(start, 1).Insert(start, "l");
-                    }
-                    else if (start < line.Length - 1 && char.IsLower(line[start + 1]))
-                    {
-                        line = line.Remove(start, 1).Insert(start, "l");
-                    }
-
-                    start++;
-                    start = line.IndexOf('I', start);
-                }
-
-                start = line.IndexOf('l');
-                while (start > 0)
-                {
-                    if (start < line.Length - 1 && char.IsUpper(line[start + 1]))
-                    {
-                        line = line.Remove(start, 1).Insert(start, "I");
-                    }
-
-                    start++;
-                    start = line.IndexOf('l', start);
-                }
-
-                if (line.Contains('l'))
-                {
-                    if (line.StartsWith('l'))
-                    {
-                        line = @"I" + line.Substring(1);
-                    }
-
-                    if (line.StartsWith("<i>l", StringComparison.Ordinal))
-                    {
-                        line = line.Remove(3, 1).Insert(3, "I");
-                    }
-
-                    if (line.StartsWith("- l", StringComparison.Ordinal))
-                    {
-                        line = line.Remove(2, 1).Insert(2, "I");
-                    }
-
-                    if (line.StartsWith("-l", StringComparison.Ordinal))
-                    {
-                        line = line.Remove(1, 1).Insert(1, "I");
-                    }
-
-                    line = line.Replace(". l", ". I");
-                    line = line.Replace("? l", "? I");
-                    line = line.Replace("! l", "! I");
-                    line = line.Replace(": l", ": I");
-                    line = line.Replace("." + Environment.NewLine + "l", "." + Environment.NewLine + "I");
-                    line = line.Replace("?" + Environment.NewLine + "l", "?" + Environment.NewLine + "I");
-                    line = line.Replace("!" + Environment.NewLine + "l", "!" + Environment.NewLine + "I");
-                    line = line.Replace("." + Environment.NewLine + "- l", "." + Environment.NewLine + "- I");
-                    line = line.Replace("?" + Environment.NewLine + "- l", "?" + Environment.NewLine + "- I");
-                    line = line.Replace("!" + Environment.NewLine + "- l", "!" + Environment.NewLine + "- I");
-                    line = line.Replace("." + Environment.NewLine + "-l", "." + Environment.NewLine + "-I");
-                    line = line.Replace("?" + Environment.NewLine + "-l", "?" + Environment.NewLine + "-I");
-                    line = line.Replace("!" + Environment.NewLine + "-l", "!" + Environment.NewLine + "-I");
-                    line = line.Replace(" lq", " Iq");
-                    line = line.Replace(" lw", " Iw");
-                    line = line.Replace(" lr", " Ir");
-                    line = line.Replace(" lt", " It");
-                    line = line.Replace(" lp", " Ip");
-                    line = line.Replace(" ls", " Is");
-                    line = line.Replace(" ld", " Id");
-                    line = line.Replace(" lf", " If");
-                    line = line.Replace(" lg", " Ig");
-                    line = line.Replace(" lh", " Ih");
-                    line = line.Replace(" lj", " Ij");
-                    line = line.Replace(" lk", " Ik");
-                    line = line.Replace(" ll", " Il");
-                    line = line.Replace(" lz", " Iz");
-                    line = line.Replace(" lx", " Ix");
-                    line = line.Replace(" lc", " Ic");
-                    line = line.Replace(" lv", " Iv");
-                    line = line.Replace(" lb", " Ib");
-                    line = line.Replace(" ln", " In");
-                    line = line.Replace(" lm", " Im");
-                }
-
-                if (line.Contains('I'))
-                {
-                    line = line.Replace("II", "ll");
-                }
-            }
-
-            // fix periods with space between
-            line = line.Replace(".   .", "..");
-            line = line.Replace(".  .", "..");
-            line = line.Replace(". .", "..");
-            line = line.Replace(". .", "..");
-            line = line.Replace(" ." + Environment.NewLine, "." + Environment.NewLine);
-            if (line.EndsWith(" .", StringComparison.Ordinal))
-            {
-                line = line.Remove(line.Length - 2, 1);
-            }
-
-            // fix no space before comma
-            line = line.Replace(" ,", ",");
-
-            // fix O => 0
-            if (line.Contains('O'))
-            {
-                line = line.Replace(", OOO", ",000");
-                line = line.Replace(",OOO", ",000");
-                line = line.Replace(". OOO", ".000");
-                line = line.Replace(".OOO", ".000");
-
-                line = line.Replace("1O", "10");
-                line = line.Replace("2O", "20");
-                line = line.Replace("3O", "30");
-                line = line.Replace("4O", "40");
-                line = line.Replace("5O", "50");
-                line = line.Replace("6O", "60");
-                line = line.Replace("7O", "70");
-                line = line.Replace("8O", "80");
-                line = line.Replace("9O", "90");
-
-                line = line.Replace("O1", "01");
-                line = line.Replace("O2", "02");
-                line = line.Replace("O3", "03");
-                line = line.Replace("O4", "04");
-                line = line.Replace("O5", "05");
-                line = line.Replace("O6", "06");
-                line = line.Replace("O7", "07");
-                line = line.Replace("O8", "08");
-                line = line.Replace("O9", "09");
-
-                line = line.Replace("O-O", "0-0");
-                line = line.Replace("O-1", "0-1");
-                line = line.Replace("O-2", "0-2");
-                line = line.Replace("O-3", "0-3");
-                line = line.Replace("O-4", "0-4");
-                line = line.Replace("O-5", "0-5");
-                line = line.Replace("O-6", "0-6");
-                line = line.Replace("O-7", "0-7");
-                line = line.Replace("O-8", "0-8");
-                line = line.Replace("O-9", "0-9");
-                line = line.Replace("1-O", "1-0");
-                line = line.Replace("2-O", "2-0");
-                line = line.Replace("3-O", "3-0");
-                line = line.Replace("4-O", "4-0");
-                line = line.Replace("5-O", "5-0");
-                line = line.Replace("6-O", "6-0");
-                line = line.Replace("7-O", "7-0");
-                line = line.Replace("8-O", "8-0");
-                line = line.Replace("9-O", "9-0");
-            }
-            return line;
-        }
 
         internal static ImageSplitterItem GetExpandedSelectionNew(NikseBitmap bitmap, List<ImageSplitterItem> expandSelectionList)
         {
@@ -3814,17 +3577,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             LoadVobRip();
             return _subtitle;
-        }
-
-        private void ButtonOkClick(object sender, EventArgs e)
-        {
-            _okClicked = true; // don't ask about discard changes
-            if (_dvbSubtitles != null && _transportStreamUseColor)
-            {
-                MergeDvbForEachSubImage();
-            }
-
-            DialogResult = DialogResult.OK;
         }
 
         private void SetButtonsStartOcr()
@@ -5253,16 +5005,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 e.SuppressKeyPress = true;
                 previewToolStripMenuItem_Click(null, null);
-            }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.F)
-            {
-                e.SuppressKeyPress = true;
-                Find();
-            }
-            else if (e.Modifiers == Keys.None && e.KeyCode == Keys.F3)
-            {
-                e.SuppressKeyPress = true;
-                FindNext();
             }
             else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.P)
             {
