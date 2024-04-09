@@ -443,7 +443,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             buttonUknownToNames.Text = LanguageSettings.Current.SpellCheck.AddToNamesAndIgnoreList;
             buttonUknownToUserDic.Text = LanguageSettings.Current.SpellCheck.AddToUserDictionary;
             buttonAddToOcrReplaceList.Text = LanguageSettings.Current.SpellCheck.AddToOcrReplaceList;
-            buttonGoogleIt.Text = LanguageSettings.Current.Main.VideoControls.GoogleIt;
 
             groupBoxSubtitleImage.Text = string.Empty;
             groupBoxOCRControls.Text = string.Empty;

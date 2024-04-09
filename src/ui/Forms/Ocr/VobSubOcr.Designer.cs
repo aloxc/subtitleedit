@@ -63,10 +63,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.contextMenuStripAllFixes = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemClearFixes = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageUnknownWords = new System.Windows.Forms.TabPage();
-            this.buttonGoogleIt = new System.Windows.Forms.Button();
             this.buttonAddToOcrReplaceList = new System.Windows.Forms.Button();
             this.buttonUknownToUserDic = new System.Windows.Forms.Button();
-            this.buttonUknownToNames = new System.Windows.Forms.Button();
             this.listBoxUnknownWords = new System.Windows.Forms.ListBox();
             this.contextMenuStripUnknownWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,6 +121,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.underlineToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.subtitleListView1 = new Nikse.SubtitleEdit.Controls.SubtitleListView();
             this.timerHideStatus = new System.Windows.Forms.Timer(this.components);
+            this.buttonUknownToNames = new System.Windows.Forms.Button();
             this.contextMenuStripListview.SuspendLayout();
             this.groupBoxOCRControls.SuspendLayout();
             this.groupBoxOcrAutoFix.SuspendLayout();
@@ -557,7 +556,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             // 
             // tabPageUnknownWords
             // 
-            this.tabPageUnknownWords.Controls.Add(this.buttonGoogleIt);
             this.tabPageUnknownWords.Controls.Add(this.buttonAddToOcrReplaceList);
             this.tabPageUnknownWords.Controls.Add(this.buttonUknownToUserDic);
             this.tabPageUnknownWords.Controls.Add(this.buttonUknownToNames);
@@ -568,18 +566,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.tabPageUnknownWords.TabIndex = 2;
             this.tabPageUnknownWords.Text = "Unknown words";
             this.tabPageUnknownWords.UseVisualStyleBackColor = true;
-            // 
-            // buttonGoogleIt
-            // 
-            this.buttonGoogleIt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGoogleIt.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.buttonGoogleIt.Location = new System.Drawing.Point(152, 94);
-            this.buttonGoogleIt.Name = "buttonGoogleIt";
-            this.buttonGoogleIt.Size = new System.Drawing.Size(217, 23);
-            this.buttonGoogleIt.TabIndex = 3;
-            this.buttonGoogleIt.Text = "Google it";
-            this.buttonGoogleIt.UseVisualStyleBackColor = true;
-            this.buttonGoogleIt.Click += new System.EventHandler(this.buttonGoogleIt_Click);
             // 
             // buttonAddToOcrReplaceList
             // 
@@ -604,18 +590,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.buttonUknownToUserDic.Text = "Add to user dictionary";
             this.buttonUknownToUserDic.UseVisualStyleBackColor = true;
             this.buttonUknownToUserDic.Click += new System.EventHandler(this.buttonUnknownToUserDic_Click);
-            // 
-            // buttonUknownToNames
-            // 
-            this.buttonUknownToNames.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonUknownToNames.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.buttonUknownToNames.Location = new System.Drawing.Point(152, 7);
-            this.buttonUknownToNames.Name = "buttonUknownToNames";
-            this.buttonUknownToNames.Size = new System.Drawing.Size(217, 23);
-            this.buttonUknownToNames.TabIndex = 0;
-            this.buttonUknownToNames.Text = "Add to names etc list";
-            this.buttonUknownToNames.UseVisualStyleBackColor = true;
-            this.buttonUknownToNames.Click += new System.EventHandler(this.buttonUknownToNames_Click);
             // 
             // listBoxUnknownWords
             // 
@@ -1237,6 +1211,18 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             this.timerHideStatus.Interval = 2000;
             this.timerHideStatus.Tick += new System.EventHandler(this.timerHideStatus_Tick);
             // 
+            // buttonUknownToNames
+            // 
+            this.buttonUknownToNames.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonUknownToNames.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.buttonUknownToNames.Location = new System.Drawing.Point(152, 7);
+            this.buttonUknownToNames.Name = "buttonUknownToNames";
+            this.buttonUknownToNames.Size = new System.Drawing.Size(217, 23);
+            this.buttonUknownToNames.TabIndex = 0;
+            this.buttonUknownToNames.Text = "Add to names etc list";
+            this.buttonUknownToNames.UseVisualStyleBackColor = true;
+            this.buttonUknownToNames.Click += new System.EventHandler(this.buttonUknownToNames_Click);
+            // 
             // VobSubOcr
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1349,9 +1335,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.Button buttonUknownToUserDic;
-        private System.Windows.Forms.Button buttonUknownToNames;
         private System.Windows.Forms.Button buttonAddToOcrReplaceList;
-        private System.Windows.Forms.Button buttonGoogleIt;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSetUnItalicFactor;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExport;
         private System.Windows.Forms.ToolStripMenuItem vobSubToolStripMenuItem;
@@ -1402,5 +1386,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private System.Windows.Forms.ToolStripMenuItem removeAllXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem oCRSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorOcrSelected;
+        private System.Windows.Forms.Button buttonUknownToNames;
     }
 }
