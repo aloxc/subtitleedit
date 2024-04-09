@@ -466,7 +466,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             comboBoxDictionaries.Left = labelDictionaryLoaded.Left + labelDictionaryLoaded.Width;
 
             groupBoxImageCompareMethod.Text = string.Empty;
-            groupBoxModiMethod.Text = string.Empty;
 
             checkBoxAutoFixCommonErrors.Text = language.FixOcrErrors;
             checkBoxRightToLeft.Text = language.RightToLeft;
@@ -534,7 +533,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             numericUpDownPixelsIsSpace.Value = Configuration.Settings.VobSubOcr.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = Configuration.Settings.VobSubOcr.XOrMorePixelsMakesSpace;
 
             checkBoxShowOnlyForced.Text = language.ShowOnlyForcedSubtitles;
             checkBoxUseTimeCodesFromIdx.Text = language.UseTimeCodesFromIdx;
@@ -567,21 +565,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             toolStripMenuItemClearFixes.Text = LanguageSettings.Current.DvdSubRip.Clear;
             toolStripMenuItemClearGuesses.Text = LanguageSettings.Current.DvdSubRip.Clear;
             clearToolStripMenuItem.Text = LanguageSettings.Current.DvdSubRip.Clear;
-
-            checkBoxNOcrDrawUnknownLetters.Checked = Configuration.Settings.VobSubOcr.LineOcrDraw;
-            comboBoxNOcrLineSplitMinHeight.SelectedIndex = Configuration.Settings.VobSubOcr.LineOcrMaxLineHeight;
-            checkBoxNOcrItalic.Checked = Configuration.Settings.VobSubOcr.LineOcrAdvancedItalic;
-            numericUpDownNOcrMaxWrongPixels.Value = Configuration.Settings.VobSubOcr.LineOcrMaxErrorPixels;
-
-            groupBoxCloudVision.Text = language.CloudVisionApi;
-            labelCloudVisionApiKey.Text = language.ApiKey;
-            labelCloudVisionLanguage.Text = language.Language;
-            checkBoxCloudVisionSendOriginalImages.Text = language.SendOriginalImages;
-            checkBoxSeHandlesTextMerge.Text = language.SeHandlesTextMerge;
-
-            textBoxCloudVisionApiKey.Text = Configuration.Settings.VobSubOcr.CloudVisionApiKey;
-            checkBoxCloudVisionSendOriginalImages.Checked = Configuration.Settings.VobSubOcr.CloudVisionSendOriginalImages;
-            checkBoxSeHandlesTextMerge.Checked = Configuration.Settings.Tools.OcrGoogleCloudVisionSeHandlesTextMerge;
 
 
             UiUtil.InitializeSubtitleFont(subtitleListView1);
@@ -628,14 +611,11 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
 
             var ocrLanguages = new GoogleOcrService(new GoogleCloudVisionApi(string.Empty)).GetLanguages().OrderBy(p => p.ToString());
-            comboBoxCloudVisionLanguage.Items.Clear();
-            comboBoxCloudVisionLanguage.Items.AddRange(ocrLanguages.ToArray());
             var selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == Configuration.Settings.VobSubOcr.CloudVisionLanguage);
             if (selectedOcrLanguage == null)
             {
                 selectedOcrLanguage = ocrLanguages.FirstOrDefault(p => p.Code == "en");
             }
-            comboBoxCloudVisionLanguage.Text = selectedOcrLanguage.ToString();
         }
 
         private void FillSpellCheckDictionaries()
@@ -659,15 +639,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             checkBoxShowOnlyForced.Checked = forcedOnly;
             checkBoxPromptForUnknownWords.Checked = false;
 
-            if (ocrEngine?.ToLowerInvariant() == "nocr")
-            {
-                var oldNOcrDrawText = checkBoxNOcrDrawUnknownLetters.Checked;
-                InitializeNOcrForBatch(language);
-                checkBoxShowOnlyForced.Checked = forcedOnly;
-                DoBatch();
-                checkBoxNOcrDrawUnknownLetters.Checked = oldNOcrDrawText;
-                return;
-            }
+
 
             _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
             if (language == null)
@@ -761,7 +733,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -782,7 +753,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -805,7 +775,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -829,7 +798,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
             _vobSubMergedPackList = vobSubMergedPackist;
             _palette = palette;
@@ -871,7 +839,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         {
             Initialize(subtitles, vobSubOcrSettings, fileName, language);
             _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
-            var oldNOcrDrawText = checkBoxNOcrDrawUnknownLetters.Checked;
 
             if (ocrEngine?.ToLowerInvariant() == "nocr")
             {
@@ -895,21 +862,18 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             checkBoxShowOnlyForced.Checked = forcedOnly;
             DoBatch();
-            checkBoxNOcrDrawUnknownLetters.Checked = oldNOcrDrawText;
         }
 
         internal void InitializeBatch(List<BluRaySupParser.PcsData> subtitles, VobSubOcrSettings vobSubOcrSettings, string fileName, bool forcedOnly, string language, string ocrEngine, CancellationToken cancellationToken)
         {
             Initialize(subtitles, vobSubOcrSettings, fileName);
             _ocrMethodIndex = Configuration.Settings.VobSubOcr.LastOcrMethod == "Tesseract4" ? _ocrMethodTesseract5 : _ocrMethodTesseract302;
-            var oldNOcrDrawText = checkBoxNOcrDrawUnknownLetters.Checked;
 
             InitializeOcrEngineBatch(language, ocrEngine);
             _cancellationToken = cancellationToken;
 
             checkBoxShowOnlyForced.Checked = forcedOnly;
             DoBatch();
-            checkBoxNOcrDrawUnknownLetters.Checked = oldNOcrDrawText;
         }
 
         private void InitializeOcrEngineBatch(string language, string ocrEngine)
@@ -1080,7 +1044,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract();
@@ -1579,16 +1542,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         foreach (string fn in fileNames)
                         {
                             fullFileName = Path.Combine(Path.GetDirectoryName(_bdnFileName), fn);
-
-                            // Check if we need to load the original VSF image
-                            if (checkBoxCloudVisionSendOriginalImages.Visible && checkBoxCloudVisionSendOriginalImages.Checked)
-                            {
-                                var originalFileName = GetVSFOriginalImageFileName(fullFileName);
-                                if (originalFileName != fullFileName && File.Exists(originalFileName))
-                                {
-                                    fullFileName = originalFileName;
-                                }
-                            }
 
                             if (!File.Exists(fullFileName))
                             {
@@ -2490,7 +2443,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 return new CompareMatch(expandedResult.Text, expandedResult.Italic, expandedResult.ExpandCount, null, expandedResult) { ImageSplitterItem = targetItem };
             }
 
-            var result = NOcrFindBestMatchNew(targetItem, nOcrDb, deepSeek, (int)numericUpDownNOcrMaxWrongPixels.Value);
+            NOcrChar result = null;
             if (result == null)
             {
 
@@ -2507,21 +2460,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     oldBmp.Dispose();
                     unItalicImage.Dispose();
                     var unItalicTargetItem = new ImageSplitterItem(targetItem.X, targetItem.Y, unItalicNikseBitmap) { Top = targetItem.Top };
-                    result = NOcrFindBestMatchNew(unItalicTargetItem, nOcrDb, deepSeek, (int)numericUpDownNOcrMaxWrongPixels.Value);
-                    if (result != null)
-                    {
-                        result.Italic = true;
-                        _italicFixes++;
-                    }
                 }
 
                 if (result == null)
                 {
-                    if (checkBoxNOcrDrawUnknownLetters.Checked)
-                    {
-                        return null;
-                    }
-
                     return new CompareMatch("*", false, 0, null);
                 }
             }
@@ -3694,7 +3636,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (string.IsNullOrEmpty(line))
             {
                 matches = new List<CompareMatch>();
-                var listTemp = NikseBitmapImageSplitter.SplitBitmapToLettersNew(nbmpInput, _numericUpDownPixelsIsSpace, checkBoxRightToLeftNOCR.Checked, Configuration.Settings.VobSubOcr.TopToBottom, GetMinLineHeight(), _autoLineHeight);
+                List<ImageSplitterItem> listTemp = NikseBitmapImageSplitter.SplitBitmapToLettersNew(nbmpInput, _numericUpDownPixelsIsSpace, false, Configuration.Settings.VobSubOcr.TopToBottom, GetMinLineHeight(), _autoLineHeight);
                 var list = new List<ImageSplitterItem>();
                 foreach (var imageSplitterItem in listTemp)
                 {
@@ -3780,7 +3722,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
                     else
                     {
-                        var match = GetNOcrCompareMatchNew(item, nbmpInput, _nOcrDb, checkBoxNOcrItalic.Checked, !checkBoxNOcrDrawUnknownLetters.Checked, index, list);
+                        CompareItem match = null;
                         if (match == null)
                         {
                             _vobSubOcrNOcrCharacter.Initialize(bitmap, item, _manualOcrDialogPosition, _italicCheckedLast, true, false, string.Empty);
@@ -4549,15 +4491,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 }
 
 
-                _autoLineHeight = comboBoxNOcrLineSplitMinHeight.SelectedIndex == 0;
-                if (comboBoxNOcrLineSplitMinHeight.Visible && comboBoxNOcrLineSplitMinHeight.SelectedIndex > 0)
-                {
-                    _ocrMinLineHeight = int.Parse(comboBoxNOcrLineSplitMinHeight.Text);
-                }
-                else
-                {
-                    _ocrMinLineHeight = -1;
-                }
 
                 InitializeNOcrThreads(max);
             }
@@ -4568,7 +4501,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     _binaryOcrDb = new BinaryOcrDb(Configuration.OcrDirectory + "Latin.db", true);
                 }
 
-                checkBoxNOcrDrawUnknownLetters.Checked = true;
                 _numericUpDownMaxErrorPct = (double)numericUpDownMaxErrorPct.Value;
                 _autoLineHeight = comboBoxLineSplitMinLineHeight.SelectedIndex == 0;
                 if (comboBoxLineSplitMinLineHeight.Visible && comboBoxLineSplitMinLineHeight.SelectedIndex > 0)
@@ -4578,21 +4510,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 else
                 {
                     _ocrMinLineHeight = -1;
-                }
-            }
-            else if (_ocrMethodIndex == _ocrMethodCloudVision)
-            {
-                if (string.IsNullOrWhiteSpace(textBoxCloudVisionApiKey.Text))
-                {
-                    MessageBox.Show("No API key found!");
-                    textBoxCloudVisionApiKey.Focus();
-                    SetButtonsEnabledAfterOcrDone();
-                    return;
-                }
-
-                if (_ocrService == null)
-                {
-                    _ocrService = new GoogleOcrService(new GoogleCloudVisionApi(textBoxCloudVisionApiKey.Text));
                 }
             }
 
@@ -4648,14 +4565,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     if (start + i < max)
                     {
                         var bw = new BackgroundWorker();
-                        var p = new NOcrThreadParameter(start + i, _nOcrDbThread, bw, noOfThreads, _unItalicFactor, checkBoxNOcrItalic.Checked, _numericUpDownPixelsIsSpace, checkBoxRightToLeftNOCR.Checked)
-                        {
-                            NOcrLastLowercaseHeight = GetLastBinOcrLowercaseHeight(),
-                            NOcrLastUppercaseHeight = GetLastBinOcrUppercaseHeight(),
-                        };
                         bw.DoWork += NOcrThreadDoWork;
                         bw.RunWorkerCompleted += NOcrThreadRunWorkerCompleted;
-                        bw.RunWorkerAsync(p);
                         Application.DoEvents();
                     }
                 }
@@ -4678,7 +4589,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             p.Index += p.Increment;
             if (p.Index < _subtitle.Paragraphs.Count)
             {
-                p = new NOcrThreadParameter(p.Index, _nOcrDbThread, p.Self, p.Increment, _unItalicFactor, checkBoxNOcrItalic.Checked, _numericUpDownPixelsIsSpace, checkBoxRightToLeftNOCR.Checked);
+                p = new NOcrThreadParameter(p.Index, _nOcrDbThread, p.Self, p.Increment, _unItalicFactor, false, _numericUpDownPixelsIsSpace, false);
                 p.Self.RunWorkerAsync(p);
             }
         }
@@ -5774,13 +5685,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
             string line = string.Empty;
 
-            var language = (comboBoxCloudVisionLanguage.SelectedItem as OcrLanguage).Code;
-            var cloudVisionResult = _ocrService.PerformOcr(language, new List<Bitmap>() { bitmap });
-
-            if (cloudVisionResult.Count > 0)
-            {
-                line = cloudVisionResult[0];
-            }
 
             if (checkBoxAutoFixCommonErrors.Checked && _ocrFixEngine != null)
             {
@@ -5853,7 +5757,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
         private void InitializeNOcrForBatch(string db)
         {
             _ocrMethodIndex = _ocrMethodNocr;
-            checkBoxNOcrDrawUnknownLetters.Checked = false;
             var fileName = string.Empty;
             if (!string.IsNullOrEmpty(db))
             {
@@ -6282,11 +6185,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             {
                 e.SuppressKeyPress = true;
 
-                if (comboBoxNOcrLineSplitMinHeight.Visible && comboBoxNOcrLineSplitMinHeight.SelectedIndex > 0)
-                {
-                    _ocrMinLineHeight = int.Parse(comboBoxNOcrLineSplitMinHeight.Text);
-                }
-                else if (comboBoxLineSplitMinLineHeight.Visible && comboBoxLineSplitMinLineHeight.SelectedIndex > 0)
+              if (comboBoxLineSplitMinLineHeight.Visible && comboBoxLineSplitMinLineHeight.SelectedIndex > 0)
                 {
                     _ocrMinLineHeight = int.Parse(comboBoxLineSplitMinLineHeight.Text);
                 }
@@ -6299,7 +6198,7 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 var bitmap = GetSubtitleBitmap(_selectedIndex);
                 var nikseBitmap = new NikseBitmap(bitmap);
                 nikseBitmap.MakeTwoColor(200);
-                var list = NikseBitmapImageSplitter.SplitBitmapToLines(nikseBitmap, _numericUpDownPixelsIsSpace, checkBoxRightToLeftNOCR.Checked, Configuration.Settings.VobSubOcr.TopToBottom, minLineHeight, _autoLineHeight);
+                var list = NikseBitmapImageSplitter.SplitBitmapToLines(nikseBitmap, _numericUpDownPixelsIsSpace, false, Configuration.Settings.VobSubOcr.TopToBottom, minLineHeight, _autoLineHeight);
 
                 var lineSplitImage = new NikseBitmap(nikseBitmap.Width + 10, nikseBitmap.Height + list.Count * 10 + 10);
                 lineSplitImage.Fill(Color.Red);
@@ -6497,11 +6396,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
             else if (_ocrMethodIndex == _ocrMethodNocr)
             {
-                ShowOcrMethodGroupBox(groupBoxNOCR);
                 Configuration.Settings.VobSubOcr.LastOcrMethod = "nOCR";
                 SetSpellCheckLanguage(Configuration.Settings.VobSubOcr.LineOcrLastSpellCheck);
 
-                comboBoxNOcrLanguage.Items.Clear();
                 int index = 0;
                 int selIndex = 0;
                 foreach (var s in NOcrDb.GetDatabases())
@@ -6511,14 +6408,9 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                         selIndex = index;
                     }
 
-                    comboBoxNOcrLanguage.Items.Add(s);
                     index++;
                 }
 
-                if (comboBoxNOcrLanguage.Items.Count > 0)
-                {
-                    comboBoxNOcrLanguage.SelectedIndex = selIndex;
-                }
             }
             else if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
             {
@@ -6529,12 +6421,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
             else if (_ocrMethodIndex == _ocrMethodModi)
             {
-                ShowOcrMethodGroupBox(groupBoxModiMethod);
                 Configuration.Settings.VobSubOcr.LastOcrMethod = "MODI";
             }
             else if (_ocrMethodIndex == _ocrMethodCloudVision)
             {
-                ShowOcrMethodGroupBox(groupBoxCloudVision);
                 Configuration.Settings.VobSubOcr.LastOcrMethod = "CloudVision";
             }
 
@@ -6544,20 +6434,13 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
 
         private string GetNOcrLanguageFileName()
         {
-            if (comboBoxNOcrLanguage.SelectedIndex < 0)
-            {
-                return null;
-            }
 
-            return Configuration.OcrDirectory + comboBoxNOcrLanguage.Items[comboBoxNOcrLanguage.SelectedIndex] + ".nocr";
+            return null;
         }
 
         private void ShowOcrMethodGroupBox(GroupBox groupBox)
         {
             groupBoxImageCompareMethod.Visible = false;
-            groupBoxModiMethod.Visible = false;
-            groupBoxNOCR.Visible = false;
-            groupBoxCloudVision.Visible = false;
 
             groupBox.Visible = true;
             groupBox.BringToFront();
@@ -7007,17 +6890,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                 pictureBoxPattern.BackColor = Color.DarkGray;
                 pictureBoxEmphasis1.BackColor = Color.Black;
                 pictureBoxEmphasis2.BackColor = Color.White;
-            }
-
-            checkBoxCloudVisionSendOriginalImages.Visible = false;
-            if (bdnSubtitle.Paragraphs.Count > 0)
-            {
-                var firstImageFileName = bdnSubtitle.Paragraphs[0].Text;
-                var originalImageFileName = GetVSFOriginalImageFileName(firstImageFileName);
-                if (firstImageFileName != originalImageFileName && File.Exists(originalImageFileName))
-                {
-                    checkBoxCloudVisionSendOriginalImages.Visible = true;
-                }
             }
 
             SetButtonsStartOcr();
@@ -7522,18 +7394,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             Configuration.Settings.VobSubOcr.PromptForUnknownWords = checkBoxPromptForUnknownWords.Checked;
             Configuration.Settings.VobSubOcr.GuessUnknownWords = checkBoxGuessUnknownWords.Checked;
             Configuration.Settings.VobSubOcr.AutoBreakSubtitleIfMoreThanTwoLines = checkBoxAutoBreakLines.Checked;
-            Configuration.Settings.VobSubOcr.LineOcrDraw = checkBoxNOcrDrawUnknownLetters.Checked;
-            Configuration.Settings.VobSubOcr.LineOcrMaxLineHeight = comboBoxNOcrLineSplitMinHeight.SelectedIndex;
-            Configuration.Settings.VobSubOcr.LineOcrAdvancedItalic = checkBoxNOcrItalic.Checked;
             Configuration.Settings.VobSubOcr.XOrMorePixelsMakesSpace = (int)numericUpDownPixelsIsSpace.Value;
-            if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                Configuration.Settings.VobSubOcr.XOrMorePixelsMakesSpace = (int)numericUpDownNumberOfPixelsIsSpaceNOCR.Value;
-            }
-            Configuration.Settings.VobSubOcr.LineOcrMaxErrorPixels = (int)numericUpDownNOcrMaxWrongPixels.Value;
             Configuration.Settings.VobSubOcr.CaptureTopAlign = toolStripMenuItemCaptureTopAlign.Checked;
-            Configuration.Settings.VobSubOcr.CloudVisionApiKey = textBoxCloudVisionApiKey.Text;
-            Configuration.Settings.VobSubOcr.CloudVisionLanguage = (comboBoxCloudVisionLanguage.SelectedItem as OcrLanguage).Code;
 
             if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
             {
@@ -7565,10 +7427,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             if (_ocrMethodIndex == _ocrMethodNocr)
             {
                 Configuration.Settings.VobSubOcr.LineOcrLastSpellCheck = LanguageString;
-                if (comboBoxNOcrLanguage.Items.Count > 0 && comboBoxNOcrLanguage.SelectedIndex >= 0)
-                {
-                    Configuration.Settings.VobSubOcr.LineOcrLastLanguages = comboBoxNOcrLanguage.Items[comboBoxNOcrLanguage.SelectedIndex].ToString();
-                }
             }
 
             if (!e.Cancel)
@@ -8083,7 +7941,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             using (var inspect = new VobSubNOcrCharacterInspect())
             {
                 int minLineHeight = GetMinLineHeight();
-                inspect.Initialize(bitmap, _numericUpDownPixelsIsSpace, checkBoxRightToLeftNOCR.Checked, _nOcrDb, this, checkBoxNOcrItalic.Checked, minLineHeight, !checkBoxNOcrDrawUnknownLetters.Checked);
                 if (inspect.ShowDialog(this) == DialogResult.OK)
                 {
                     Cursor = Cursors.WaitCursor;
@@ -8159,24 +8016,10 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
                     }
 
                     _nOcrDb = null;
-                    comboBoxNOcrLanguage.Items.Add(s);
-                    comboBoxNOcrLanguage.SelectedIndex = comboBoxNOcrLanguage.Items.Count - 1;
                 }
             }
         }
 
-        private void comboBoxNOcrLanguage_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _nOcrDb = null;
-
-            if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                if (comboBoxNOcrLanguage.Items.Count > 0 && comboBoxNOcrLanguage.SelectedIndex >= 0)
-                {
-                    Configuration.Settings.VobSubOcr.LineOcrLastLanguages = comboBoxNOcrLanguage.Items[comboBoxNOcrLanguage.SelectedIndex].ToString();
-                }
-            }
-        }
 
         private void buttonSpellCheckDownload_Click(object sender, EventArgs e)
         {
@@ -8246,7 +8089,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
 
             InitializeTesseract(language);
@@ -8777,24 +8619,8 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             }
         }
 
-        private void numericUpDownNumberOfPixelsIsSpaceNOCR_ValueChanged(object sender, EventArgs e)
-        {
-            if (_ocrMethodIndex == _ocrMethodNocr)
-            {
-                numericUpDownPixelsIsSpace.Value = numericUpDownNumberOfPixelsIsSpaceNOCR.Value;
-            }
-
-            _numericUpDownPixelsIsSpace = (int)numericUpDownNumberOfPixelsIsSpaceNOCR.Value;
-        }
-
         private void numericUpDownPixelsIsSpace_ValueChanged(object sender, EventArgs e)
         {
-            if (_ocrMethodIndex == _ocrMethodBinaryImageCompare)
-            {
-                numericUpDownNumberOfPixelsIsSpaceNOCR.Value = numericUpDownPixelsIsSpace.Value;
-            }
-
-            _numericUpDownPixelsIsSpace = (int)numericUpDownNumberOfPixelsIsSpaceNOCR.Value;
         }
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -8969,7 +8795,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
             numericUpDownPixelsIsSpace.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
-            numericUpDownNumberOfPixelsIsSpaceNOCR.Value = vobSubOcrSettings.XOrMorePixelsMakesSpace;
             _vobSubOcrSettings = vobSubOcrSettings;
             groupBoxImagePalette.Visible = false;
 
@@ -9141,16 +8966,6 @@ namespace Nikse.SubtitleEdit.Forms.Ocr
             return fileName.Replace("\\RGBResults", "\\RGBImages").Replace("\\TXTImages", "\\RGBImages").Replace(".jpeg.png", ".jpeg").Replace(".png", ".jpeg");
         }
 
-        private void checkBoxCloudVisionSendOriginalImages_CheckedChanged(object sender, EventArgs e)
-        {
-            // Toggle subtitle image refresh
-            SubtitleListView1SelectedIndexChanged(sender, e);
-        }
-
-        private void checkBoxSeHandlesTextMerge_CheckedChanged(object sender, EventArgs e)
-        {
-            Configuration.Settings.Tools.OcrGoogleCloudVisionSeHandlesTextMerge = checkBoxSeHandlesTextMerge.Checked;
-        }
 
         public void FindDialogFind(string findText, ReplaceType findReplaceType, Regex regex)
         {
